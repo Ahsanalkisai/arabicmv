@@ -1,0 +1,1670 @@
+<!DOCTYPE html>
+<html lang="dv" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ޢަރަބި ދަސްކުރަމާ</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Sans+Thaana:wght@400;600;700&display=swap">
+<style>
+@font-face{
+  font-family:"Faruma";
+  src:url("./fonts/Faruma.woff2") format("woff2"),
+      url("./fonts/Faruma.woff") format("woff");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+:root{
+  --bg:#f3f5f1; --surface:#e4efe6; --card:#ffffff; --ink:#15211b; --muted:#66736c;
+  --primary:#1f5c45; --on-primary:#ffffff; --accent:#f3e9a8; --on-accent:#3a3a12; --line:#e3e9e4;
+  --good:#22a06b; --bad:#d9433b; --shadow:0 1px 2px rgba(31,92,69,.05), 0 4px 16px rgba(31,92,69,.07);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1a15; --surface:#1a2b23; --card:#15231c; --ink:#edf2ee; --muted:#9fb0a7;
+    --primary:#8fd3b4; --on-primary:#0f1a15; --accent:#4f4a24; --on-accent:#f5efc2; --line:#26382f;
+    --good:#5fd39a; --bad:#f08a80; --shadow:0 1px 2px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1a15; --surface:#1a2b23; --card:#15231c; --ink:#edf2ee; --muted:#9fb0a7;
+  --primary:#8fd3b4; --on-primary:#0f1a15; --accent:#4f4a24; --on-accent:#f5efc2; --line:#26382f;
+  --good:#5fd39a; --bad:#f08a80; --shadow:0 1px 2px rgba(0,0,0,.35);
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Faruma","Samee Avas Thaana","MV Faseyha","Noto Sans Thaana",sans-serif; font-size:17px; line-height:1.9}
+.ar{font-family:"Amiri","Traditional Arabic","Scheherazade New",serif; line-height:1.8; direction:rtl; unicode-bidi:isolate}
+.en{font-family:Georgia,"Times New Roman",serif; direction:ltr; unicode-bidi:isolate; line-height:1.4; font-size:1rem; color:var(--muted)}
+.dv{direction:rtl; unicode-bidi:isolate}
+button,input,select,textarea{font:inherit; color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default}
+:focus-visible{outline:3px solid var(--accent); outline-offset:2px}
+[hidden]{display:none!important}
+.ic{width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; flex:none}
+.wrap{max-width:600px; margin:0 auto; padding:0 14px 96px}
+
+/* header */
+.hdr,.home{display:grid; grid-template-columns:44px 1fr 44px; align-items:center; padding:8px 0 10px}
+.ib{width:40px; height:40px; border-radius:50%; background:none; border:0; display:grid; place-items:center; color:var(--primary); padding:0}
+.ib:hover{background:var(--surface)}
+.hc{text-align:center; min-width:0}
+.hs{font-size:.8rem; color:var(--muted); line-height:1.3}
+.ht{font-weight:700; color:var(--primary); font-size:1.15rem; line-height:1.5; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.ht.ar{font-size:1.45rem}
+.hc.one{display:flex; align-items:baseline; justify-content:space-between; gap:6px}
+.hc.one .hs{font-size:1rem; color:var(--primary); white-space:nowrap}
+.hc.one .ht{flex:1; font-size:1.35rem; text-align:center; color:var(--ink)}
+.home .logo{display:grid; place-items:center; color:var(--primary)}
+.home .logo .ic{width:28px; height:28px}
+.home .ht{font-size:1.7rem}
+.home .logo .ic{color:var(--primary)}
+
+/* unit list */
+.ulist{list-style:none; margin:0; padding:0; display:grid; gap:10px}
+.ucard,.lcard{display:flex; align-items:center; gap:12px; width:100%; text-align:right; background:var(--card); border:0; border-radius:16px; padding:10px 12px; box-shadow:var(--shadow)}
+.thumb{width:48px; height:48px; flex:none; display:grid; place-items:center; background:var(--surface); border-radius:14px; color:var(--primary); font-size:1.35rem; font-weight:700}
+.ut{flex:1; min-width:0; display:flex; flex-direction:column}
+.uk{font-size:.85rem; color:var(--primary); line-height:1.3}
+.un{font-size:1.3rem; line-height:1.6; font-weight:700}
+.ud{font-size:.85rem; color:var(--muted); line-height:1.5}
+.uend{color:var(--muted); display:grid; flex:none}
+.ucard .ut{flex-direction:row; align-items:center; justify-content:space-between; gap:8px}
+.ucard .un{flex:1; min-width:0}
+.ucard .uk{order:2; white-space:nowrap}
+.ucard .ut{flex-wrap:wrap}
+.ucard .ud{width:100%; order:3}
+.ucard.off{box-shadow:none; background:var(--surface); opacity:.6}
+.ucard.off .thumb{background:var(--bg); color:var(--muted)}
+
+/* lessons */
+.hero{background:linear-gradient(90deg, #f6f1cf 0%, var(--surface) 60%); color:var(--ink); border-radius:18px; padding:14px 18px; margin-bottom:12px; display:grid; grid-template-columns:1fr auto 1fr; align-items:baseline; gap:10px; padding:10px 16px}
+.hero .hk{font-size:.95rem; color:var(--primary); white-space:nowrap}
+.hero .hn{font-size:1.35rem; font-weight:700; line-height:1.6; text-align:center}
+.hero .ud{color:inherit; opacity:.85}
+.llist{display:grid; gap:10px}
+.lcard.cur .lk{background:var(--accent); color:var(--on-accent)}
+.lk.ok{background:var(--good); color:#fff}
+.lk{width:40px; height:40px; flex:none; border-radius:12px; background:var(--surface); color:var(--primary); display:grid; place-items:center; font-size:1.1rem; font-weight:700}
+.lcard .un{font-size:1.5rem; font-weight:400}
+
+/* segmented control */
+.seg{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px}
+.seg button{background:var(--card); border:1px solid var(--line); border-radius:999px; padding:4px 18px; color:var(--muted); white-space:nowrap; font-size:1rem}
+.seg button.on{background:var(--accent); border-color:transparent; color:var(--primary); font-weight:700}
+.scope{display:flex; justify-content:flex-end; margin-bottom:8px}
+.scope select{width:auto; border-radius:999px; background:var(--card); border:1px solid var(--line); padding:2px 14px; font-size:.95rem}
+
+h2{font-size:1.05rem; margin:16px 0 8px; color:var(--primary)}
+.sub{color:var(--muted); margin:0 0 8px; font-size:.95rem}
+.row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--primary); color:var(--on-primary); border:0; border-radius:14px; padding:8px 22px; font-weight:600; font-size:1.05rem}
+.btn.wide{width:auto; margin:0 auto; display:flex}
+.btn.reveal{background:var(--surface); color:var(--primary); border-radius:999px; padding:6px 22px; font-weight:600}
+.btn.ghost{background:var(--card); color:var(--primary); border:1px solid var(--line)}
+.btn.small{padding:0 12px; font-size:.82rem; font-weight:400}
+.btn.danger{background:none; color:var(--bad); border:1px solid var(--bad)}
+.card{background:var(--card); border-radius:18px; padding:14px; box-shadow:var(--shadow)}
+.empty{background:var(--surface); border-radius:16px; padding:22px 16px; text-align:center; color:var(--muted)}
+.count{color:var(--muted); font-size:.92rem}
+.tr{display:flex; flex-direction:column; gap:2px; margin-top:4px}
+.tr .en{text-align:left}
+
+/* conversation */
+.conv{background:var(--card); border-radius:18px; margin-bottom:12px; overflow:hidden; box-shadow:var(--shadow)}
+.chead{display:flex; align-items:center; gap:10px; padding:10px 14px 6px}
+.chead .count{margin-inline-start:auto}
+.chead .ib{width:34px; height:34px; background:var(--surface)}
+.chead .pbtn{width:34px; height:34px}
+.chead b{color:var(--primary)}
+.chead span{font-size:.85rem; color:var(--muted)}
+.player{display:flex; align-items:center; gap:10px; margin:2px 12px 8px; background:var(--surface); border-radius:999px; padding:6px 14px}
+.pbtn{width:38px; height:38px; border-radius:50%; border:0; background:var(--primary); color:var(--on-primary); color:var(--on-primary); display:grid; place-items:center; flex:none; padding:0}
+.pbtn svg{width:14px; height:14px; fill:currentColor}
+.plab{font-size:.82rem; line-height:1.4; white-space:nowrap}
+.plab small{display:block; color:var(--muted); direction:ltr; text-align:right; font-family:Georgia,serif}
+.prog{flex:1; height:4px; background:var(--line); border-radius:2px; overflow:hidden; direction:ltr}
+.prog i{display:block; height:100%; width:0; background:var(--primary)}
+.auerr{margin:-2px 14px 8px; font-size:.8rem; color:var(--muted)}
+.line{display:grid; grid-template-columns:4.6em 1fr 20px; align-items:baseline; gap:6px; width:100%; text-align:right; background:none; border:0; border-top:1px solid var(--line); padding:6px 14px}
+.line.on{background:var(--surface)}
+.line .who{color:var(--primary); font-size:1.05rem}
+.line .say{font-size:1.55rem}
+.line .tr{grid-column:1 / -1}
+.line .ic,.vcard .ic,.nhead .ic{width:18px; height:18px; color:var(--muted); align-self:center; transition:transform .15s}
+.line.on>.ic,.nhead[aria-expanded="true"]>.ic{transform:rotate(-90deg)}
+
+/* vocabulary + class entries */
+.vlist{list-style:none; margin:0; padding:0; display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.vlist li{display:flex}
+.vcard{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; width:100%; min-height:84px; text-align:center; background:var(--card); border:0; border-radius:16px; padding:10px 8px; box-shadow:var(--shadow)}
+.vcard.on{background:var(--surface)}
+.vcard>.ar{font-size:1.75rem; color:var(--primary); line-height:1.5}
+.vcard>.ic{display:none}
+.vcard .tr{align-items:center; text-align:center}
+.vcard .tr .en{text-align:center}
+.vcard .forms{justify-content:center}
+.forms{display:flex; gap:14px; flex-wrap:wrap; font-size:.82rem; color:var(--muted)}
+.forms .ar{font-size:1.15rem; color:var(--ink)}
+.tools{display:flex; gap:8px; padding:6px 4px 2px}
+
+/* help */
+.note{background:var(--card); border-radius:16px; margin-bottom:8px; overflow:hidden; box-shadow:var(--shadow)}
+.nhead{display:flex; justify-content:space-between; align-items:center; width:100%; background:none; border:0; padding:10px 14px; font-weight:700; text-align:right}
+.nbody{padding:0 14px 10px}
+.nbody p{margin:0 0 6px; font-size:1rem; color:var(--muted)}
+.ex{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:center; border-top:1px solid var(--line); padding:6px 0}
+.badge{background:var(--accent); color:var(--on-accent)}
+.ex .ar{font-size:1.4rem}
+.ex .tr{margin:0}
+.tips p{margin:0 0 6px; font-size:1rem}
+.tips p:last-child{margin:0}
+
+/* flashcard */
+.fc{width:100%; min-height:210px; background:var(--card); border:0; border-radius:18px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; padding:20px; text-align:center; box-shadow:var(--shadow)}
+.fc .ar{font-size:clamp(2.4rem,11vw,3.4rem); color:var(--primary)}
+.fc .en{font-size:1.15rem; text-align:center}
+.fc .dv{font-size:1.25rem}
+.fc .hint{font-size:.8rem; color:var(--muted)}
+.fc .forms{justify-content:center; margin-top:6px}
+.ctrl{display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:10px}
+.rb{width:52px; height:42px; border-radius:999px; border:1px solid var(--line); background:var(--card); color:var(--primary); display:grid; place-items:center; padding:0}
+.rb.go{background:var(--primary); border-color:var(--primary); color:var(--on-primary)}
+
+/* quiz + speak */
+.clabel{display:flex; justify-content:space-between; align-items:center; color:var(--primary); font-weight:700; font-size:1.05rem}
+.prompt{text-align:center; margin:2px 0 12px; display:flex; flex-direction:column; align-items:center}
+.prompt .ar{font-size:2.1rem}
+.prompt .dv{font-size:1.25rem}
+.prompt .en{font-size:1rem}
+.opts{display:grid; gap:8px}
+.opt{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:5px 12px; text-align:right; display:flex; flex-direction:column}
+.opt .en{text-align:left}
+.opt.ar{font-size:1.5rem}
+.opt.right{border-color:var(--good); background:color-mix(in srgb, var(--good) 12%, var(--card))}
+.opt.wrong{border-color:var(--bad); background:color-mix(in srgb, var(--bad) 10%, var(--card))}
+.score{font-size:2.2rem; font-weight:700; color:var(--primary); text-align:center; margin:4px 0}
+.model{background:var(--surface); border-radius:16px; padding:10px 14px; margin-top:10px; text-align:center}
+.model .ar{font-size:1.9rem; display:block}
+.msg{text-align:center; min-height:1.9em; margin:6px 0 0; font-size:.9rem}
+
+/* match + arrange */
+.match{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+.match .col{display:grid; gap:8px; align-content:start}
+.mbtn{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:4px 8px; min-height:62px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center}
+.mbtn.ar{font-size:1.45rem}
+.mbtn .en{text-align:center}
+.mbtn.sel{border-color:var(--primary); box-shadow:inset 0 0 0 2px var(--primary)}
+.mbtn.done{border-color:var(--good); background:var(--surface); color:var(--good)}
+.mbtn.wrong{border-color:var(--bad); box-shadow:inset 0 0 0 2px var(--bad)}
+.slot{min-height:64px; border-bottom:2px solid var(--line); display:flex; flex-wrap:wrap; gap:6px; align-items:center; padding:6px 0; margin-bottom:10px}
+.slot.good{border-bottom-color:var(--good)} .slot.bad{border-bottom-color:var(--bad)}
+.bank{display:flex; flex-wrap:wrap; gap:6px; justify-content:center; min-height:50px}
+.word{background:var(--surface); border:0; border-radius:10px; padding:0 12px; font-size:1.45rem}
+
+/* class */
+.chips{display:grid; gap:8px; margin:6px 0}
+.chip{display:flex; justify-content:space-between; align-items:center; background:var(--card); border:0; border-radius:14px; padding:8px 14px; box-shadow:var(--shadow); text-align:right}
+
+/* bottom nav */
+.nav{position:fixed; bottom:0; left:0; right:0; z-index:5; display:grid; grid-template-columns:repeat(4,1fr); gap:4px; background:var(--card); border-radius:22px 22px 0 0; box-shadow:0 -4px 18px rgba(31,92,69,.08); padding:8px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+.nav button{display:flex; flex-direction:column; align-items:center; gap:0; background:none; border:0; border-radius:14px; padding:4px 6px 2px; font-size:.95rem; line-height:1.6; color:var(--muted); white-space:nowrap}
+.nav button .ic{width:24px; height:24px}
+.nav button .ic{width:22px; height:22px; padding:7px; box-sizing:content-box; border-radius:50%}
+.nav button.on{color:var(--primary); font-weight:700}
+.nav button.on .ic{background:var(--primary); color:var(--on-primary)}
+
+/* modal + menu */
+.veil{position:fixed; inset:0; background:rgba(0,0,0,.45); display:flex; align-items:flex-end; justify-content:center; z-index:10}
+.modal{background:var(--card); width:100%; max-width:460px; max-height:92%; overflow:auto; border-radius:18px 18px 0 0; padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px))}
+.modal h3{margin:0 0 8px}
+.menu{display:grid; gap:6px}
+.menu button{background:var(--surface); border:0; border-radius:12px; padding:8px 14px; text-align:right; color:var(--primary); font-weight:600}
+.menu button.q{background:none; color:var(--muted); font-weight:400; text-align:center}
+label{display:block; font-size:.86rem; color:var(--muted); margin-top:8px}
+input,select,textarea{width:100%; background:var(--bg); border:1px solid var(--line); border-radius:10px; padding:5px 12px}
+input.ar,textarea.ar{font-size:1.35rem}
+input.en{text-align:left; font-size:1rem; color:var(--ink)}
+.err{color:var(--bad); font-size:.86rem; min-height:1.6em; margin:6px 0 0}
+
+@media (prefers-reduced-motion: no-preference){
+  .tr,.model,.nbody{animation:rise .18s ease-out}
+  @keyframes rise{from{opacity:0; transform:translateY(-4px)}to{opacity:1; transform:none}}
+}
+
+/* tablet + desktop: side rail instead of a stretched phone layout */
+@media (min-width:700px){
+  .ulist{grid-template-columns:1fr 1fr}
+  .vlist{grid-template-columns:repeat(3,1fr)}
+  .wrap{max-width:760px; padding-bottom:40px}
+  .veil{align-items:center}.modal{border-radius:18px}
+}
+@media (min-width:900px){
+  /* desktop: the four sections sit in a top bar, same position every page */
+  body.has-nav .wrap{padding-top:72px}
+  .nav{top:0; bottom:auto; left:50%; right:auto; transform:translateX(-50%); width:100%; max-width:760px; border-radius:0 0 22px 22px; box-shadow:0 4px 18px rgba(31,92,69,.08); padding:8px 10px}
+  .nav button{flex-direction:row; justify-content:center; gap:8px; padding:6px 18px; font-size:1.05rem}
+  .nav button .ic{padding:5px}
+  .vlist{grid-template-columns:repeat(4,1fr)}
+}
+
+
+/* Audio files are not included, so hide unavailable audio controls. */
+.chead .pbtn,.player,.auerr{display:none!important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header id="hdr"></header>
+  <main id="app"></main>
+</div>
+<nav class="nav" id="nav" aria-label="ބައިތައް"></nav>
+<div id="modalRoot"></div>
+<script>
+/* ---------- content: Book 1 ---------- */
+var UNITS = [
+ ["التَّحِيَّةُ وَالتَّعَارُفُ","ސަލާމްކުރުމާއި ދެނެގަތުން"],
+ ["الأُسْرَةُ","ޢާއިލާ"],
+ ["السَّكَنُ","ދިރިއުޅޭ ތަން"],
+ ["الحَيَاةُ اليَوْمِيَّةُ","ދުވަހުގެ ދިރިއުޅުން"],
+ ["الطَّعَامُ وَالشَّرَابُ","ކެއުމާއި ބުއިން"],
+ ["الصَّلَاةُ","ނަމާދު"],
+ ["الدِّرَاسَةُ","ކިޔެވުން"],
+ ["العَمَلُ","މަސައްކަތް"],
+ ["التَّسَوُّقُ","ބާޒާރުކުރުން"],
+ ["الجَوُّ","މޫސުން"],
+ ["النَّاسُ وَالأَمَاكِنُ","މީހުންނާއި ތަންތަން"],
+ ["الهِوَايَاتُ","ޝައުޤުވެރި ކަންކަން"],
+ ["السَّفَرُ","ދަތުރު"],
+ ["الحَجُّ وَالعُمْرَةُ","ޙައްޖާއި ޢުމްރާ"],
+ ["الصِّحَّةُ","ޞިއްޙަތު"],
+ ["العُطْلَةُ","ޗުއްޓީ"]
+];
+/* In VS Code each unit becomes /data/book1/unitNN.json.
+   "audio" is ONE file for the whole conversation. */
+var UNIT_DATA = {
+ 1:{
+  lessons:[
+   {num:1,ar:"التَّحِيَّةُ",task:"ކްލާހުގެ ކުއްޖަކާ ސަލާމްކޮށް، އޭނާގެ ނަމާއި ޙާލު ޢަރަބިން އަހާ. ދެން ބަދަލުކޮށްލާ."},
+   {num:2,ar:"الْجِنْسِيَّةُ",task:"ކްލާހުގެ ކުއްޖަކު ކޮން ޤައުމަކުންތޯ އާއި އޭނާގެ ޤައުމިއްޔަތަކީ ކޮބައިތޯ ޢަރަބިން އަހާ."},
+   {num:3,ar:"التَّعَارُفُ",task:"ކްލާހުގެ ކުއްޖަކަށް ތިބާގެ ރަޙްމަތްތެރިއަކު ޢަރަބިން ތަޢާރަފުކޮށްދީ، އޭނާގެ މަސައްކަތްވެސް ބުނެދީ."}
+  ],
+  vocab:[
+   {lesson:1,ar:"السَّلَامُ عَلَيْكُمْ",en:"Peace be upon you",dv:"ތިޔަބޭކަލުންނަށް ސަލާމް"},
+   {lesson:1,ar:"وَعَلَيْكُمُ السَّلَامُ",en:"And upon you be peace",dv:"ތިޔަބޭކަލުންނަށްވެސް ސަލާމް"},
+   {lesson:1,ar:"اِسْمٌ",pl:"أَسْمَاءٌ",en:"name",dv:"ނަން"},
+   {lesson:1,ar:"مَا اسْمُكَ؟",en:"What is your name?",dv:"ތިބާގެ ނަމަކީ ކޮބައި؟"},
+   {lesson:1,ar:"كَيْفَ حَالُكَ؟",en:"How are you?",dv:"ތިބާގެ ޙާލު ކިހިނެއް؟"},
+   {lesson:1,ar:"بِخَيْرٍ",en:"fine, well",dv:"ރަނގަޅު"},
+   {lesson:1,ar:"الْحَمْدُ لِلّٰهِ",en:"Praise be to Allah",dv:"ޙަމްދު ހުރީ ﷲއަށް"},
+   {lesson:1,ar:"أَنَا",en:"I",dv:"އަހަރެން"},
+   {lesson:1,ar:"أَنْتَ",en:"you (male)",dv:"ތިބާ (ފިރިހެން)"},
+   {lesson:1,ar:"أَنْتِ",en:"you (female)",dv:"ތިބާ (އަންހެން)"},
+   {lesson:2,ar:"مِنْ أَيْنَ؟",en:"From where?",dv:"ކޮންތާކުން؟"},
+   {lesson:2,ar:"جِنْسِيَّةٌ",en:"nationality",dv:"ޤައުމިއްޔަތު"},
+   {lesson:2,ar:"مَا جِنْسِيَّتُكَ؟",en:"What is your nationality?",dv:"ތިބާގެ ޤައުމިއްޔަތަކީ ކޮބައި؟"},
+   {lesson:2,ar:"الْمَالْدِيفُ",en:"the Maldives",dv:"ދިވެހިރާއްޖެ"},
+   {lesson:2,ar:"مَالْدِيفِيٌّ",en:"Maldivian (male)",dv:"ދިވެއްސެއް (ފިރިހެން)"},
+   {lesson:2,ar:"مَالْدِيفِيَّةٌ",en:"Maldivian (female)",dv:"ދިވެއްސެއް (އަންހެން)"},
+   {lesson:2,ar:"مِصْرُ",en:"Egypt",dv:"މިޞްރު"},
+   {lesson:2,ar:"مِصْرِيٌّ",en:"Egyptian",dv:"މިޞްރު މީހެއް"},
+   {lesson:2,ar:"تُرْكِيَا",en:"Turkey",dv:"ތުރުކީ"},
+   {lesson:2,ar:"تُرْكِيٌّ",en:"Turkish",dv:"ތުރުކީ މީހެއް"},
+   {lesson:2,ar:"بَاكِسْتَانُ",en:"Pakistan",dv:"ޕާކިސްތާން"},
+   {lesson:2,ar:"بَاكِسْتَانِيٌّ",en:"Pakistani",dv:"ޕާކިސްތާން މީހެއް"},
+   {lesson:2,ar:"سُورِيَا",en:"Syria",dv:"ސޫރިޔާ"},
+   {lesson:2,ar:"سُورِيٌّ",en:"Syrian",dv:"ސޫރިޔާ މީހެއް"},
+   {lesson:2,ar:"هَلْ",en:"(yes/no question word)",dv:"(ސުވާލުކުރާ ލަފުޒު)"},
+   {lesson:2,ar:"نَعَمْ",en:"yes",dv:"އާނ"},
+   {lesson:3,ar:"هَذَا",en:"this (masculine)",dv:"މި (ފިރިހެން)"},
+   {lesson:3,ar:"هَذِهِ",en:"this (feminine)",dv:"މި (އަންހެން)"},
+   {lesson:3,ar:"هُوَ",en:"he",dv:"އޭނާ (ފިރިހެން)"},
+   {lesson:3,ar:"هِيَ",en:"she",dv:"އޭނާ (އަންހެން)"},
+   {lesson:3,ar:"أَخٌ",pl:"إِخْوَةٌ",en:"brother",dv:"ބޭބެ / ކޮއްކޮ (ފިރިހެން)"},
+   {lesson:3,ar:"أُخْتٌ",pl:"أَخَوَاتٌ",en:"sister",dv:"ދައްތަ / ކޮއްކޮ (އަންހެން)"},
+   {lesson:3,ar:"صَدِيقٌ",pl:"أَصْدِقَاءُ",en:"friend (male)",dv:"ރަޙްމަތްތެރިޔާ (ފިރިހެން)"},
+   {lesson:3,ar:"صَدِيقَةٌ",pl:"صَدِيقَاتٌ",en:"friend (female)",dv:"ރަޙްމަތްތެރިޔާ (އަންހެން)"},
+   {lesson:3,ar:"مُدَرِّسٌ",pl:"مُدَرِّسُونَ",en:"teacher",dv:"މުދައްރިސް"},
+   {lesson:3,ar:"طَبِيبٌ",pl:"أَطِبَّاءُ",en:"doctor (male)",dv:"ޑޮކްޓަރު (ފިރިހެން)"},
+   {lesson:3,ar:"طَبِيبَةٌ",pl:"طَبِيبَاتٌ",en:"doctor (female)",dv:"ޑޮކްޓަރު (އަންހެން)"},
+   {lesson:3,ar:"مُهَنْدِسٌ",pl:"مُهَنْدِسُونَ",en:"engineer",dv:"އިންޖިނޭރު"},
+   {lesson:3,ar:"طَالِبٌ",pl:"طُلَّابٌ",en:"student (male)",dv:"ދަރިވަރު (ފިރިހެން)"},
+   {lesson:3,ar:"طَالِبَةٌ",pl:"طَالِبَاتٌ",en:"student (female)",dv:"ދަރިވަރު (އަންހެން)"},
+   {lesson:3,ar:"أَهْلًا وَسَهْلًا",en:"Welcome",dv:"މަރުޙަބާ"},
+   {lesson:3,ar:"مَعَ السَّلَامَةِ",en:"Goodbye",dv:"ސަލާމަތާއެކު (ވަކިވެލަން ބުނާ ބަސް)"}
+  ],
+  conv:[
+   {lesson:1,audio:"audio/u01-l01-a.mp3",lines:[
+    {who:"أَحْمَدُ",ar:"السَّلَامُ عَلَيْكُمْ.",en:"Peace be upon you.",dv:"ތިޔަބޭކަލުންނަށް ސަލާމް."},
+    {who:"عَلِيٌّ",ar:"وَعَلَيْكُمُ السَّلَامُ وَرَحْمَةُ اللهِ.",en:"And upon you be peace and the mercy of Allah.",dv:"ތިޔަބޭކަލުންނަށްވެސް ސަލާމާއި ﷲގެ ރަޙްމަތް."},
+    {who:"أَحْمَدُ",ar:"اِسْمِي أَحْمَدُ. مَا اسْمُكَ؟",en:"My name is Ahmed. What is your name?",dv:"އަހަރެންގެ ނަމަކީ އަޙްމަދު. ތިބާގެ ނަމަކީ ކޮބައި؟"},
+    {who:"عَلِيٌّ",ar:"اِسْمِي عَلِيٌّ.",en:"My name is Ali.",dv:"އަހަރެންގެ ނަމަކީ ޢަލީ."},
+    {who:"أَحْمَدُ",ar:"كَيْفَ حَالُكَ يَا عَلِيُّ؟",en:"How are you, Ali?",dv:"ޢަލީ، ތިބާގެ ޙާލު ކިހިނެއް؟"},
+    {who:"عَلِيٌّ",ar:"بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ. وَكَيْفَ حَالُكَ أَنْتَ؟",en:"Fine, praise be to Allah. And how are you?",dv:"ރަނގަޅު، އަލްޙަމްދު ލިއްލާހި. ތިބާގެ ޙާލު ކިހިނެއް؟"},
+    {who:"أَحْمَدُ",ar:"بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ.",en:"Fine, praise be to Allah.",dv:"ރަނގަޅު، އަލްޙަމްދު ލިއްލާހި."}
+   ]},
+   {lesson:1,audio:"audio/u01-l01-b.mp3",lines:[
+    {who:"عَائِشَةُ",ar:"السَّلَامُ عَلَيْكُمْ.",en:"Peace be upon you.",dv:"ތިޔަބޭކަލުންނަށް ސަލާމް."},
+    {who:"مَرْيَمُ",ar:"وَعَلَيْكُمُ السَّلَامُ.",en:"And upon you be peace.",dv:"ތިޔަބޭކަލުންނަށްވެސް ސަލާމް."},
+    {who:"عَائِشَةُ",ar:"اِسْمِي عَائِشَةُ. مَا اسْمُكِ؟",en:"My name is Aisha. What is your name?",dv:"އަހަރެންގެ ނަމަކީ ޢާއިޝާ. ތިބާގެ ނަމަކީ ކޮބައި؟"},
+    {who:"مَرْيَمُ",ar:"اِسْمِي مَرْيَمُ.",en:"My name is Maryam.",dv:"އަހަރެންގެ ނަމަކީ މަރްޔަމް."},
+    {who:"عَائِشَةُ",ar:"كَيْفَ حَالُكِ يَا مَرْيَمُ؟",en:"How are you, Maryam?",dv:"މަރްޔަމް، ތިބާގެ ޙާލު ކިހިނެއް؟"},
+    {who:"مَرْيَمُ",ar:"بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ. وَكَيْفَ حَالُكِ أَنْتِ؟",en:"Fine, praise be to Allah. And how are you?",dv:"ރަނގަޅު، އަލްޙަމްދު ލިއްލާހި. ތިބާގެ ޙާލު ކިހިނެއް؟"},
+    {who:"عَائِشَةُ",ar:"بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ.",en:"Fine, praise be to Allah.",dv:"ރަނގަޅު، އަލްޙަމްދު ލިއްލާހި."}
+   ]},
+   {lesson:2,audio:"audio/u01-l02-a.mp3",lines:[
+    {who:"حَسَنٌ",ar:"السَّلَامُ عَلَيْكُمْ.",en:"Peace be upon you.",dv:"ތިޔަބޭކަލުންނަށް ސަލާމް."},
+    {who:"يُوسُفُ",ar:"وَعَلَيْكُمُ السَّلَامُ.",en:"And upon you be peace.",dv:"ތިޔަބޭކަލުންނަށްވެސް ސަލާމް."},
+    {who:"حَسَنٌ",ar:"مِنْ أَيْنَ أَنْتَ؟",en:"Where are you from?",dv:"ތިބާ ކޮންތާކުން؟"},
+    {who:"يُوسُفُ",ar:"أَنَا مِنَ الْمَالْدِيفِ. وَأَنْتَ؟",en:"I am from the Maldives. And you?",dv:"އަހަރެން ދިވެހިރާއްޖެއިން. ތިބާ؟"},
+    {who:"حَسَنٌ",ar:"أَنَا مِنْ مِصْرَ.",en:"I am from Egypt.",dv:"އަހަރެން މިޞްރުން."},
+    {who:"يُوسُفُ",ar:"هَلْ أَنْتَ مِصْرِيٌّ؟",en:"Are you Egyptian?",dv:"ތިބާއަކީ މިޞްރު މީހެއްތަ؟"},
+    {who:"حَسَنٌ",ar:"نَعَمْ، أَنَا مِصْرِيٌّ. وَمَا جِنْسِيَّتُكَ أَنْتَ؟",en:"Yes, I am Egyptian. And what is your nationality?",dv:"އާނ، އަހަރެންނަކީ މިޞްރު މީހެއް. ތިބާގެ ޤައުމިއްޔަތަކީ ކޮބައި؟"},
+    {who:"يُوسُفُ",ar:"أَنَا مَالْدِيفِيٌّ.",en:"I am Maldivian.",dv:"އަހަރެންނަކީ ދިވެއްސެއް."},
+    {who:"حَسَنٌ",ar:"أَهْلًا وَسَهْلًا.",en:"Welcome.",dv:"މަރުޙަބާ."}
+   ]},
+   {lesson:2,audio:"audio/u01-l02-b.mp3",lines:[
+    {who:"خَدِيجَةُ",ar:"السَّلَامُ عَلَيْكُمْ.",en:"Peace be upon you.",dv:"ތިޔަބޭކަލުންނަށް ސަލާމް."},
+    {who:"فَاطِمَةُ",ar:"وَعَلَيْكُمُ السَّلَامُ.",en:"And upon you be peace.",dv:"ތިޔަބޭކަލުންނަށްވެސް ސަލާމް."},
+    {who:"خَدِيجَةُ",ar:"مِنْ أَيْنَ أَنْتِ؟",en:"Where are you from?",dv:"ތިބާ ކޮންތާކުން؟"},
+    {who:"فَاطِمَةُ",ar:"أَنَا مِنْ تُرْكِيَا. وَأَنْتِ؟",en:"I am from Turkey. And you?",dv:"އަހަރެން ތުރުކީން. ތިބާ؟"},
+    {who:"خَدِيجَةُ",ar:"أَنَا مِنَ الْمَالْدِيفِ.",en:"I am from the Maldives.",dv:"އަހަރެން ދިވެހިރާއްޖެއިން."},
+    {who:"فَاطِمَةُ",ar:"هَلْ أَنْتِ مَالْدِيفِيَّةٌ؟",en:"Are you Maldivian?",dv:"ތިބާއަކީ ދިވެއްސެއްތަ؟"},
+    {who:"خَدِيجَةُ",ar:"نَعَمْ، أَنَا مَالْدِيفِيَّةٌ. وَمَا جِنْسِيَّتُكِ أَنْتِ؟",en:"Yes, I am Maldivian. And what is your nationality?",dv:"އާނ، އަހަރެންނަކީ ދިވެއްސެއް. ތިބާގެ ޤައުމިއްޔަތަކީ ކޮބައި؟"},
+    {who:"فَاطِمَةُ",ar:"أَنَا تُرْكِيَّةٌ.",en:"I am Turkish.",dv:"އަހަރެންނަކީ ތުރުކީ މީހެއް."},
+    {who:"خَدِيجَةُ",ar:"أَهْلًا وَسَهْلًا.",en:"Welcome.",dv:"މަރުޙަބާ."}
+   ]},
+   {lesson:3,audio:"audio/u01-l03-a.mp3",lines:[
+    {who:"إِبْرَاهِيمُ",ar:"السَّلَامُ عَلَيْكُمْ.",en:"Peace be upon you.",dv:"ތިޔަބޭކަލުންނަށް ސަލާމް."},
+    {who:"خَالِدٌ",ar:"وَعَلَيْكُمُ السَّلَامُ.",en:"And upon you be peace.",dv:"ތިޔަބޭކަލުންނަށްވެސް ސަލާމް."},
+    {who:"إِبْرَاهِيمُ",ar:"هَذَا أَخِي حَسَنٌ، هُوَ طَبِيبٌ.",en:"This is my brother Hassan. He is a doctor.",dv:"މިއީ އަހަރެންގެ ބޭބެ ޙަސަން. އޭނާއަކީ ޑޮކްޓަރެއް."},
+    {who:"خَالِدٌ",ar:"أَهْلًا وَسَهْلًا.",en:"Welcome.",dv:"މަރުޙަބާ."},
+    {who:"إِبْرَاهِيمُ",ar:"وَهَذَا صَدِيقِي عُمَرُ، هُوَ مُدَرِّسٌ.",en:"And this is my friend Umar. He is a teacher.",dv:"މިއީ އަހަރެންގެ ރަޙްމަތްތެރިޔާ ޢުމަރު. އޭނާއަކީ މުދައްރިސެއް."},
+    {who:"خَالِدٌ",ar:"أَهْلًا وَسَهْلًا. أَنَا خَالِدٌ، أَنَا مُهَنْدِسٌ.",en:"Welcome. I am Khalid. I am an engineer.",dv:"މަރުޙަބާ. އަހަރެންނަކީ ޚާލިދު. އަހަރެންނަކީ އިންޖިނޭރެއް."},
+    {who:"إِبْرَاهِيمُ",ar:"مَعَ السَّلَامَةِ يَا خَالِدُ.",en:"Goodbye, Khalid.",dv:"ޚާލިދު، ސަލާމަތާއެކު."},
+    {who:"خَالِدٌ",ar:"مَعَ السَّلَامَةِ.",en:"Goodbye.",dv:"ސަލާމަތާއެކު."}
+   ]},
+   {lesson:3,audio:"audio/u01-l03-b.mp3",lines:[
+    {who:"زَيْنَبُ",ar:"السَّلَامُ عَلَيْكُمْ.",en:"Peace be upon you.",dv:"ތިޔަބޭކަލުންނަށް ސަލާމް."},
+    {who:"هُدَى",ar:"وَعَلَيْكُمُ السَّلَامُ.",en:"And upon you be peace.",dv:"ތިޔަބޭކަލުންނަށްވެސް ސަލާމް."},
+    {who:"زَيْنَبُ",ar:"هَذِهِ أُخْتِي آمِنَةُ، هِيَ طَالِبَةٌ.",en:"This is my sister Aminah. She is a student.",dv:"މިއީ އަހަރެންގެ ކޮއްކޮ އާމިނާ. އޭނާއަކީ ދަރިވަރެއް."},
+    {who:"هُدَى",ar:"أَهْلًا وَسَهْلًا.",en:"Welcome.",dv:"މަރުޙަބާ."},
+    {who:"زَيْنَبُ",ar:"وَهَذِهِ صَدِيقَتِي سَارَةُ، هِيَ مُعَلِّمَةٌ.",en:"And this is my friend Sarah. She is a teacher.",dv:"މިއީ އަހަރެންގެ ރަޙްމަތްތެރިޔާ ސާރާ. އޭނާއަކީ މުދައްރިސާއެއް."},
+    {who:"هُدَى",ar:"أَهْلًا وَسَهْلًا. أَنَا هُدَى، أَنَا طَبِيبَةٌ.",en:"Welcome. I am Huda. I am a doctor.",dv:"މަރުޙަބާ. އަހަރެންނަކީ ހުދާ. އަހަރެންނަކީ ޑޮކްޓަރެއް."},
+    {who:"زَيْنَبُ",ar:"مَعَ السَّلَامَةِ يَا هُدَى.",en:"Goodbye, Huda.",dv:"ހުދާ، ސަލާމަތާއެކު."},
+    {who:"هُدَى",ar:"مَعَ السَّلَامَةِ.",en:"Goodbye.",dv:"ސަލާމަތާއެކު."}
+   ]}
+  ],
+  speak:[
+   {lesson:1,q:{ar:"السَّلَامُ عَلَيْكُمْ.",en:"Peace be upon you.",dv:"ތިޔަބޭކަލުންނަށް ސަލާމް."},a:{ar:"وَعَلَيْكُمُ السَّلَامُ.",en:"And upon you be peace.",dv:"ތިޔަބޭކަލުންނަށްވެސް ސަލާމް."}},
+   {lesson:1,q:{ar:"مَا اسْمُكَ؟",en:"What is your name?",dv:"ތިބާގެ ނަމަކީ ކޮބައި؟"},a:{ar:"اِسْمِي أَحْمَدُ.",en:"My name is Ahmed.",dv:"އަހަރެންގެ ނަމަކީ އަޙްމަދު."}},
+   {lesson:1,q:{ar:"كَيْفَ حَالُكَ؟",en:"How are you?",dv:"ތިބާގެ ޙާލު ކިހިނެއް؟"},a:{ar:"بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ.",en:"Fine, praise be to Allah.",dv:"ރަނގަޅު، އަލްޙަމްދު ލިއްލާހި."}},
+   {lesson:2,q:{ar:"مِنْ أَيْنَ أَنْتَ؟",en:"Where are you from?",dv:"ތިބާ ކޮންތާކުން؟"},a:{ar:"أَنَا مِنَ الْمَالْدِيفِ.",en:"I am from the Maldives.",dv:"އަހަރެން ދިވެހިރާއްޖެއިން."}},
+   {lesson:2,q:{ar:"مَا جِنْسِيَّتُكَ؟",en:"What is your nationality?",dv:"ތިބާގެ ޤައުމިއްޔަތަކީ ކޮބައި؟"},a:{ar:"أَنَا مَالْدِيفِيٌّ.",en:"I am Maldivian.",dv:"އަހަރެންނަކީ ދިވެއްސެއް."}},
+   {lesson:2,q:{ar:"هَلْ أَنْتَ مَالْدِيفِيٌّ؟",en:"Are you Maldivian?",dv:"ތިބާއަކީ ދިވެއްސެއްތަ؟"},a:{ar:"نَعَمْ، أَنَا مَالْدِيفِيٌّ.",en:"Yes, I am Maldivian.",dv:"އާނ، އަހަރެންނަކީ ދިވެއްސެއް."}},
+   {lesson:3,q:{ar:"مَنْ هَذَا؟",en:"Who is this?",dv:"މިއީ ކާކު؟"},a:{ar:"هَذَا أَخِي، هُوَ طَالِبٌ.",en:"This is my brother. He is a student.",dv:"މިއީ އަހަރެންގެ ބޭބެ. އޭނާއަކީ ދަރިވަރެއް."}},
+   {lesson:3,q:{ar:"مَنْ هَذِهِ؟",en:"Who is this?",dv:"މިއީ ކާކު؟"},a:{ar:"هَذِهِ أُخْتِي، هِيَ طَبِيبَةٌ.",en:"This is my sister. She is a doctor.",dv:"މިއީ އަހަރެންގެ ދައްތަ. އޭނާއަކީ ޑޮކްޓަރެއް."}},
+   {lesson:3,q:{ar:"هَلْ هُوَ مُدَرِّسٌ؟",en:"Is he a teacher?",dv:"އޭނާއަކީ މުދައްރިސެއްތަ؟"},a:{ar:"نَعَمْ، هُوَ مُدَرِّسٌ.",en:"Yes, he is a teacher.",dv:"އާނ، އޭނާއަކީ މުދައްރިސެއް."}}
+  ],
+  grammar:[
+   {lesson:1,title:"أَنْتَ އާއި أَنْتِ",body:"ފިރިހެނަކާ ވާހަކަދައްކާއިރު أَنْتَ ބޭނުންކުރެއެވެ. އަންހެނަކާ ވާހަކަދައްކާއިރު أَنْتِ ބޭނުންކުރެއެވެ. ލަފުޒުގެ ފަހަތަށް އަންނަ ކަފު (ك) ވެސް މިގޮތަށް ބަދަލުވެއެވެ.",
+    ex:[{ar:"مَا اسْمُكَ؟ — مَا اسْمُكِ؟",en:"What is your name? (to a man — to a woman)",dv:"ތިބާގެ ނަމަކީ ކޮބައި؟ (ފިރިހެނަކަށް — އަންހެނަކަށް)"},{ar:"كَيْفَ حَالُكَ؟ — كَيْفَ حَالُكِ؟",en:"How are you? (to a man — to a woman)",dv:"ޙާލު ކިހިނެއް؟ (ފިރިހެނަކަށް — އަންހެނަކަށް)"}]},
+   {lesson:2,title:"ޤައުމިއްޔަތު ބުނާ ގޮތް",body:"ޤައުމުގެ ނަމުގެ ފަހަތަށް (يّ) އިތުރުކުރުމުން ޤައުމިއްޔަތު ލިބެއެވެ. އަންހެނަކަށް ނަމަ އޭގެ ފަހަތަށް (ة) އިތުރުކުރެއެވެ.",
+    ex:[{ar:"مِصْرُ — مِصْرِيٌّ — مِصْرِيَّةٌ",en:"Egypt — Egyptian (m) — Egyptian (f)",dv:"މިޞްރު — މިޞްރު މީހެއް (ފ) — މިޞްރު މީހެއް (އ)"},{ar:"هَلْ أَنْتَ مَالْدِيفِيٌّ؟ نَعَمْ.",en:"Are you Maldivian? Yes.",dv:"ތިބާއަކީ ދިވެއްސެއްތަ؟ އާނ."}]},
+   {lesson:3,title:"هَذَا / هَذِهِ އާއި هُوَ / هِيَ",body:"ފިރިހެން ނަންތަކަށް هَذَا އާއި هُوَ ބޭނުންކުރެއެވެ. އަންހެން ނަންތަކަށް هَذِهِ އާއި هِيَ ބޭނުންކުރެއެވެ. އަންހެން ނަންތައް ގިނަފަހަރު ނިމެނީ (ة) އިންނެވެ.",
+    ex:[{ar:"هَذَا أَخِي، هُوَ مُدَرِّسٌ.",en:"This is my brother. He is a teacher.",dv:"މިއީ އަހަރެންގެ ބޭބެ. އޭނާއަކީ މުދައްރިސެއް."},{ar:"هَذِهِ أُخْتِي، هِيَ مُدَرِّسَةٌ.",en:"This is my sister. She is a teacher.",dv:"މިއީ އަހަރެންގެ ދައްތަ. އޭނާއަކީ މުދައްރިސާއެއް."}]}
+  ]
+ },
+ 2:{
+  lessons:[
+   {num:10,ar:"صُورَةُ الْأُسْرَةِ",task:"ތިބާގެ ޢާއިލާގެ ފޮޓޯއެއް ދައްކައިގެން، ކްލާހުގެ ކުއްޖަކަށް ޢާއިލާގެ މީހުން ޢަރަބިން ތަޢާރަފުކޮށްދީ."},
+   {num:11,ar:"شَجَرَةُ الْأُسْرَةِ",task:"ތިބާގެ ޢާއިލާގެ ގަސް ކުރަހައި، ކްލާހުގެ ކުއްޖަކަށް ބޮޑުބޭބެ، ބޮޑުދައިތަ، އެމީހުންގެ ދަރިން ޢަރަބިން ބުނެދީ."},
+   {num:12,ar:"فِي الْبَيْتِ",task:"ކްލާހުގެ ކުއްޖަކަށް ޢާއިލާގެ މީހުން ކޮންތާކު ކޮންކަމެއް ކުރަނީތޯ ޢަރަބިން ބުނެދީ: ޙަންމާމުގައި، ކޮޓަރީގައި، ނަމާދުކުރާ ތަނުގައި."}
+  ],
+  vocab:[
+   {lesson:1,ar:"أُسْرَةٌ",pl:"أُسَرٌ",en:"family",dv:"ޢާއިލާ"},
+   {lesson:1,ar:"صُورَةٌ",pl:"صُوَرٌ",en:"picture, photo",dv:"ފޮޓޯ"},
+   {lesson:1,ar:"وَالِدٌ",en:"father",dv:"ބައްޕަ"},
+   {lesson:1,ar:"وَالِدَةٌ",en:"mother",dv:"މަންމަ"},
+   {lesson:1,ar:"جَدٌّ",pl:"أَجْدَادٌ",en:"grandfather",dv:"ކާފަ"},
+   {lesson:1,ar:"جَدَّةٌ",pl:"جَدَّاتٌ",en:"grandmother",dv:"މާމަ"},
+   {lesson:1,ar:"مُعَلِّمَةٌ",pl:"مُعَلِّمَاتٌ",en:"teacher (female)",dv:"މުދައްރިސާ"},
+   {lesson:1,ar:"مَنْ هَذَا؟",en:"Who is this? (m)",dv:"މިއީ ކާކު؟ (ފިރިހެން)"},
+   {lesson:1,ar:"مَنْ هَذِهِ؟",en:"Who is this? (f)",dv:"މިއީ ކާކު؟ (އަންހެން)"},
+   {lesson:1,ar:"مَا شَاءَ اللهُ",en:"Masha Allah (what Allah has willed)",dv:"މާޝާﷲ"},
+   {lesson:2,ar:"شَجَرَةٌ",pl:"أَشْجَارٌ",en:"tree",dv:"ގަސް"},
+   {lesson:2,ar:"عَمٌّ",pl:"أَعْمَامٌ",en:"paternal uncle",dv:"ބޮޑުބޭބެ (ބައްޕަ ފަރާތު)"},
+   {lesson:2,ar:"عَمَّةٌ",pl:"عَمَّاتٌ",en:"paternal aunt",dv:"ބޮޑުދައިތަ (ބައްޕަ ފަރާތު)"},
+   {lesson:2,ar:"اِبْنٌ",pl:"أَبْنَاءٌ",en:"son",dv:"ފިރިހެން ދަރި"},
+   {lesson:2,ar:"اِبْنَةٌ",pl:"بَنَاتٌ",en:"daughter",dv:"އަންހެން ދަރި"},
+   {lesson:2,ar:"اِبْنُ عَمٍّ",en:"cousin (uncle's son)",dv:"ބޮޑުބޭބެގެ ފިރިހެން ދަރި"},
+   {lesson:2,ar:"مَا هَذِهِ؟",en:"What is this? (f)",dv:"މިއީ ކޮން އެއްޗެއް؟"},
+   {lesson:3,ar:"أَذَانٌ",en:"the call to prayer",dv:"ބަންގި"},
+   {lesson:3,ar:"الْفَجْرُ",en:"Fajr, dawn",dv:"ފަތިސް"},
+   {lesson:3,ar:"اللهُ أَكْبَرُ",en:"Allah is the greatest",dv:"ﷲ އެންމެ ބޮޑު"},
+   {lesson:3,ar:"أَوْلَادٌ",en:"children, boys",dv:"ކުދިން"},
+   {lesson:3,ar:"حَمَّامٌ",pl:"حَمَّامَاتٌ",en:"bathroom",dv:"ފާޚާނާ"},
+   {lesson:3,ar:"غُرْفَةٌ",pl:"غُرَفٌ",en:"room",dv:"ކޮޓަރި"},
+   {lesson:3,ar:"مُصَلًّى",en:"prayer room",dv:"ނަމާދުކުރާ ތަން"},
+   {lesson:3,ar:"مَسْجِدٌ",pl:"مَسَاجِدُ",en:"mosque",dv:"މިސްކިތް"},
+   {lesson:3,ar:"الْقُرْآنُ",en:"the Quran",dv:"ޤުރުއާން"},
+   {lesson:3,ar:"مِعْطَفٌ",pl:"مَعَاطِفُ",en:"coat",dv:"ކޯޓު"},
+   {lesson:3,ar:"نَظَّارَةٌ",pl:"نَظَّارَاتٌ",en:"glasses",dv:"އައިނު"},
+   {lesson:3,ar:"يَتَوَضَّأُ",command:"تَوَضَّأْ",en:"he makes wudu",dv:"އޭނާ ވުޟޫކުރަނީ"},
+   {lesson:3,ar:"يَقْرَأُ",command:"اِقْرَأْ",en:"he reads",dv:"އޭނާ ކިޔަވަނީ"},
+   {lesson:3,ar:"يُصَلِّي",command:"صَلِّ",en:"he prays",dv:"އޭނާ ނަމާދުކުރަނީ"},
+   {lesson:3,ar:"هَيَّا بِنَا",en:"Let's go",dv:"ހިނގާ ދަމާ"},
+   {lesson:3,ar:"أَيْنَ؟",en:"Where?",dv:"ކޮންތާކު؟"},
+   {lesson:3,ar:"أَبٌ",en:"father",dv:"ބައްޕަ"},
+   {lesson:3,ar:"أُمٌّ",en:"mother",dv:"މަންމަ"}
+  ],
+  conv:[
+   {lesson:1,audio:"audio/u02-l10-a.mp3",lines:[
+    {who:"سَعِيدٌ",ar:"هَذِهِ صُورَةُ أُسْرَتِي.",en:"This is a photo of my family.",dv:"މިއީ އަހަރެންގެ ޢާއިލާގެ ފޮޓޯއެއް."},
+    {who:"مُحَمَّدٌ",ar:"مَا شَاءَ اللهُ! مَنْ هَذَا؟",en:"Masha Allah! Who is this?",dv:"މާޝާﷲ! މިއީ ކާކު؟"},
+    {who:"سَعِيدٌ",ar:"هَذَا وَالِدِي، هُوَ مُدَرِّسٌ.",en:"This is my father. He is a teacher.",dv:"މިއީ އަހަރެންގެ ބައްޕަ. އޭނާއަކީ މުދައްރިސެއް."},
+    {who:"مُحَمَّدٌ",ar:"وَمَنْ هَذِهِ؟",en:"And who is this?",dv:"މިއީ ކާކު؟"},
+    {who:"سَعِيدٌ",ar:"هَذِهِ وَالِدَتِي، هِيَ طَبِيبَةٌ.",en:"This is my mother. She is a doctor.",dv:"މިއީ އަހަރެންގެ މަންމަ. އޭނާއަކީ ޑޮކްޓަރެއް."},
+    {who:"مُحَمَّدٌ",ar:"وَمَنْ هَذَا؟",en:"And who is this?",dv:"މިއީ ކާކު؟"},
+    {who:"سَعِيدٌ",ar:"هَذَا جَدِّي، وَهَذِهِ جَدَّتِي.",en:"This is my grandfather, and this is my grandmother.",dv:"މިއީ އަހަރެންގެ ކާފަ، އަދި މިއީ އަހަރެންގެ މާމަ."},
+    {who:"مُحَمَّدٌ",ar:"مَا شَاءَ اللهُ!",en:"Masha Allah!",dv:"މާޝާﷲ!"}
+   ]},
+   {lesson:1,audio:"audio/u02-l10-b.mp3",lines:[
+    {who:"نُورُ",ar:"هَذِهِ صُورَةُ أُسْرَتِي.",en:"This is a photo of my family.",dv:"މިއީ އަހަރެންގެ ޢާއިލާގެ ފޮޓޯއެއް."},
+    {who:"لَيْلَى",ar:"مَا شَاءَ اللهُ! مَنْ هَذِهِ؟",en:"Masha Allah! Who is this?",dv:"މާޝާﷲ! މިއީ ކާކު؟"},
+    {who:"نُورُ",ar:"هَذِهِ وَالِدَتِي، هِيَ مُعَلِّمَةٌ.",en:"This is my mother. She is a teacher.",dv:"މިއީ އަހަރެންގެ މަންމަ. އޭނާއަކީ މުދައްރިސާއެއް."},
+    {who:"لَيْلَى",ar:"وَمَنْ هَذَا؟",en:"And who is this?",dv:"މިއީ ކާކު؟"},
+    {who:"نُورُ",ar:"هَذَا أَخِي أَحْمَدُ، هُوَ طَالِبٌ.",en:"This is my brother Ahmed. He is a student.",dv:"މިއީ އަހަރެންގެ ބޭބެ އަޙްމަދު. އޭނާއަކީ ދަރިވަރެއް."},
+    {who:"لَيْلَى",ar:"وَمَنْ هَذِهِ؟",en:"And who is this?",dv:"މިއީ ކާކު؟"},
+    {who:"نُورُ",ar:"هَذِهِ أُخْتِي، وَهَذِهِ جَدَّتِي.",en:"This is my sister, and this is my grandmother.",dv:"މިއީ އަހަރެންގެ ދައްތަ، އަދި މިއީ އަހަރެންގެ މާމަ."},
+    {who:"لَيْلَى",ar:"مَا شَاءَ اللهُ!",en:"Masha Allah!",dv:"މާޝާﷲ!"}
+   ]},
+   {lesson:2,audio:"audio/u02-l11-a.mp3",lines:[
+    {who:"عُمَرُ",ar:"مَا هَذِهِ؟",en:"What is this?",dv:"މިއީ ކޮން އެއްޗެއް؟"},
+    {who:"يُوسُفُ",ar:"هَذِهِ شَجَرَةُ أُسْرَتِي.",en:"This is my family tree.",dv:"މިއީ އަހަރެންގެ ޢާއިލާގެ ގަސް."},
+    {who:"عُمَرُ",ar:"مَنْ هَذَا؟",en:"Who is this?",dv:"މިއީ ކާކު؟"},
+    {who:"يُوسُفُ",ar:"هَذَا جَدِّي عَبْدُ اللهِ، وَهَذَا وَالِدِي حَسَنٌ.",en:"This is my grandfather Abdullah, and this is my father Hassan.",dv:"މިއީ އަހަރެންގެ ކާފަ ޢަބްދުﷲ، އަދި މިއީ އަހަރެންގެ ބައްޕަ ޙަސަން."},
+    {who:"عُمَرُ",ar:"وَمَنْ هَذَا؟",en:"And who is this?",dv:"މިއީ ކާކު؟"},
+    {who:"يُوسُفُ",ar:"هَذَا عَمِّي عَلِيٌّ، وَهَذِهِ عَمَّتِي مَرْيَمُ.",en:"This is my uncle Ali, and this is my aunt Maryam.",dv:"މިއީ އަހަރެންގެ ބޮޑުބޭބެ ޢަލީ، އަދި މިއީ އަހަރެންގެ ބޮޑުދައިތަ މަރްޔަމް."},
+    {who:"عُمَرُ",ar:"وَمَنْ هَذَا؟",en:"And who is this?",dv:"މިއީ ކާކު؟"},
+    {who:"يُوسُفُ",ar:"هَذَا ابْنُ عَمِّي، وَهَذِهِ ابْنَةُ عَمِّي.",en:"This is my uncle's son, and this is my uncle's daughter.",dv:"މިއީ އަހަރެންގެ ބޮޑުބޭބެގެ ފިރިހެން ދަރި، އަދި މިއީ ބޮޑުބޭބެގެ އަންހެން ދަރި."},
+    {who:"عُمَرُ",ar:"مَا شَاءَ اللهُ!",en:"Masha Allah!",dv:"މާޝާﷲ!"}
+   ]},
+   {lesson:2,audio:"audio/u02-l11-b.mp3",lines:[
+    {who:"آمِنَةُ",ar:"هَلْ هَذِهِ شَجَرَةٌ؟",en:"Is this a tree?",dv:"މިއީ ގަހެއްތަ؟"},
+    {who:"سَلْمَى",ar:"نَعَمْ، هَذِهِ شَجَرَةُ أُسْرَتِي.",en:"Yes, this is my family tree.",dv:"އާނ، މިއީ އަހަރެންގެ ޢާއިލާގެ ގަސް."},
+    {who:"آمِنَةُ",ar:"مَنْ هَذِهِ؟",en:"Who is this?",dv:"މިއީ ކާކު؟"},
+    {who:"سَلْمَى",ar:"هَذِهِ جَدَّتِي، وَهَذِهِ وَالِدَتِي.",en:"This is my grandmother, and this is my mother.",dv:"މިއީ އަހަރެންގެ މާމަ، އަދި މިއީ އަހަރެންގެ މަންމަ."},
+    {who:"آمِنَةُ",ar:"وَمَنْ هَذَا؟",en:"And who is this?",dv:"މިއީ ކާކު؟"},
+    {who:"سَلْمَى",ar:"هَذَا عَمِّي، وَهَذِهِ عَمَّتِي.",en:"This is my uncle, and this is my aunt.",dv:"މިއީ އަހަރެންގެ ބޮޑުބޭބެ، އަދި މިއީ އަހަރެންގެ ބޮޑުދައިތަ."},
+    {who:"آمِنَةُ",ar:"وَمَنْ هَذِهِ؟",en:"And who is this?",dv:"މިއީ ކާކު؟"},
+    {who:"سَلْمَى",ar:"هَذِهِ ابْنَةُ عَمَّتِي، هِيَ طَالِبَةٌ.",en:"This is my aunt's daughter. She is a student.",dv:"މިއީ އަހަރެންގެ ބޮޑުދައިތަގެ އަންހެން ދަރި. އޭނާއަކީ ދަރިވަރެއް."}
+   ]},
+   {lesson:3,audio:"audio/u02-l12-a.mp3",lines:[
+    {who:"الْأَبُ",ar:"هَذَا أَذَانُ الْفَجْرِ. أَيْنَ أَحْمَدُ؟",en:"This is the Fajr adhan. Where is Ahmed?",dv:"މިއީ ފަތިސް ނަމާދުގެ ބަންގި. އަޙްމަދު ކޮބައި؟"},
+    {who:"الِابْنُ",ar:"أَحْمَدُ فِي الْحَمَّامِ، يَتَوَضَّأُ.",en:"Ahmed is in the bathroom, making wudu.",dv:"އަޙްމަދު ހުރީ ފާޚާނާގައި، ވުޟޫކުރަނީ."},
+    {who:"الْأَبُ",ar:"وَأَيْنَ عَلِيٌّ؟",en:"And where is Ali?",dv:"ޢަލީ ކޮބައި؟"},
+    {who:"الِابْنُ",ar:"عَلِيٌّ فِي الْغُرْفَةِ، يَقْرَأُ الْقُرْآنَ.",en:"Ali is in the room, reading the Quran.",dv:"ޢަލީ ހުރީ ކޮޓަރީގައި، ޤުރުއާން ކިޔަވަނީ."},
+    {who:"الْأَبُ",ar:"أَيْنَ الْمِعْطَفُ؟",en:"Where is the coat?",dv:"ކޯޓު ކޮބައި؟"},
+    {who:"الِابْنُ",ar:"هَذَا هُوَ الْمِعْطَفُ يَا وَالِدِي.",en:"Here is the coat, father.",dv:"ބައްޕާ، މިއޮތީ ކޯޓު."},
+    {who:"الْأَبُ",ar:"وَأَيْنَ النَّظَّارَةُ؟",en:"And where are the glasses?",dv:"އައިނު ކޮބައި؟"},
+    {who:"الِابْنُ",ar:"هَذِهِ هِيَ النَّظَّارَةُ.",en:"Here are the glasses.",dv:"މިއޮތީ އައިނު."},
+    {who:"الْأَبُ",ar:"هَيَّا بِنَا إِلَى الْمَسْجِدِ.",en:"Let's go to the mosque.",dv:"ހިނގާ މިސްކިތަށް ދަމާ."},
+    {who:"الِابْنُ",ar:"هَيَّا بِنَا.",en:"Let's go.",dv:"ހިނގާ ދަމާ."}
+   ]},
+   {lesson:3,audio:"audio/u02-l12-b.mp3",lines:[
+    {who:"الْأُمُّ",ar:"هَذَا أَذَانُ الْفَجْرِ. أَيْنَ مَرْيَمُ؟",en:"This is the Fajr adhan. Where is Maryam?",dv:"މިއީ ފަތިސް ނަމާދުގެ ބަންގި. މަރްޔަމް ކޮބައި؟"},
+    {who:"الِابْنَةُ",ar:"مَرْيَمُ فِي الْحَمَّامِ، تَتَوَضَّأُ.",en:"Maryam is in the bathroom, making wudu.",dv:"މަރްޔަމް ހުރީ ފާޚާނާގައި، ވުޟޫކުރަނީ."},
+    {who:"الْأُمُّ",ar:"وَأَيْنَ فَاطِمَةُ؟",en:"And where is Fatimah?",dv:"ފާޠިމާ ކޮބައި؟"},
+    {who:"الِابْنَةُ",ar:"فَاطِمَةُ فِي الْمُصَلَّى، تُصَلِّي.",en:"Fatimah is in the prayer room, praying.",dv:"ފާޠިމާ ހުރީ ނަމާދުކުރާ ތަނުގައި، ނަމާދުކުރަނީ."},
+    {who:"الْأُمُّ",ar:"أَيْنَ الْقُرْآنُ؟",en:"Where is the Quran?",dv:"ޤުރުއާން ކޮބައި؟"},
+    {who:"الِابْنَةُ",ar:"هَذَا هُوَ الْقُرْآنُ يَا وَالِدَتِي.",en:"Here is the Quran, mother.",dv:"މަންމާ، މިއޮތީ ޤުރުއާން."},
+    {who:"الْأُمُّ",ar:"هَيَّا بِنَا إِلَى الْمُصَلَّى.",en:"Let's go to the prayer room.",dv:"ހިނގާ ނަމާދުކުރާ ތަނަށް ދަމާ."},
+    {who:"الِابْنَةُ",ar:"هَيَّا بِنَا.",en:"Let's go.",dv:"ހިނގާ ދަމާ."}
+   ]}
+  ],
+  speak:[
+   {lesson:1,q:{ar:"مَنْ هَذَا؟",en:"Who is this?",dv:"މިއީ ކާކު؟"},a:{ar:"هَذَا وَالِدِي، هُوَ مُدَرِّسٌ.",en:"This is my father. He is a teacher.",dv:"މިއީ އަހަރެންގެ ބައްޕަ. އޭނާއަކީ މުދައްރިސެއް."}},
+   {lesson:1,q:{ar:"مَنْ هَذِهِ؟",en:"Who is this?",dv:"މިއީ ކާކު؟"},a:{ar:"هَذِهِ وَالِدَتِي، هِيَ طَبِيبَةٌ.",en:"This is my mother. She is a doctor.",dv:"މިއީ އަހަރެންގެ މަންމަ. އޭނާއަކީ ޑޮކްޓަރެއް."}},
+   {lesson:1,q:{ar:"هَلْ هَذَا جَدُّكَ؟",en:"Is this your grandfather?",dv:"މިއީ ތިބާގެ ކާފަތަ؟"},a:{ar:"نَعَمْ، هَذَا جَدِّي.",en:"Yes, this is my grandfather.",dv:"އާނ، މިއީ އަހަރެންގެ ކާފަ."}},
+   {lesson:2,q:{ar:"مَا هَذِهِ؟",en:"What is this?",dv:"މިއީ ކޮން އެއްޗެއް؟"},a:{ar:"هَذِهِ شَجَرَةُ أُسْرَتِي.",en:"This is my family tree.",dv:"މިއީ އަހަރެންގެ ޢާއިލާގެ ގަސް."}},
+   {lesson:2,q:{ar:"مَنْ هَذَا؟",en:"Who is this?",dv:"މިއީ ކާކު؟"},a:{ar:"هَذَا عَمِّي.",en:"This is my uncle.",dv:"މިއީ އަހަރެންގެ ބޮޑުބޭބެ."}},
+   {lesson:2,q:{ar:"هَلْ هَذِهِ عَمَّتُكَ؟",en:"Is this your aunt?",dv:"މިއީ ތިބާގެ ބޮޑުދައިތަތަ؟"},a:{ar:"نَعَمْ، هَذِهِ عَمَّتِي.",en:"Yes, this is my aunt.",dv:"އާނ، މިއީ އަހަރެންގެ ބޮޑުދައިތަ."}},
+   {lesson:3,q:{ar:"أَيْنَ أَحْمَدُ؟",en:"Where is Ahmed?",dv:"އަޙްމަދު ކޮބައި؟"},a:{ar:"أَحْمَدُ فِي الْحَمَّامِ، يَتَوَضَّأُ.",en:"Ahmed is in the bathroom, making wudu.",dv:"އަޙްމަދު ހުރީ ފާޚާނާގައި، ވުޟޫކުރަނީ."}},
+   {lesson:3,q:{ar:"أَيْنَ الْمِعْطَفُ؟",en:"Where is the coat?",dv:"ކޯޓު ކޮބައި؟"},a:{ar:"هَذَا هُوَ الْمِعْطَفُ.",en:"Here is the coat.",dv:"މިއޮތީ ކޯޓު."}},
+   {lesson:3,q:{ar:"هَيَّا بِنَا إِلَى الْمَسْجِدِ.",en:"Let's go to the mosque.",dv:"ހިނގާ މިސްކިތަށް ދަމާ."},a:{ar:"هَيَّا بِنَا.",en:"Let's go.",dv:"ހިނގާ ދަމާ."}}
+  ],
+  grammar:[
+   {lesson:1,title:"ي = އަހަރެންގެ",body:"ނަމެއްގެ ފަހަތަށް (ي) އިތުރުކުރުމުން 'އަހަރެންގެ' މާނަ ލިބެއެވެ.",
+    ex:[{ar:"وَالِدٌ — وَالِدِي",en:"father — my father",dv:"ބައްޕަ — އަހަރެންގެ ބައްޕަ"},{ar:"جَدَّةٌ — جَدَّتِي",en:"grandmother — my grandmother",dv:"މާމަ — އަހަރެންގެ މާމަ"}]},
+   {lesson:2,title:"މުޛައްކަރާއި މުއައްނަޘް",body:"ޢާއިލާގެ ގިނަ ނަންތައް އަންހެން ސިފައަށް ބަދަލުކުރަނީ ފަހަތަށް (ة) އިތުރުކޮށްގެންނެވެ.",
+    ex:[{ar:"عَمٌّ — عَمَّةٌ",en:"uncle — aunt",dv:"ބޮޑުބޭބެ — ބޮޑުދައިތަ"},{ar:"اِبْنٌ — اِبْنَةٌ",en:"son — daughter",dv:"ފިރިހެން ދަރި — އަންހެން ދަރި"}]},
+   {lesson:3,title:"މުޟާރިޢު ފިޢުލު: هُوَ އާއި هِيَ",body:"މިހާރު ހިނގަމުންދާ ކަމެއް ބުނާއިރު ފިޢުލު ފެށެނީ هُوَ އަށް (ي) އިން، އަދި هِيَ އަށް (ت) އިންނެވެ.",
+    ex:[{ar:"هُوَ يَقْرَأُ — هِيَ تَقْرَأُ",en:"he reads — she reads",dv:"އޭނާ ކިޔަވަނީ (ފ) — އޭނާ ކިޔަވަނީ (އ)"},{ar:"هُوَ يُصَلِّي — هِيَ تُصَلِّي",en:"he prays — she prays",dv:"އޭނާ ނަމާދުކުރަނީ (ފ) — އޭނާ ނަމާދުކުރަނީ (އ)"}]}
+  ]
+ }
+};
+UNIT_DATA[3] = {
+  lessons:[
+   {num:19,ar:"أَيْنَ تَسْكُنُ؟",task:"ކްލާހުގެ ކުއްޖަކު ދިރިއުޅެނީ ކޮން ހިސާބެއްގައިތޯ އާއި ގޭގައިތޯ ނުވަތަ އެޕާޓްމަންޓެއްގައިތޯ ޢަރަބިން އަހާ."},
+   {num:20,ar:"أُرِيدُ شَقَّةً",task:"އެކަކު އެޕާޓްމަންޓް ކުއްޔަށް ދޭ މީހާގެ ދައުރު އަދާކޮށް، އަނެކަކު ކޮޓަރީގެ ޢަދަދާއި ފަންގިފިލާ ޢަރަބިން އަހާ."},
+   {num:21,ar:"الْأَثَاثُ",task:"އެކަކު ވިއްކާ މީހާ، އަނެކަކު ގަންނަ މީހާ. ކޮންމެ ކޮޓަރިއަކަށް ބޭނުންވާ ފަރުނީޗަރު ޢަރަބިން ބުނެދީ."}
+  ],
+  vocab:[
+   {lesson:1,ar:"بَيْتٌ",pl:"بُيُوتٌ",en:"house",dv:"ގެ"},
+   {lesson:1,ar:"شَقَّةٌ",pl:"شُقَقٌ",en:"flat, apartment",dv:"އެޕާޓްމަންޓް"},
+   {lesson:1,ar:"رَقْمٌ",pl:"أَرْقَامٌ",en:"number",dv:"ނަންބަރު"},
+   {lesson:1,ar:"حَيٌّ",pl:"أَحْيَاءٌ",en:"neighbourhood",dv:"އަވަށް"},
+   {lesson:1,ar:"يَسْكُنُ",command:"اُسْكُنْ",en:"he lives",dv:"އޭނާ ދިރިއުޅެނީ"},
+   {lesson:1,ar:"لَا",en:"no",dv:"ނޫން"},
+   {lesson:1,ar:"الْمَطَارُ",en:"the airport",dv:"އެއާޕޯޓު"},
+   {lesson:1,ar:"الْجَامِعَةُ",en:"the university",dv:"ޔުނިވަރސިޓީ"},
+   {lesson:2,ar:"دَوْرٌ",pl:"أَدْوَارٌ",en:"floor, storey",dv:"ފަންގިފިލާ"},
+   {lesson:2,ar:"الدَّوْرُ الْخَامِسُ",en:"the fifth floor",dv:"ފަސްވަނަ ފަންގިފިލާ"},
+   {lesson:2,ar:"جَمِيلٌ",en:"beautiful",dv:"ރީތި"},
+   {lesson:2,ar:"غُرَفٌ",en:"rooms",dv:"ކޮޓަރިތައް"},
+   {lesson:2,ar:"تَفَضَّلْ",en:"please, go ahead",dv:"ތަފައްޟަލް (އިޝާރާތްކޮށްދޭ ބަސް)"},
+   {lesson:2,ar:"مُشَاهَدَةٌ",en:"viewing, seeing",dv:"ބަލައިލުން"},
+   {lesson:2,ar:"أُرِيدُ",en:"I want",dv:"އަހަރެން ބޭނުން"},
+   {lesson:2,ar:"يَدْخُلُ",command:"اُدْخُلْ",en:"he enters",dv:"އޭނާ ވަންނަނީ"},
+   {lesson:2,ar:"بَابٌ",pl:"أَبْوَابٌ",en:"door",dv:"ދޮރު"},
+   {lesson:3,ar:"مَطْبَخٌ",pl:"مَطَابِخُ",en:"kitchen",dv:"ބަދިގެ"},
+   {lesson:3,ar:"غُرْفَةُ نَوْمٍ",en:"bedroom",dv:"ނިދާ ކޮޓަރި"},
+   {lesson:3,ar:"غُرْفَةُ جُلُوسٍ",en:"living room",dv:"ސިޓިންގރޫމް"},
+   {lesson:3,ar:"أَثَاثٌ",en:"furniture",dv:"ފަރުނީޗަރު"},
+   {lesson:3,ar:"سِتَارَةٌ",pl:"سَتَائِرُ",en:"curtain",dv:"ދޮރުފޮތި"},
+   {lesson:3,ar:"أَرِيكَةٌ",pl:"أَرَائِكُ",en:"sofa",dv:"ސޯފާ"},
+   {lesson:3,ar:"سَجَّادَةٌ",pl:"سَجَاجِيدُ",en:"carpet",dv:"ކާޕެޓު"},
+   {lesson:3,ar:"سَرِيرٌ",pl:"أَسِرَّةٌ",en:"bed",dv:"އެނދު"},
+   {lesson:3,ar:"ثَلَّاجَةٌ",pl:"ثَلَّاجَاتٌ",en:"refrigerator",dv:"އައިސްއަލަމާރި"},
+   {lesson:3,ar:"سَخَّانٌ",pl:"سَخَّانَاتٌ",en:"water heater",dv:"ފެން ހޫނުކުރާ ހީޓަރު"},
+   {lesson:3,ar:"فُرْنٌ",pl:"أَفْرَانٌ",en:"oven",dv:"އަވަން"},
+   {lesson:3,ar:"مِرْآةٌ",pl:"مَرَايَا",en:"mirror",dv:"ލޯގަނޑު"},
+   {lesson:3,ar:"الْبَائِعُ",en:"the seller",dv:"ވިއްކާ މީހާ"},
+   {lesson:3,ar:"الْمُشْتَرِي",en:"the buyer",dv:"ގަންނަ މީހާ"}
+  ],
+  conv:[
+   {lesson:1,audio:"audio/u03-l19.mp3",lines:[
+    {who:"عُمَرُ",ar:"أَيْنَ تَسْكُنُ يَا حَسَنُ؟",en:"Where do you live, Hassan?",dv:"ޙަސަން، ތިބާ ދިރިއުޅެނީ ކޮންތާކު؟"},
+    {who:"حَسَنٌ",ar:"أَسْكُنُ فِي حَيِّ الْجَامِعَةِ. وَأَيْنَ تَسْكُنُ أَنْتَ؟",en:"I live in the university neighbourhood. And where do you live?",dv:"އަހަރެން ދިރިއުޅެނީ ޔުނިވަރސިޓީ އަވަށުގައި. ތިބާ ދިރިއުޅެނީ ކޮންތާކު؟"},
+    {who:"عُمَرُ",ar:"أَسْكُنُ فِي حَيِّ الْمَطَارِ.",en:"I live in the airport neighbourhood.",dv:"އަހަރެން ދިރިއުޅެނީ އެއާޕޯޓު އަވަށުގައި."},
+    {who:"حَسَنٌ",ar:"هَلْ تَسْكُنُ فِي شَقَّةٍ؟",en:"Do you live in a flat?",dv:"ތިބާ ދިރިއުޅެނީ އެޕާޓްމަންޓެއްގައިތަ؟"},
+    {who:"عُمَرُ",ar:"لَا، أَسْكُنُ فِي بَيْتٍ. وَأَنْتَ؟",en:"No, I live in a house. And you?",dv:"ނޫން، އަހަރެން ދިރިއުޅެނީ ގެއެއްގައި. ތިބާ؟"},
+    {who:"حَسَنٌ",ar:"أَنَا أَسْكُنُ فِي شَقَّةٍ.",en:"I live in a flat.",dv:"އަހަރެން ދިރިއުޅެނީ އެޕާޓްމަންޓެއްގައި."},
+    {who:"عُمَرُ",ar:"مَا رَقْمُ شَقَّتِكَ؟",en:"What is your flat number?",dv:"ތިބާގެ އެޕާޓްމަންޓުގެ ނަންބަރަކީ ކޮބައި؟"},
+    {who:"حَسَنٌ",ar:"رَقْمُ شَقَّتِي ٧. وَمَا رَقْمُ بَيْتِكَ؟",en:"My flat number is 7. And what is your house number?",dv:"އަހަރެންގެ އެޕާޓްމަންޓުގެ ނަންބަރަކީ 7. ތިބާގެ ގޭގެ ނަންބަރަކީ ކޮބައި؟"},
+    {who:"عُمَرُ",ar:"رَقْمُ بَيْتِي ١٢.",en:"My house number is 12.",dv:"އަހަރެންގެ ގޭގެ ނަންބަރަކީ 12."}
+   ]},
+   {lesson:2,audio:"audio/u03-l20.mp3",lines:[
+    {who:"عَبْدُ اللهِ",ar:"السَّلَامُ عَلَيْكُمْ. أُرِيدُ شَقَّةً مِنْ فَضْلِكَ.",en:"Peace be upon you. I want a flat, please.",dv:"ތިޔަބޭކަލުންނަށް ސަލާމް. އަހަރެން އެޕާޓްމަންޓެއް ބޭނުން."},
+    {who:"سَعِيدٌ",ar:"وَعَلَيْكُمُ السَّلَامُ. لَدَيْنَا شَقَّةٌ جَمِيلَةٌ فِي الدَّوْرِ الثَّالِثِ.",en:"And upon you be peace. We have a beautiful flat on the third floor.",dv:"ތިޔަބޭކަލުންނަށްވެސް ސަލާމް. ތިންވަނަ ފަންގިފިލާގައި ރީތި އެޕާޓްމަންޓެއް އެބަހުރި."},
+    {who:"عَبْدُ اللهِ",ar:"كَمْ غُرْفَةً فِي الشَّقَّةِ؟",en:"How many rooms are in the flat?",dv:"އެޕާޓްމަންޓުގައި ކިތައް ކޮޓަރި ހުރޭ؟"},
+    {who:"سَعِيدٌ",ar:"فِي الشَّقَّةِ أَرْبَعُ غُرَفٍ.",en:"There are four rooms in the flat.",dv:"އެޕާޓްމަންޓުގައި ހަތަރު ކޮޓަރި ހުރޭ."},
+    {who:"عَبْدُ اللهِ",ar:"أُرِيدُ مُشَاهَدَةَ الشَّقَّةِ.",en:"I want to see the flat.",dv:"އަހަރެން އެޕާޓްމަންޓް ބަލައިލަން ބޭނުން."},
+    {who:"سَعِيدٌ",ar:"تَفَضَّلْ، اُدْخُلْ. هَذَا بَابُ الشَّقَّةِ.",en:"Please, come in. This is the door of the flat.",dv:"ތަފައްޟަލް، ވަދެލާ. މިއީ އެޕާޓްމަންޓުގެ ދޮރު."},
+    {who:"عَبْدُ اللهِ",ar:"مَا شَاءَ اللهُ! هَذِهِ شَقَّةٌ جَمِيلَةٌ.",en:"Masha Allah! This is a beautiful flat.",dv:"މާޝާﷲ! މިއީ ރީތި އެޕާޓްމަންޓެއް."},
+    {who:"سَعِيدٌ",ar:"الْحَمْدُ لِلّٰهِ.",en:"Praise be to Allah.",dv:"އަލްޙަމްދު ލިއްލާހި."}
+   ]},
+   {lesson:3,audio:"audio/u03-l21.mp3",lines:[
+    {who:"الْبَائِعُ",ar:"السَّلَامُ عَلَيْكُمْ. أَيُّ خِدْمَةٍ؟",en:"Peace be upon you. How can I help?",dv:"ތިޔަބޭކަލުންނަށް ސަލާމް. ކޮން ޚިދުމަތެއް ބޭނުން؟"},
+    {who:"الْمُشْتَرِي",ar:"وَعَلَيْكُمُ السَّلَامُ. أُرِيدُ أَثَاثًا لِشَقَّتِي مِنْ فَضْلِكَ.",en:"And upon you be peace. I want furniture for my flat, please.",dv:"ތިޔަބޭކަލުންނަށްވެސް ސަލާމް. އަހަރެންގެ އެޕާޓްމަންޓަށް ފަރުނީޗަރު ބޭނުން."},
+    {who:"الْبَائِعُ",ar:"مَاذَا تُرِيدُ لِغُرْفَةِ الْجُلُوسِ؟",en:"What do you want for the living room?",dv:"ސިޓިންގރޫމަށް ކޮން އެއްޗެއް ބޭނުން؟"},
+    {who:"الْمُشْتَرِي",ar:"أُرِيدُ سَجَّادَةً وَأَرِيكَةً.",en:"I want a carpet and a sofa.",dv:"ކާޕެޓަކާއި ސޯފާއެއް ބޭނުން."},
+    {who:"الْبَائِعُ",ar:"وَمَاذَا تُرِيدُ لِغُرْفَةِ النَّوْمِ؟",en:"And what do you want for the bedroom?",dv:"ނިދާ ކޮޓަރިއަށް ކޮން އެއްޗެއް ބޭނުން؟"},
+    {who:"الْمُشْتَرِي",ar:"أُرِيدُ سَرِيرًا وَمِرْآةً.",en:"I want a bed and a mirror.",dv:"އެނދަކާއި ލޯގަނޑެއް ބޭނުން."},
+    {who:"الْبَائِعُ",ar:"وَمَاذَا تُرِيدُ لِلْمَطْبَخِ؟",en:"And what do you want for the kitchen?",dv:"ބަދިގެއަށް ކޮން އެއްޗެއް ބޭނުން؟"},
+    {who:"الْمُشْتَرِي",ar:"أُرِيدُ ثَلَّاجَةً وَفُرْنًا.",en:"I want a refrigerator and an oven.",dv:"އައިސްއަލަމާރިއަކާއި އަވަނެއް ބޭނުން."},
+    {who:"الْبَائِعُ",ar:"هَلْ تُرِيدُ سِتَارَةً؟",en:"Do you want a curtain?",dv:"ދޮރުފޮއްޗެއް ބޭނުންތަ؟"},
+    {who:"الْمُشْتَرِي",ar:"نَعَمْ، أُرِيدُ سِتَارَةً لِلْحَمَّامِ.",en:"Yes, I want a curtain for the bathroom.",dv:"އާނ، ފާޚާނާއަށް ދޮރުފޮއްޗެއް ބޭނުން."},
+    {who:"الْبَائِعُ",ar:"تَفَضَّلْ، هَذَا هُوَ الْأَثَاثُ.",en:"Here you are, this is the furniture.",dv:"ތަފައްޟަލް، މިއޮތީ ފަރުނީޗަރު."}
+   ]}
+  ],
+  speak:[
+   {lesson:1,q:{ar:"أَيْنَ تَسْكُنُ؟",en:"Where do you live?",dv:"ތިބާ ދިރިއުޅެނީ ކޮންތާކު؟"},a:{ar:"أَسْكُنُ فِي حَيِّ الْجَامِعَةِ.",en:"I live in the university neighbourhood.",dv:"އަހަރެން ދިރިއުޅެނީ ޔުނިވަރސިޓީ އަވަށުގައި."}},
+   {lesson:1,q:{ar:"هَلْ تَسْكُنُ فِي بَيْتٍ؟",en:"Do you live in a house?",dv:"ތިބާ ދިރިއުޅެނީ ގެއެއްގައިތަ؟"},a:{ar:"لَا، أَسْكُنُ فِي شَقَّةٍ.",en:"No, I live in a flat.",dv:"ނޫން، އަހަރެން ދިރިއުޅެނީ އެޕާޓްމަންޓެއްގައި."}},
+   {lesson:1,q:{ar:"مَا رَقْمُ بَيْتِكَ؟",en:"What is your house number?",dv:"ތިބާގެ ގޭގެ ނަންބަރަކީ ކޮބައި؟"},a:{ar:"رَقْمُ بَيْتِي ٩.",en:"My house number is 9.",dv:"އަހަރެންގެ ގޭގެ ނަންބަރަކީ 9."}},
+   {lesson:2,q:{ar:"كَمْ غُرْفَةً فِي الشَّقَّةِ؟",en:"How many rooms are in the flat?",dv:"އެޕާޓްމަންޓުގައި ކިތައް ކޮޓަރި ހުރޭ؟"},a:{ar:"فِي الشَّقَّةِ ثَلَاثُ غُرَفٍ.",en:"There are three rooms in the flat.",dv:"އެޕާޓްމަންޓުގައި ތިން ކޮޓަރި ހުރޭ."}},
+   {lesson:2,q:{ar:"فِي أَيِّ دَوْرٍ الشَّقَّةُ؟",en:"On which floor is the flat?",dv:"އެޕާޓްމަންޓް ހުރީ ކޮން ފަންގިފިލާއެއްގައި؟"},a:{ar:"الشَّقَّةُ فِي الدَّوْرِ الْخَامِسِ.",en:"The flat is on the fifth floor.",dv:"އެޕާޓްމަންޓް ހުރީ ފަސްވަނަ ފަންގިފިލާގައި."}},
+   {lesson:2,q:{ar:"هَلْ تُرِيدُ مُشَاهَدَةَ الشَّقَّةِ؟",en:"Do you want to see the flat?",dv:"އެޕާޓްމަންޓް ބަލައިލަން ބޭނުންތަ؟"},a:{ar:"نَعَمْ، أُرِيدُ مُشَاهَدَةَ الشَّقَّةِ.",en:"Yes, I want to see the flat.",dv:"އާނ، އެޕާޓްމަންޓް ބަލައިލަން ބޭނުން."}},
+   {lesson:3,q:{ar:"مَاذَا تُرِيدُ لِغُرْفَةِ النَّوْمِ؟",en:"What do you want for the bedroom?",dv:"ނިދާ ކޮޓަރިއަށް ކޮން އެއްޗެއް ބޭނުން؟"},a:{ar:"أُرِيدُ سَرِيرًا وَسِتَارَةً.",en:"I want a bed and a curtain.",dv:"އެނދަކާއި ދޮރުފޮއްޗެއް ބޭނުން."}},
+   {lesson:3,q:{ar:"مَاذَا تُرِيدُ لِلْمَطْبَخِ؟",en:"What do you want for the kitchen?",dv:"ބަދިގެއަށް ކޮން އެއްޗެއް ބޭނުން؟"},a:{ar:"أُرِيدُ فُرْنًا وَثَلَّاجَةً.",en:"I want an oven and a refrigerator.",dv:"އަވަނަކާއި އައިސްއަލަމާރިއެއް ބޭނުން."}},
+   {lesson:3,q:{ar:"هَلْ تُرِيدُ شَيْئًا آخَرَ؟",en:"Do you want anything else?",dv:"އިތުރު އެއްޗެއް ބޭނުންތަ؟"},a:{ar:"لَا، شُكْرًا.",en:"No, thank you.",dv:"ނޫން، ޝުކުރިއްޔާ."}}
+  ],
+  grammar:[
+   {lesson:1,title:"أَسْكُنُ / تَسْكُنُ",body:"މުޟާރިޢު ފިޢުލު أَنَا އަށް ފެށެނީ (أ) އިން، އަދި أَنْتَ އަށް ފެށެނީ (ت) އިންނެވެ. ނޫނެކޭ ބުނުމަށް لَا ބޭނުންކުރެއެވެ.",
+    ex:[{ar:"أَنَا أَسْكُنُ فِي بَيْتٍ.",en:"I live in a house.",dv:"އަހަރެން ދިރިއުޅެނީ ގެއެއްގައި."},{ar:"هَلْ تَسْكُنُ فِي شَقَّةٍ؟ لَا.",en:"Do you live in a flat? No.",dv:"ތިބާ ދިރިއުޅެނީ އެޕާޓްމަންޓެއްގައިތަ؟ ނޫން."}]},
+   {lesson:2,title:"كَمْ އާއި ތަރުތީބު ޢަދަދު",body:"كَمْ ގެ ފަހަތަށް އަންނަނީ މުފްރަދު ނަމެކެވެ. ފަންގިފިލާ ބުނާއިރު ތަރުތީބު ޢަދަދު ބޭނުންކުރެއެވެ: الْأَوَّلُ، الثَّانِي، الثَّالِثُ، الرَّابِعُ، الْخَامِسُ.",
+    ex:[{ar:"كَمْ غُرْفَةً فِي الشَّقَّةِ؟",en:"How many rooms are in the flat?",dv:"އެޕާޓްމަންޓުގައި ކިތައް ކޮޓަރި ހުރޭ؟"},{ar:"الشَّقَّةُ فِي الدَّوْرِ الثَّالِثِ.",en:"The flat is on the third floor.",dv:"އެޕާޓްމަންޓް ހުރީ ތިންވަނަ ފަންގިފިލާގައި."}]},
+   {lesson:3,title:"أُرِيدُ + ...ًا",body:"أُرِيدُ ގެ ފަހަތަށް އަންނަ ނަން ނިމެނީ ފަތުޙަ ތަންވީނުން (ـًا / ـةً) ނެވެ.",
+    ex:[{ar:"أُرِيدُ سَرِيرًا.",en:"I want a bed.",dv:"އަހަރެން އެނދެއް ބޭނުން."},{ar:"أُرِيدُ أَرِيكَةً وَسَجَّادَةً.",en:"I want a sofa and a carpet.",dv:"އަހަރެން ސޯފާއަކާއި ކާޕެޓެއް ބޭނުން."}]}
+  ]
+};
+UNIT_DATA[4] = {
+  lessons:[
+   {num:28,ar:"مَتَى تَسْتَيْقِظُ؟",task:"ކްލާހުގެ ކުއްޖަކަށް ތިބާ ހޭލާ ވަގުތާއި، ފަތިސް ނަމާދު ކުރާ ތަނާއި، ކިޔަވަން ދާ ވަގުތު ޢަރަބިން ބުނެދީ."},
+   {num:29,ar:"يَوْمُ الْعُطْلَةِ",task:"ޗުއްޓީ ދުވަހު ގޭގައި ތިބާ ކުރާނެ މަސައްކަތްތައް ކްލާހުގެ ކުއްޖަކަށް ޢަރަބިން ބުނެދީ."},
+   {num:30,ar:"فِي الصَّبَاحِ",task:"ޗުއްޓީ ދުވަހުގެ ހެނދުނު ތިބާ ކުރާ ކަންތައް ކްލާހުގެ ކުއްޖަކާ ޢަރަބިން ޙިއްޞާކުރޭ."}
+  ],
+  vocab:[
+   {lesson:1,ar:"يَنَامُ",command:"نَمْ",en:"he sleeps",dv:"އޭނާ ނިދަނީ"},
+   {lesson:1,ar:"يَسْتَيْقِظُ",command:"اِسْتَيْقِظْ",en:"he wakes up",dv:"އޭނާ ހޭލަނީ"},
+   {lesson:1,ar:"يَذْهَبُ",command:"اِذْهَبْ",en:"he goes",dv:"އޭނާ ދަނީ"},
+   {lesson:1,ar:"السَّاعَةُ السَّابِعَةُ",en:"seven o'clock",dv:"ހަތެއް ޖަހާއިރު"},
+   {lesson:1,ar:"سَيَّارَةٌ",pl:"سَيَّارَاتٌ",en:"car",dv:"ކާރު"},
+   {lesson:1,ar:"حَافِلَةٌ",pl:"حَافِلَاتٌ",en:"bus",dv:"ބަސް"},
+   {lesson:1,ar:"مَدْرَسَةٌ",pl:"مَدَارِسُ",en:"school",dv:"ސްކޫލު"},
+   {lesson:1,ar:"عِنْدَ الْفَجْرِ",en:"at dawn",dv:"ފަތިހު"},
+   {lesson:1,ar:"بَعْدَ",en:"after",dv:"ފަހުން"},
+   {lesson:2,ar:"يَوْمُ الْعَمَلِ",en:"working day",dv:"މަސައްކަތު ދުވަސް"},
+   {lesson:2,ar:"يَوْمُ الْعُطْلَةِ",en:"holiday, day off",dv:"ޗުއްޓީ ދުވަސް"},
+   {lesson:2,ar:"أَطْبَاقٌ",en:"plates, dishes",dv:"ތަށިތައް"},
+   {lesson:2,ar:"يَكْنُسُ",command:"اُكْنُسْ",en:"he sweeps",dv:"އޭނާ ކުނިކަހަނީ"},
+   {lesson:2,ar:"مَلَابِسُ",en:"clothes",dv:"ހެދުން"},
+   {lesson:2,ar:"يَغْسِلُ",command:"اِغْسِلْ",en:"he washes",dv:"އޭނާ ދޮންނަނީ"},
+   {lesson:2,ar:"يَكْوِي",command:"اِكْوِ",en:"he irons",dv:"އޭނާ އިސްތިރިކުރަނީ"},
+   {lesson:3,ar:"كِتَابٌ",pl:"كُتُبٌ",en:"book",dv:"ފޮތް"},
+   {lesson:3,ar:"صَحِيفَةٌ",pl:"صُحُفٌ",en:"newspaper",dv:"ނޫސް"},
+   {lesson:3,ar:"تِلْفَازٌ",en:"television",dv:"ޓީވީ"},
+   {lesson:3,ar:"يُشَاهِدُ",command:"شَاهِدْ",en:"he watches",dv:"އޭނާ ބަލަނީ"},
+   {lesson:3,ar:"الصَّبَاحُ",en:"the morning",dv:"ހެނދުނު"},
+   {lesson:3,ar:"كَبِيرٌ",en:"big",dv:"ބޮޑު"},
+   {lesson:3,ar:"مُبَكِّرًا",en:"early",dv:"އަވަހަށް"},
+   {lesson:3,ar:"مُتَأَخِّرًا",en:"late",dv:"ލަހުން"},
+   {lesson:3,ar:"أَيْضًا",en:"also",dv:"ވެސް"}
+  ],
+  conv:[
+   {lesson:1,audio:"audio/u04-l28.mp3",lines:[
+    {who:"عَلِيٌّ",ar:"مَتَى تَسْتَيْقِظُ يَا أَحْمَدُ؟",en:"When do you wake up, Ahmed?",dv:"އަޙްމަދު، ތިބާ ހޭލަނީ ކޮން އިރަކު؟"},
+    {who:"أَحْمَدُ",ar:"أَسْتَيْقِظُ عِنْدَ أَذَانِ الْفَجْرِ.",en:"I wake up at the Fajr adhan.",dv:"އަހަރެން ހޭލަނީ ފަތިސް ނަމާދުގެ ބަންގިއަށް."},
+    {who:"عَلِيٌّ",ar:"وَأَيْنَ تُصَلِّي الْفَجْرَ؟",en:"And where do you pray Fajr?",dv:"ފަތިސް ނަމާދު ކުރަނީ ކޮންތާކު؟"},
+    {who:"أَحْمَدُ",ar:"أُصَلِّي الْفَجْرَ فِي الْمَسْجِدِ.",en:"I pray Fajr in the mosque.",dv:"ފަތިސް ނަމާދު ކުރަނީ މިސްކިތުގައި."},
+    {who:"عَلِيٌّ",ar:"هَلْ تَنَامُ بَعْدَ الصَّلَاةِ؟",en:"Do you sleep after the prayer?",dv:"ނަމާދަށްފަހު ނިދަންތަ؟"},
+    {who:"أَحْمَدُ",ar:"لَا، لَا أَنَامُ. أَقْرَأُ الْقُرْآنَ.",en:"No, I don't sleep. I read the Quran.",dv:"ނޫން، ނުނިދަން. ޤުރުއާން ކިޔަވަން."},
+    {who:"عَلِيٌّ",ar:"وَمَتَى تَذْهَبُ إِلَى الْجَامِعَةِ؟",en:"And when do you go to the university?",dv:"ޔުނިވަރސިޓީއަށް ދަނީ ކޮން އިރަކު؟"},
+    {who:"أَحْمَدُ",ar:"أَذْهَبُ السَّاعَةَ السَّابِعَةَ.",en:"I go at seven o'clock.",dv:"ދަނީ ހަތެއް ޖަހާއިރު."},
+    {who:"عَلِيٌّ",ar:"هَلْ تَذْهَبُ بِالْحَافِلَةِ؟",en:"Do you go by bus?",dv:"ދަނީ ބަހުގައިތަ؟"},
+    {who:"أَحْمَدُ",ar:"لَا، أَذْهَبُ بِالسَّيَّارَةِ.",en:"No, I go by car.",dv:"ނޫން، ދަނީ ކާރުގައި."}
+   ]},
+   {lesson:2,audio:"audio/u04-l29.mp3",lines:[
+    {who:"الْأُمُّ",ar:"الْيَوْمُ يَوْمُ الْعُطْلَةِ. مَاذَا سَتَفْعَلُ يَا حَسَنُ؟",en:"Today is a day off. What will you do, Hassan?",dv:"މިއަދަކީ ޗުއްޓީ ދުވަސް. ޙަސަން، ތިބާ ކުރާނީ ކޮންކަމެއް؟"},
+    {who:"حَسَنٌ",ar:"سَأَكْنُسُ غُرْفَةَ الْجُلُوسِ.",en:"I will sweep the living room.",dv:"އަހަރެން ސިޓިންގރޫމް ކުނިކަހާނަން."},
+    {who:"الْأُمُّ",ar:"وَمَاذَا سَتَفْعَلِينَ يَا مَرْيَمُ؟",en:"And what will you do, Maryam?",dv:"މަރްޔަމް، ތިބާ ކުރާނީ ކޮންކަމެއް؟"},
+    {who:"مَرْيَمُ",ar:"سَأَغْسِلُ الْأَطْبَاقَ.",en:"I will wash the dishes.",dv:"އަހަރެން ތަށިތައް ދޮންނާނަން."},
+    {who:"الْأُمُّ",ar:"وَمَاذَا سَتَفْعَلُ يَا عَلِيُّ؟",en:"And what will you do, Ali?",dv:"ޢަލީ، ތިބާ ކުރާނީ ކޮންކަމެއް؟"},
+    {who:"عَلِيٌّ",ar:"سَأَغْسِلُ الْمَلَابِسَ.",en:"I will wash the clothes.",dv:"އަހަރެން ހެދުންތައް ދޮންނާނަން."},
+    {who:"الْأُمُّ",ar:"وَمَاذَا سَتَفْعَلِينَ يَا عَائِشَةُ؟",en:"And what will you do, Aisha?",dv:"ޢާއިޝާ، ތިބާ ކުރާނީ ކޮންކަމެއް؟"},
+    {who:"عَائِشَةُ",ar:"سَأَكْوِي الْمَلَابِسَ.",en:"I will iron the clothes.",dv:"އަހަރެން ހެދުންތައް އިސްތިރިކުރާނަން."},
+    {who:"الْأَبُ",ar:"وَأَنَا سَأَكْنُسُ غُرْفَةَ النَّوْمِ.",en:"And I will sweep the bedroom.",dv:"އަހަރެން ނިދާ ކޮޓަރި ކުނިކަހާނަން."},
+    {who:"الْأُمُّ",ar:"وَأَنَا سَأَقْرَأُ الْقُرْآنَ بَعْدَ الْعَمَلِ.",en:"And I will read the Quran after the work.",dv:"މަސައްކަތަށްފަހު އަހަރެން ޤުރުއާން ކިޔަވާނަން."}
+   ]},
+   {lesson:3,audio:"audio/u04-l30.mp3",lines:[
+    {who:"خَالِدٌ",ar:"مَتَى تَسْتَيْقِظُ يَوْمَ الْعُطْلَةِ يَا يُوسُفُ؟",en:"When do you wake up on a day off, Yusuf?",dv:"ޔޫސުފް، ޗުއްޓީ ދުވަހު ތިބާ ހޭލަނީ ކޮން އިރަކު؟"},
+    {who:"يُوسُفُ",ar:"أَسْتَيْقِظُ مُتَأَخِّرًا. وَمَتَى تَسْتَيْقِظُ أَنْتَ؟",en:"I wake up late. And when do you wake up?",dv:"އަހަރެން ހޭލަނީ ލަހުން. ތިބާ ހޭލަނީ ކޮން އިރަކު؟"},
+    {who:"خَالِدٌ",ar:"أَنَا أَسْتَيْقِظُ مُبَكِّرًا.",en:"I wake up early.",dv:"އަހަރެން ހޭލަނީ އަވަހަށް."},
+    {who:"يُوسُفُ",ar:"مَاذَا تَفْعَلُ فِي الصَّبَاحِ؟",en:"What do you do in the morning?",dv:"ހެނދުނު ތިބާ ކުރަނީ ކޮންކަމެއް؟"},
+    {who:"خَالِدٌ",ar:"أَقْرَأُ كِتَابًا أَوْ صَحِيفَةً. وَمَاذَا تَفْعَلُ أَنْتَ؟",en:"I read a book or a newspaper. And what do you do?",dv:"އަހަރެން ފޮތެއް ނުވަތަ ނޫހެއް ކިޔަން. ތިބާ ކުރަނީ ކޮންކަމެއް؟"},
+    {who:"يُوسُفُ",ar:"أُشَاهِدُ التِّلْفَازَ.",en:"I watch television.",dv:"އަހަރެން ޓީވީ ބަލަން."},
+    {who:"خَالِدٌ",ar:"وَأَيْنَ تُصَلِّي الْجُمُعَةَ؟",en:"And where do you pray Jumuah?",dv:"ހުކުރު ނަމާދު ކުރަނީ ކޮންތާކު؟"},
+    {who:"يُوسُفُ",ar:"أُصَلِّي الْجُمُعَةَ فِي الْمَسْجِدِ الْكَبِيرِ.",en:"I pray Jumuah in the big mosque.",dv:"ހުކުރު ނަމާދު ކުރަނީ ބޮޑު މިސްކިތުގައި."},
+    {who:"خَالِدٌ",ar:"وَأَنَا أُصَلِّي فِي الْمَسْجِدِ الْكَبِيرِ أَيْضًا.",en:"And I pray in the big mosque too.",dv:"އަހަރެންވެސް ނަމާދު ކުރަނީ ބޮޑު މިސްކިތުގައި."}
+   ]}
+  ],
+  speak:[
+   {lesson:1,q:{ar:"مَتَى تَسْتَيْقِظُ؟",en:"When do you wake up?",dv:"ތިބާ ހޭލަނީ ކޮން އިރަކު؟"},a:{ar:"أَسْتَيْقِظُ عِنْدَ الْفَجْرِ.",en:"I wake up at dawn.",dv:"އަހަރެން ހޭލަނީ ފަތިހު."}},
+   {lesson:1,q:{ar:"هَلْ تَنَامُ بَعْدَ الصَّلَاةِ؟",en:"Do you sleep after the prayer?",dv:"ނަމާދަށްފަހު ނިދަންތަ؟"},a:{ar:"لَا، لَا أَنَامُ بَعْدَ الصَّلَاةِ.",en:"No, I don't sleep after the prayer.",dv:"ނޫން، ނަމާދަށްފަހު ނުނިދަން."}},
+   {lesson:1,q:{ar:"كَيْفَ تَذْهَبُ إِلَى الْمَدْرَسَةِ؟",en:"How do you go to school?",dv:"ސްކޫލަށް ދަނީ ކިހިނެއް؟"},a:{ar:"أَذْهَبُ بِالْحَافِلَةِ.",en:"I go by bus.",dv:"ދަނީ ބަހުގައި."}},
+   {lesson:2,q:{ar:"مَاذَا سَتَفْعَلُ يَوْمَ الْعُطْلَةِ؟",en:"What will you do on the day off?",dv:"ޗުއްޓީ ދުވަހު ތިބާ ކުރާނީ ކޮންކަމެއް؟"},a:{ar:"سَأَغْسِلُ الْمَلَابِسَ.",en:"I will wash the clothes.",dv:"އަހަރެން ހެދުންތައް ދޮންނާނަން."}},
+   {lesson:2,q:{ar:"مَنْ سَيَكْنُسُ غُرْفَةَ الْجُلُوسِ؟",en:"Who will sweep the living room?",dv:"ސިޓިންގރޫމް ކުނިކަހާނީ ކާކު؟"},a:{ar:"أَنَا سَأَكْنُسُ غُرْفَةَ الْجُلُوسِ.",en:"I will sweep the living room.",dv:"ސިޓިންގރޫމް ކުނިކަހާނީ އަހަރެން."}},
+   {lesson:2,q:{ar:"هَلْ سَتَغْسِلُ الْأَطْبَاقَ؟",en:"Will you wash the dishes?",dv:"ތަށިތައް ދޮންނާނަންތަ؟"},a:{ar:"نَعَمْ، سَأَغْسِلُ الْأَطْبَاقَ.",en:"Yes, I will wash the dishes.",dv:"އާނ، ތަށިތައް ދޮންނާނަން."}},
+   {lesson:3,q:{ar:"مَاذَا تَفْعَلُ فِي الصَّبَاحِ؟",en:"What do you do in the morning?",dv:"ހެނދުނު ތިބާ ކުރަނީ ކޮންކަމެއް؟"},a:{ar:"أَقْرَأُ صَحِيفَةً.",en:"I read a newspaper.",dv:"އަހަރެން ނޫހެއް ކިޔަން."}},
+   {lesson:3,q:{ar:"هَلْ تَسْتَيْقِظُ مُبَكِّرًا؟",en:"Do you wake up early?",dv:"ތިބާ ހޭލަނީ އަވަހަށްތަ؟"},a:{ar:"لَا، أَسْتَيْقِظُ مُتَأَخِّرًا.",en:"No, I wake up late.",dv:"ނޫން، އަހަރެން ހޭލަނީ ލަހުން."}},
+   {lesson:3,q:{ar:"أَيْنَ تُصَلِّي الْجُمُعَةَ؟",en:"Where do you pray Jumuah?",dv:"ހުކުރު ނަމާދު ކުރަނީ ކޮންތާކު؟"},a:{ar:"أُصَلِّي الْجُمُعَةَ فِي الْمَسْجِدِ الْكَبِيرِ.",en:"I pray Jumuah in the big mosque.",dv:"ހުކުރު ނަމާދު ކުރަނީ ބޮޑު މިސްކިތުގައި."}}
+  ],
+  grammar:[
+   {lesson:1,title:"مَتَى؟ އާއި لَا + މުޟާރިޢު",body:"ވަގުތު އެހުމަށް مَتَى ބޭނުންކުރެއެވެ. މުޟާރިޢު ފިޢުލުގެ ކުރިއަށް لَا ގެނައުމުން ނަފީވެއެވެ.",
+    ex:[{ar:"مَتَى تَذْهَبُ إِلَى الْمَدْرَسَةِ؟",en:"When do you go to school?",dv:"ސްކޫލަށް ދަނީ ކޮން އިރަކު؟"},{ar:"لَا أَنَامُ بَعْدَ الصَّلَاةِ.",en:"I don't sleep after the prayer.",dv:"ނަމާދަށްފަހު ނުނިދަން."}]},
+   {lesson:2,title:"މުސްތަޤްބަލް: سَـ + މުޟާރިޢު",body:"ކުރިއަށް އޮތް ކަމެއް ބުނުމަށް މުޟާރިޢު ފިޢުލުގެ ކުރިއަށް (سَـ) އިތުރުކުރެއެވެ. އަންހެނަކާ ވާހަކަދައްކާއިރު ފިޢުލު ނިމެނީ (ـِينَ) އިންނެވެ.",
+    ex:[{ar:"سَأَغْسِلُ الْمَلَابِسَ.",en:"I will wash the clothes.",dv:"އަހަރެން ހެދުންތައް ދޮންނާނަން."},{ar:"مَاذَا سَتَفْعَلِينَ يَا مَرْيَمُ؟",en:"What will you do, Maryam?",dv:"މަރްޔަމް، ތިބާ ކުރާނީ ކޮންކަމެއް؟"}]},
+   {lesson:3,title:"أَوْ އާއި أَيْضًا",body:"ދެ އިޚްތިޔާރެއްގެ ދެމެދު أَوْ (ނުވަތަ) ބޭނުންކުރެއެވެ. ޖުމްލައިގެ ފަހަތަށް أَيْضًا (ވެސް) އިތުރުކުރެއެވެ.",
+    ex:[{ar:"أَقْرَأُ كِتَابًا أَوْ صَحِيفَةً.",en:"I read a book or a newspaper.",dv:"އަހަރެން ފޮތެއް ނުވަތަ ނޫހެއް ކިޔަން."},{ar:"أَنَا أَسْتَيْقِظُ مُبَكِّرًا أَيْضًا.",en:"I wake up early too.",dv:"އަހަރެންވެސް ހޭލަނީ އަވަހަށް."}]}
+  ]
+};
+UNIT_DATA[5] = {
+  lessons:[
+   {num:37,ar:"الْوَجَبَاتُ",task:"ކްލާހުގެ ކުއްޖަކަށް ތިބާ ދުވާލަކު ކާ ވަގުތުތަކާއި، މެންދުރު ކާ އެއްޗެހި ޢަރަބިން ބުނެދީ."},
+   {num:38,ar:"فِي الطَّائِرَةِ",task:"އެކަކު ކާބޯތަކެތި ހުށަހަޅާ މީހާ، އަނެކަކު ދަތުރުވެރިޔާ. ކާއެއްޗެއް، ބުއިމެއް، މޭވާއެއް ޢަރަބިން އެދޭ."},
+   {num:39,ar:"الضُّيُوفُ",task:"ކްލާހުގެ ކުއްޖަކަށް ތިބާގެ ގެއަށް އަންނަ މެހެމާނުން ކޮން ބައެއްތޯ އާއި އެމީހުން ތިބޭނެ ތަން ޢަރަބިން ބުނެދީ."}
+  ],
+  vocab:[
+   {lesson:1,ar:"فَاكِهَةٌ",pl:"فَوَاكِهُ",en:"fruit",dv:"މޭވާ"},
+   {lesson:1,ar:"أَرُزٌّ",en:"rice",dv:"ބަތް"},
+   {lesson:1,ar:"سَمَكٌ",en:"fish",dv:"މަސް"},
+   {lesson:1,ar:"خُبْزٌ",en:"bread",dv:"ރޮށި / ޕާން"},
+   {lesson:1,ar:"يَأْكُلُ",command:"كُلْ",en:"he eats",dv:"އޭނާ ކަނީ"},
+   {lesson:1,ar:"مَطْعَمٌ",pl:"مَطَاعِمُ",en:"restaurant",dv:"ރެސްޓޯރަންޓް"},
+   {lesson:1,ar:"فَطُورٌ",en:"breakfast",dv:"ހެނދުނުގެ ނާސްތާ"},
+   {lesson:1,ar:"غَدَاءٌ",en:"lunch",dv:"މެންދުރުގެ ކެއުން"},
+   {lesson:1,ar:"عَشَاءٌ",en:"dinner",dv:"ރޭގަނޑުގެ ކެއުން"},
+   {lesson:1,ar:"وَجْبَةٌ",pl:"وَجَبَاتٌ",en:"meal",dv:"ކެއުން (އެއް ފަހަރު)"},
+   {lesson:1,ar:"وَزْنٌ",en:"weight",dv:"ބަރުދަން"},
+   {lesson:1,ar:"قَلِيلٌ",en:"little, few",dv:"މަދު"},
+   {lesson:1,ar:"كَثِيرٌ",en:"much, many",dv:"ގިނަ"},
+   {lesson:1,ar:"سَمِينٌ",en:"fat",dv:"ފަލަ"},
+   {lesson:1,ar:"نَحِيفٌ",en:"thin",dv:"ހިކި"},
+   {lesson:1,ar:"كِيلُو",en:"kilo",dv:"ކިލޯ"},
+   {lesson:2,ar:"مَاءٌ",en:"water",dv:"ފެން"},
+   {lesson:2,ar:"قَهْوَةٌ",en:"coffee",dv:"ކޮފީ"},
+   {lesson:2,ar:"شَايٌ",en:"tea",dv:"ސައި"},
+   {lesson:2,ar:"حَلِيبٌ",en:"milk",dv:"ކިރު"},
+   {lesson:2,ar:"شَرَابٌ",en:"drink",dv:"ބުއިން"},
+   {lesson:2,ar:"تَمْرٌ",en:"dates",dv:"ކަދުރު"},
+   {lesson:2,ar:"عِنَبٌ",en:"grapes",dv:"މޭބިސްކަދުރު"},
+   {lesson:2,ar:"طَعَامٌ",en:"food",dv:"ކާނާ"},
+   {lesson:2,ar:"يَطْلُبُ",command:"اُطْلُبْ",en:"he orders, asks for",dv:"އޭނާ އެދެނީ"},
+   {lesson:2,ar:"يَشْرَبُ",command:"اِشْرَبْ",en:"he drinks",dv:"އޭނާ ބޮނީ"},
+   {lesson:2,ar:"أُفَضِّلُ",en:"I prefer",dv:"އަހަރެން އިސްކަންދެނީ"},
+   {lesson:3,ar:"ضُيُوفٌ",en:"guests",dv:"މެހެމާނުން"},
+   {lesson:3,ar:"جَوْعَانُ",en:"hungry",dv:"ބަނޑުހައި"},
+   {lesson:3,ar:"مَائِدَةٌ",pl:"مَوَائِدُ",en:"dining table",dv:"ކާމޭޒު"},
+   {lesson:3,ar:"سَلَطَةٌ",en:"salad",dv:"ސެލެޑު"},
+   {lesson:3,ar:"يَجْلِسُ",command:"اِجْلِسْ",en:"he sits",dv:"އޭނާ އިށީންނަނީ"},
+   {lesson:3,ar:"زَوْجٌ",en:"husband",dv:"ފިރިމީހާ"},
+   {lesson:3,ar:"زَوْجَةٌ",en:"wife",dv:"އަނބިމީހާ"},
+   {lesson:3,ar:"دَجَاجٌ",en:"chicken",dv:"ކުކުޅު"},
+   {lesson:3,ar:"لَحْمٌ",en:"meat",dv:"މަސް (އެއްގަމު)"}
+  ],
+  conv:[
+   {lesson:1,audio:"audio/u05-l37.mp3",lines:[
+    {who:"حَسَنٌ",ar:"إِلَى أَيْنَ تَذْهَبُ يَا سَعِيدُ؟",en:"Where are you going, Saeed?",dv:"ސަޢީދު، ތިބާ ދަނީ ކޮންތާކަށް؟"},
+    {who:"سَعِيدٌ",ar:"أَذْهَبُ إِلَى الْمَطْعَمِ.",en:"I am going to the restaurant.",dv:"އަހަރެން ދަނީ ރެސްޓޯރަންޓަށް."},
+    {who:"حَسَنٌ",ar:"كَمْ وَجْبَةً تَأْكُلُ فِي الْيَوْمِ؟",en:"How many meals do you eat a day?",dv:"ދުވާލަކު ކިތައް ފަހަރު ކަން؟"},
+    {who:"سَعِيدٌ",ar:"آكُلُ ثَلَاثَ وَجَبَاتٍ: الْفَطُورَ وَالْغَدَاءَ وَالْعَشَاءَ. وَأَنْتَ؟",en:"I eat three meals: breakfast, lunch and dinner. And you?",dv:"އަހަރެން ތިން ފަހަރު ކަން: ހެނދުނުގެ ނާސްތާއާއި، މެންދުރުގެ ކެއުމާއި، ރޭގަނޑުގެ ކެއުން. ތިބާ؟"},
+    {who:"حَسَنٌ",ar:"أَنَا آكُلُ وَجْبَةً وَاحِدَةً.",en:"I eat one meal.",dv:"އަހަރެން ކަނީ އެންމެ ފަހަރަކު."},
+    {who:"سَعِيدٌ",ar:"هَذَا قَلِيلٌ جِدًّا! مَاذَا تَأْكُلُ فِي الْغَدَاءِ؟",en:"That is very little! What do you eat for lunch?",dv:"އެއީ ވަރަށް މަދު! މެންދުރަށް ތިބާ ކަނީ ކޯއްޗެއް؟"},
+    {who:"حَسَنٌ",ar:"آكُلُ السَّمَكَ وَالْأَرُزَّ وَالْفَاكِهَةَ. وَمَاذَا تَأْكُلُ أَنْتَ؟",en:"I eat fish, rice and fruit. And what do you eat?",dv:"އަހަރެން ކަނީ މަހާއި، ބަތާއި، މޭވާ. ތިބާ ކަނީ ކޯއްޗެއް؟"},
+    {who:"سَعِيدٌ",ar:"آكُلُ الْخُبْزَ وَاللَّحْمَ وَالْأَرُزَّ.",en:"I eat bread, meat and rice.",dv:"އަހަރެން ކަނީ ރޮށްޓާއި، މަހާއި، ބަތް."},
+    {who:"حَسَنٌ",ar:"مَا وَزْنُكَ؟",en:"What is your weight?",dv:"ތިބާގެ ބަރުދަނަކީ ކިހާވަރެއް؟"},
+    {who:"سَعِيدٌ",ar:"وَزْنِي ٩٠ كِيلُو. وَمَا وَزْنُكَ أَنْتَ؟",en:"My weight is 90 kilos. And what is your weight?",dv:"އަހަރެންގެ ބަރުދަނަކީ 90 ކިލޯ. ތިބާގެ ބަރުދަނަކީ ކިހާވަރެއް؟"},
+    {who:"حَسَنٌ",ar:"وَزْنِي ٦٠ كِيلُو.",en:"My weight is 60 kilos.",dv:"އަހަރެންގެ ބަރުދަނަކީ 60 ކިލޯ."},
+    {who:"سَعِيدٌ",ar:"أَنْتَ نَحِيفٌ جِدًّا!",en:"You are very thin!",dv:"ތިބާ ވަރަށް ހިކި!"},
+    {who:"حَسَنٌ",ar:"وَأَنْتَ سَمِينٌ جِدًّا!",en:"And you are very fat!",dv:"ތިބާ ވަރަށް ފަލަ!"}
+   ]},
+   {lesson:2,audio:"audio/u05-l38.mp3",lines:[
+    {who:"الْمُضِيفَةُ",ar:"مَاذَا تَطْلُبُ مِنَ الطَّعَامِ؟",en:"What would you like to eat?",dv:"ކާނާއިން ކޯއްޗެއް ބޭނުން؟"},
+    {who:"الْمُسَافِرُ",ar:"أَطْلُبُ السَّمَكَ وَالْأَرُزَّ مِنْ فَضْلِكِ.",en:"I would like fish and rice, please.",dv:"މަހާއި ބަތް ބޭނުން."},
+    {who:"الْمُضِيفَةُ",ar:"وَمَاذَا تَطْلُبُ مِنَ الشَّرَابِ؟",en:"And what would you like to drink?",dv:"ބުއިމަކަށް ކޯއްޗެއް ބޭނުން؟"},
+    {who:"الْمُسَافِرُ",ar:"مَاءً مِنْ فَضْلِكِ.",en:"Water, please.",dv:"ފެން."},
+    {who:"الْمُضِيفَةُ",ar:"وَمَاذَا تُفَضِّلُ مِنَ الْفَاكِهَةِ؟",en:"And which fruit do you prefer?",dv:"މޭވާއިން ކޯއްޗެއް ބޭނުން؟"},
+    {who:"الْمُسَافِرُ",ar:"أُفَضِّلُ التَّمْرَ.",en:"I prefer dates.",dv:"ކަދުރު."},
+    {who:"الْمُضِيفَةُ",ar:"هَلْ تَشْرَبُ الْقَهْوَةَ؟",en:"Do you drink coffee?",dv:"ކޮފީ ބޯންތަ؟"},
+    {who:"الْمُسَافِرُ",ar:"لَا، أُفَضِّلُ الشَّايَ بِالْحَلِيبِ.",en:"No, I prefer tea with milk.",dv:"ނޫން، ކިރު ސައި ބޭނުން."},
+    {who:"الْمُضِيفَةُ",ar:"هَلْ تُرِيدُ شَيْئًا آخَرَ؟",en:"Do you want anything else?",dv:"އިތުރު އެއްޗެއް ބޭނުންތަ؟"},
+    {who:"الْمُسَافِرُ",ar:"لَا، شُكْرًا.",en:"No, thank you.",dv:"ނޫން، ޝުކުރިއްޔާ."},
+    {who:"الْمُضِيفَةُ",ar:"عَفْوًا.",en:"You're welcome.",dv:"މަރުޙަބާ."}
+   ]},
+   {lesson:3,audio:"audio/u05-l39.mp3",lines:[
+    {who:"الزَّوْجُ",ar:"السَّلَامُ عَلَيْكُمْ. أَنَا جَوْعَانُ جِدًّا.",en:"Peace be upon you. I am very hungry.",dv:"ތިޔަބޭކަލުންނަށް ސަލާމް. އަހަރެން ވަރަށް ބަނޑުހައި."},
+    {who:"الزَّوْجَةُ",ar:"وَعَلَيْكُمُ السَّلَامُ. الْعَشَاءُ عَلَى الْمَائِدَةِ.",en:"And upon you be peace. Dinner is on the table.",dv:"ތިޔަބޭކަލުންނަށްވެސް ސަލާމް. ރޭގަނޑުގެ ކެއުން ހުރީ ކާމޭޒުމަތީގައި."},
+    {who:"الزَّوْجُ",ar:"مَا شَاءَ اللهُ! دَجَاجٌ وَلَحْمٌ وَأَرُزٌّ وَسَلَطَةٌ! هَذَا كَثِيرٌ جِدًّا.",en:"Masha Allah! Chicken, meat, rice and salad! This is a lot.",dv:"މާޝާﷲ! ކުކުޅާއި، މަހާއި، ބަތާއި، ސެލެޑު! މިއީ ވަރަށް ގިނަ."},
+    {who:"الزَّوْجَةُ",ar:"لَا تَأْكُلِ الْآنَ. اِجْلِسْ مِنْ فَضْلِكَ.",en:"Don't eat now. Please sit down.",dv:"މިހާރު ނުކާތި. އިށީނދެލާ."},
+    {who:"الزَّوْجُ",ar:"لِمَاذَا؟ أَنَا جَوْعَانُ!",en:"Why? I am hungry!",dv:"ކީއްވެ؟ އަހަރެން ބަނޑުހައި!"},
+    {who:"الزَّوْجَةُ",ar:"لَدَيْنَا ضُيُوفٌ.",en:"We have guests.",dv:"އަހަރެމެންގެ ގޭގައި މެހެމާނުން އެބަތިބި."},
+    {who:"الزَّوْجُ",ar:"مَنِ الضُّيُوفُ؟",en:"Who are the guests?",dv:"މެހެމާނުންނަކީ ކޮން ބައެއް؟"},
+    {who:"الزَّوْجَةُ",ar:"وَالِدِي وَوَالِدَتِي وَأُخْتِي.",en:"My father, my mother and my sister.",dv:"އަހަރެންގެ ބައްޕައާއި، މަންމައާއި، ދައްތަ."},
+    {who:"الزَّوْجُ",ar:"وَأَيْنَ هُمُ الْآنَ؟",en:"And where are they now?",dv:"އެމީހުން މިހާރު ކޮބައި؟"},
+    {who:"الزَّوْجَةُ",ar:"هُمْ فِي غُرْفَةِ الْجُلُوسِ.",en:"They are in the living room.",dv:"އެމީހުން ތިބީ ސިޓިންގރޫމުގައި."}
+   ]}
+  ],
+  speak:[
+   {lesson:1,q:{ar:"كَمْ وَجْبَةً تَأْكُلُ فِي الْيَوْمِ؟",en:"How many meals do you eat a day?",dv:"ދުވާލަކު ކިތައް ފަހަރު ކަން؟"},a:{ar:"آكُلُ ثَلَاثَ وَجَبَاتٍ.",en:"I eat three meals.",dv:"އަހަރެން ތިން ފަހަރު ކަން."}},
+   {lesson:1,q:{ar:"مَاذَا تَأْكُلُ فِي الْغَدَاءِ؟",en:"What do you eat for lunch?",dv:"މެންދުރަށް ތިބާ ކަނީ ކޯއްޗެއް؟"},a:{ar:"آكُلُ السَّمَكَ وَالْأَرُزَّ.",en:"I eat fish and rice.",dv:"އަހަރެން ކަނީ މަހާއި ބަތް."}},
+   {lesson:1,q:{ar:"مَا وَزْنُكَ؟",en:"What is your weight?",dv:"ތިބާގެ ބަރުދަނަކީ ކިހާވަރެއް؟"},a:{ar:"وَزْنِي ٧٠ كِيلُو.",en:"My weight is 70 kilos.",dv:"އަހަރެންގެ ބަރުދަނަކީ 70 ކިލޯ."}},
+   {lesson:2,q:{ar:"مَاذَا تَطْلُبُ مِنَ الشَّرَابِ؟",en:"What would you like to drink?",dv:"ބުއިމަކަށް ކޯއްޗެއް ބޭނުން؟"},a:{ar:"أَطْلُبُ الشَّايَ مِنْ فَضْلِكَ.",en:"I would like tea, please.",dv:"ސައި ބޭނުން."}},
+   {lesson:2,q:{ar:"هَلْ تَشْرَبُ الْقَهْوَةَ؟",en:"Do you drink coffee?",dv:"ކޮފީ ބޯންތަ؟"},a:{ar:"نَعَمْ، أَشْرَبُ الْقَهْوَةَ بِالْحَلِيبِ.",en:"Yes, I drink coffee with milk.",dv:"އާނ، އަހަރެން ބޮނީ ކިރު ކޮފީ."}},
+   {lesson:2,q:{ar:"مَاذَا تُفَضِّلُ مِنَ الْفَاكِهَةِ؟",en:"Which fruit do you prefer?",dv:"މޭވާއިން ކޯއްޗެއް ބޭނުން؟"},a:{ar:"أُفَضِّلُ الْعِنَبَ.",en:"I prefer grapes.",dv:"މޭބިސްކަދުރު."}},
+   {lesson:3,q:{ar:"هَلْ أَنْتَ جَوْعَانُ؟",en:"Are you hungry?",dv:"ތިބާ ބަނޑުހައިތަ؟"},a:{ar:"نَعَمْ، أَنَا جَوْعَانُ جِدًّا.",en:"Yes, I am very hungry.",dv:"އާނ، އަހަރެން ވަރަށް ބަނޑުހައި."}},
+   {lesson:3,q:{ar:"مَنِ الضُّيُوفُ؟",en:"Who are the guests?",dv:"މެހެމާނުންނަކީ ކޮން ބައެއް؟"},a:{ar:"الضُّيُوفُ وَالِدِي وَأَخِي.",en:"The guests are my father and my brother.",dv:"މެހެމާނުންނަކީ އަހަރެންގެ ބައްޕައާއި ބޭބެ."}},
+   {lesson:3,q:{ar:"أَيْنَ الْغَدَاءُ؟",en:"Where is lunch?",dv:"މެންދުރުގެ ކެއުން ކޮބައި؟"},a:{ar:"الْغَدَاءُ عَلَى الْمَائِدَةِ.",en:"Lunch is on the table.",dv:"މެންދުރުގެ ކެއުން ހުރީ ކާމޭޒުމަތީގައި."}}
+  ],
+  grammar:[
+   {lesson:1,title:"كَمْ ...؟ އާއި ޢަދަދު",body:"كَمْ ގެ ފަހަތަށް އަންނަނީ މުފްރަދު ނަމެކެވެ (كَمْ وَجْبَةً). ޖަވާބުގައި ޢަދަދާއެކު ޖަމްޢު އަންނައިރު ޢަދަދާއި ނަމުގެ ސިފަ ތަފާތުވެއެވެ.",
+    ex:[{ar:"كَمْ وَجْبَةً تَأْكُلُ؟",en:"How many meals do you eat?",dv:"ކިތައް ފަހަރު ކަން؟"},{ar:"آكُلُ ثَلَاثَ وَجَبَاتٍ.",en:"I eat three meals.",dv:"އަހަރެން ތިން ފަހަރު ކަން."}]},
+   {lesson:2,title:"مِنْ فَضْلِكَ އާއި އަދަބުވެރި ޢިބާރާތްތައް",body:"ކަމަކަށް އެދޭއިރު މِنْ فَضْلِكَ (ފިރިހެނަކަށް) ނުވަތަ مِنْ فَضْلِكِ (އަންހެނަކަށް) ބޭނުންކުރެއެވެ. ޝުކުރަށް ޖަވާބުގައި عَفْوًا ބުނެއެވެ.",
+    ex:[{ar:"مَاءً مِنْ فَضْلِكَ.",en:"Water, please.",dv:"ފެން (އަދަބުވެރިކޮށް)."},{ar:"شُكْرًا. — عَفْوًا.",en:"Thank you. — You're welcome.",dv:"ޝުކުރިއްޔާ. — މަރުޙަބާ."}]},
+   {lesson:3,title:"ނަހީ: لَا + މުޟާރިޢު، އަމުރު",body:"ކަމެއް ނުކުރުމަށް ބުނާއިރު لَا ގެ ފަހަތަށް މުޟާރިޢު ފިޢުލު ގެނެއެވެ (لَا تَأْكُلْ). ކަމެއް ކުރުމަށް ބުނާއިރު އަމުރު ފިޢުލު ބޭނުންކުރެއެވެ (اِجْلِسْ).",
+    ex:[{ar:"لَا تَأْكُلِ الْآنَ.",en:"Don't eat now.",dv:"މިހާރު ނުކާތި."},{ar:"اِجْلِسْ مِنْ فَضْلِكَ.",en:"Please sit down.",dv:"އިށީނދެލާ."}]}
+  ]
+};
+UNIT_DATA[6] = {
+  lessons:[
+   {num:46,ar:"الصَّلَوَاتُ الْخَمْسُ",task:"ކްލާހުގެ ކުއްޖަކަށް ފަސް ނަމާދު ތިބާ ކުރާ ތަންތަން ޢަރަބިން ބުނެދީ، ފަތިސް ނަމާދަށް ހޭލަން ލަފައެއް ދީ."},
+   {num:47,ar:"مُسَافِرٌ إِلَى مَكَّةَ",task:"ކްލާހުގެ ކުއްޖަކަށް ތިބާ ދަތުރުކުރާ ތަނާއި، ސަބަބާއި، ދަތުރުކުރާ ގޮތް ޢަރަބިން ބުނެދީ."},
+   {num:48,ar:"هَيَّا إِلَى الْمَسْجِدِ",task:"ކްލާހުގެ ކުއްޖަކަށް މިސްކިތަށް ދިއުމަށް ޢަރަބިން ދަޢުވަތުދީ، އޭނާ ދޭ ޢުޛުރުތަކަށް ޖަވާބުދީ."}
+  ],
+  vocab:[
+   {lesson:1,ar:"الظُّهْرُ",en:"Dhuhr (noon prayer)",dv:"މެންދުރު ނަމާދު"},
+   {lesson:1,ar:"الْعَصْرُ",en:"Asr (afternoon prayer)",dv:"ޢަޞްރު ނަމާދު"},
+   {lesson:1,ar:"الْمَغْرِبُ",en:"Maghrib (sunset prayer)",dv:"މަޣްރިބް ނަމާދު"},
+   {lesson:1,ar:"الْعِشَاءُ",en:"Isha (night prayer)",dv:"ޢިޝާ ނަމާދު"},
+   {lesson:1,ar:"الصَّلَوَاتُ الْخَمْسُ",en:"the five prayers",dv:"ފަސް ނަމާދު"},
+   {lesson:1,ar:"يَسْمَعُ",command:"اِسْمَعْ",en:"he hears",dv:"އޭނާއަށް އިވެނީ"},
+   {lesson:1,ar:"يَعْمَلُ",command:"اِعْمَلْ",en:"he works",dv:"އޭނާ މަސައްކަތްކުރަނީ"},
+   {lesson:1,ar:"يَسْتَطِيعُ",en:"he can, is able",dv:"އޭނާއަށް ކުޅަދާނަވޭ"},
+   {lesson:1,ar:"وَضَعَ",command:"ضَعْ",en:"he put",dv:"އޭނާ ބެހެއްޓި"},
+   {lesson:1,ar:"اللَّيْلُ",en:"the night",dv:"ރޭގަނޑު"},
+   {lesson:1,ar:"بِجَانِبِكَ",en:"beside you",dv:"ތިބާގެ ކައިރީގައި"},
+   {lesson:1,ar:"مُنَبِّهٌ",en:"alarm clock",dv:"އެލާމް ގަޑި"},
+   {lesson:1,ar:"فِكْرَةٌ طَيِّبَةٌ",en:"a good idea",dv:"ރަނގަޅު ޚިޔާލެއް"},
+   {lesson:2,ar:"يَرْكَبُ",command:"اِرْكَبْ",en:"he rides, boards",dv:"އޭނާ އަރަނީ"},
+   {lesson:2,ar:"مُسَافِرٌ",en:"travelling, traveller",dv:"ދަތުރުވެރިޔާ"},
+   {lesson:2,ar:"الْمَدِينَةُ",en:"Madinah",dv:"މަދީނާ"},
+   {lesson:2,ar:"مَكَّةُ",en:"Makkah",dv:"މައްކާ"},
+   {lesson:2,ar:"طَائِرَةٌ",pl:"طَائِرَاتٌ",en:"aeroplane",dv:"މަތިންދާބޯޓު"},
+   {lesson:2,ar:"صَلَاةُ الْجُمُعَةِ",en:"Friday prayer",dv:"ހުކުރު ނަމާދު"},
+   {lesson:2,ar:"الْمَسْجِدُ النَّبَوِيُّ",en:"the Prophet's Mosque",dv:"މަސްޖިދުއްނަބަވީ"},
+   {lesson:2,ar:"الْمَسْجِدُ الْحَرَامُ",en:"the Sacred Mosque",dv:"މަސްޖިދުލްޙަރާމް"},
+   {lesson:2,ar:"إِنْ شَاءَ اللهُ",en:"if Allah wills",dv:"އިން ޝާއަ ﷲ"},
+   {lesson:3,ar:"يَنْتَظِرُ",command:"اِنْتَظِرْ",en:"he waits",dv:"އޭނާ އިންތިޒާރުކުރަނީ"},
+   {lesson:3,ar:"صَحِيحٌ",en:"correct, true",dv:"ތެދު"},
+   {lesson:3,ar:"قَرِيبٌ",en:"near",dv:"ކައިރި"},
+   {lesson:3,ar:"بَعِيدٌ",en:"far",dv:"ދުރު"},
+   {lesson:3,ar:"مَرِيضٌ",en:"sick",dv:"ބަލި"},
+   {lesson:3,ar:"كَسْلَانُ",en:"lazy",dv:"ކަންނެތް"},
+   {lesson:3,ar:"ذَاهِبٌ",en:"going",dv:"ދަނީ"},
+   {lesson:3,ar:"آسِفٌ",en:"sorry",dv:"މަޢާފަށް އެދެން"},
+   {lesson:3,ar:"أَفْضَلُ",en:"better",dv:"މާ ރަނގަޅު"}
+  ],
+  conv:[
+   {lesson:1,audio:"audio/u06-l46.mp3",lines:[
+    {who:"أَحْمَدُ",ar:"أَيْنَ تُصَلِّي الصَّلَوَاتِ الْخَمْسَ يَا عَلِيُّ؟",en:"Where do you pray the five prayers, Ali?",dv:"ޢަލީ، ފަސް ނަމާދު ކުރަނީ ކޮންތާކު؟"},
+    {who:"عَلِيٌّ",ar:"أُصَلِّي الظُّهْرَ وَالْعَصْرَ وَالْمَغْرِبَ وَالْعِشَاءَ فِي مَسْجِدِ الْجَامِعَةِ.",en:"I pray Dhuhr, Asr, Maghrib and Isha in the university mosque.",dv:"މެންދުރާއި، ޢަޞްރާއި، މަޣްރިބާއި، ޢިޝާ ނަމާދު ކުރަނީ ޔުނިވަރސިޓީގެ މިސްކިތުގައި."},
+    {who:"أَحْمَدُ",ar:"وَأَيْنَ تُصَلِّي الْفَجْرَ؟",en:"And where do you pray Fajr?",dv:"ފަތިސް ނަމާދު ކުރަނީ ކޮންތާކު؟"},
+    {who:"عَلِيٌّ",ar:"أُصَلِّي الْفَجْرَ فِي الْبَيْتِ.",en:"I pray Fajr at home.",dv:"ފަތިސް ނަމާދު ކުރަނީ ގޭގައި."},
+    {who:"أَحْمَدُ",ar:"لِمَاذَا تُصَلِّي الْفَجْرَ فِي الْبَيْتِ؟",en:"Why do you pray Fajr at home?",dv:"ފަތިސް ނަމާދު ގޭގައި ކުރަނީ ކީއްވެ؟"},
+    {who:"عَلِيٌّ",ar:"لَا أَسْمَعُ الْأَذَانَ. أَسْتَيْقِظُ مُتَأَخِّرًا.",en:"I don't hear the adhan. I wake up late.",dv:"އަހަންނަކަށް ބަންގި ނީވޭ. އަހަރެން ހޭލަނީ ލަހުން."},
+    {who:"أَحْمَدُ",ar:"اِسْتَيْقِظْ مُبَكِّرًا!",en:"Wake up early!",dv:"އަވަހަށް ހޭލާ!"},
+    {who:"عَلِيٌّ",ar:"لَا أَسْتَطِيعُ، أَعْمَلُ فِي اللَّيْلِ.",en:"I can't, I work at night.",dv:"އަހަންނަކަށް ނުވާނެ، އަހަރެން މަސައްކަތްކުރަނީ ރޭގަނޑު."},
+    {who:"أَحْمَدُ",ar:"ضَعِ الْمُنَبِّهَ بِجَانِبِكَ.",en:"Put the alarm clock beside you.",dv:"އެލާމް ގަޑި ތިބާގެ ކައިރީގައި ބަހައްޓާ."},
+    {who:"عَلِيٌّ",ar:"هَذِهِ فِكْرَةٌ طَيِّبَةٌ. جَزَاكَ اللهُ خَيْرًا.",en:"That is a good idea. May Allah reward you.",dv:"އެއީ ރަނގަޅު ޚިޔާލެއް. ޖަޒާކަﷲ ޚައިރަން."}
+   ]},
+   {lesson:2,audio:"audio/u06-l47.mp3",lines:[
+    {who:"حَسَنٌ",ar:"أَنَا مُسَافِرٌ إِلَى الْمَدِينَةِ. إِلَى أَيْنَ أَنْتَ مُسَافِرٌ يَا يُوسُفُ؟",en:"I am travelling to Madinah. Where are you travelling to, Yusuf?",dv:"އަހަރެން ދަތުރުކުރަނީ މަދީނާއަށް. ޔޫސުފް، ތިބާ ދަތުރުކުރަނީ ކޮންތާކަށް؟"},
+    {who:"يُوسُفُ",ar:"أَنَا مُسَافِرٌ إِلَى مَكَّةَ.",en:"I am travelling to Makkah.",dv:"އަހަރެން ދަތުރުކުރަނީ މައްކާއަށް."},
+    {who:"حَسَنٌ",ar:"لِمَاذَا أَنْتَ مُسَافِرٌ إِلَى مَكَّةَ؟",en:"Why are you travelling to Makkah?",dv:"މައްކާއަށް ދަތުރުކުރަނީ ކީއްވެ؟"},
+    {who:"يُوسُفُ",ar:"لِلصَّلَاةِ فِي الْمَسْجِدِ الْحَرَامِ. وَلِمَاذَا أَنْتَ مُسَافِرٌ إِلَى الْمَدِينَةِ؟",en:"To pray in the Sacred Mosque. And why are you travelling to Madinah?",dv:"މަސްޖިދުލްޙަރާމްގައި ނަމާދުކުރަން. ތިބާ މަދީނާއަށް ދަތުރުކުރަނީ ކީއްވެ؟"},
+    {who:"حَسَنٌ",ar:"لِلصَّلَاةِ فِي الْمَسْجِدِ النَّبَوِيِّ.",en:"To pray in the Prophet's Mosque.",dv:"މަސްޖިދުއްނަބަވީގައި ނަމާދުކުރަން."},
+    {who:"يُوسُفُ",ar:"أَيْنَ سَتُصَلِّي الْجُمُعَةَ؟",en:"Where will you pray Jumuah?",dv:"ހުކުރު ނަމާދު ކުރާނީ ކޮންތާކު؟"},
+    {who:"حَسَنٌ",ar:"فِي الْمَسْجِدِ النَّبَوِيِّ، إِنْ شَاءَ اللهُ. وَأَيْنَ سَتُصَلِّي أَنْتَ؟",en:"In the Prophet's Mosque, if Allah wills. And where will you pray?",dv:"މަސްޖިދުއްނަބަވީގައި، އިން ޝާއަ ﷲ. ތިބާ ނަމާދުކުރާނީ ކޮންތާކު؟"},
+    {who:"يُوسُفُ",ar:"فِي الْمَسْجِدِ الْحَرَامِ، إِنْ شَاءَ اللهُ.",en:"In the Sacred Mosque, if Allah wills.",dv:"މަސްޖިދުލްޙަރާމްގައި، އިން ޝާއަ ﷲ."},
+    {who:"حَسَنٌ",ar:"كَيْفَ سَتُسَافِرُ إِلَى مَكَّةَ؟",en:"How will you travel to Makkah?",dv:"މައްކާއަށް ދަތުރުކުރާނީ ކިހިނެއް؟"},
+    {who:"يُوسُفُ",ar:"أَرْكَبُ الطَّائِرَةَ.",en:"I will take the plane.",dv:"މަތިންދާބޯޓުގައި."}
+   ]},
+   {lesson:3,audio:"audio/u06-l48.mp3",lines:[
+    {who:"عُمَرُ",ar:"هَذَا أَذَانُ الْمَغْرِبِ. هَيَّا بِنَا إِلَى الْمَسْجِدِ.",en:"This is the Maghrib adhan. Let's go to the mosque.",dv:"މިއީ މަޣްރިބް ނަމާދުގެ ބަންގި. ހިނގާ މިސްކިތަށް ދަމާ."},
+    {who:"خَالِدٌ",ar:"أَنَا أُصَلِّي فِي الْبَيْتِ الْيَوْمَ.",en:"I am praying at home today.",dv:"މިއަދު އަހަރެން ނަމާދުކުރާނީ ގޭގައި."},
+    {who:"عُمَرُ",ar:"الصَّلَاةُ فِي الْمَسْجِدِ أَفْضَلُ.",en:"Prayer in the mosque is better.",dv:"މިސްކިތުގައި ނަމާދުކުރުން މާ ރަނގަޅު."},
+    {who:"خَالِدٌ",ar:"الْمَسْجِدُ بَعِيدٌ.",en:"The mosque is far.",dv:"މިސްކިތް ދުރު."},
+    {who:"عُمَرُ",ar:"لَا، الْمَسْجِدُ قَرِيبٌ مِنَ الْبَيْتِ. هَلْ أَنْتَ مَرِيضٌ؟",en:"No, the mosque is near the house. Are you sick?",dv:"ނޫން، މިސްކިތް ހުރީ ގެއާ ކައިރީގައި. ތިބާ ބަލިތަ؟"},
+    {who:"خَالِدٌ",ar:"لَا، أَنَا بِخَيْرٍ.",en:"No, I am fine.",dv:"ނޫން، އަހަރެން ރަނގަޅު."},
+    {who:"عُمَرُ",ar:"أَنْتَ كَسْلَانُ!",en:"You are lazy!",dv:"ތިބާ ކަންނެތް!"},
+    {who:"خَالِدٌ",ar:"هَذَا صَحِيحٌ. آسِفٌ.",en:"That is true. Sorry.",dv:"އެއީ ތެދެއް. މަޢާފަށް އެދެން."},
+    {who:"عُمَرُ",ar:"أَنَا ذَاهِبٌ إِلَى الْمَسْجِدِ الْآنَ.",en:"I am going to the mosque now.",dv:"އަހަރެން މިހާރު މިދަނީ މިސްކިތަށް."},
+    {who:"خَالِدٌ",ar:"اِنْتَظِرْ، أَنَا ذَاهِبٌ مَعَكَ.",en:"Wait, I am going with you.",dv:"މަޑުކުރޭ، އަހަރެންވެސް ދާނަން ތިބާއާއެކު."}
+   ]}
+  ],
+  speak:[
+   {lesson:1,q:{ar:"أَيْنَ تُصَلِّي الْفَجْرَ؟",en:"Where do you pray Fajr?",dv:"ފަތިސް ނަމާދު ކުރަނީ ކޮންތާކު؟"},a:{ar:"أُصَلِّي الْفَجْرَ فِي الْمَسْجِدِ.",en:"I pray Fajr in the mosque.",dv:"ފަތިސް ނަމާދު ކުރަނީ މިސްކިތުގައި."}},
+   {lesson:1,q:{ar:"هَلْ تَسْمَعُ الْأَذَانَ؟",en:"Do you hear the adhan?",dv:"ތިބާއަށް ބަންގި އިވޭތަ؟"},a:{ar:"نَعَمْ، أَسْمَعُ الْأَذَانَ.",en:"Yes, I hear the adhan.",dv:"އާނ، އަހަންނަށް ބަންގި އިވޭ."}},
+   {lesson:1,q:{ar:"هَلْ تَسْتَطِيعُ أَنْ تَسْتَيْقِظَ مُبَكِّرًا؟",en:"Can you wake up early?",dv:"ތިބާއަށް އަވަހަށް ހޭލެވޭނެތަ؟"},a:{ar:"نَعَمْ، أَضَعُ الْمُنَبِّهَ بِجَانِبِي.",en:"Yes, I put the alarm clock beside me.",dv:"އާނ، އެލާމް ގަޑި އަހަރެންގެ ކައިރީގައި ބަހައްޓަން."}},
+   {lesson:2,q:{ar:"إِلَى أَيْنَ أَنْتَ مُسَافِرٌ؟",en:"Where are you travelling to?",dv:"ތިބާ ދަތުރުކުރަނީ ކޮންތާކަށް؟"},a:{ar:"أَنَا مُسَافِرٌ إِلَى مَكَّةَ.",en:"I am travelling to Makkah.",dv:"އަހަރެން ދަތުރުކުރަނީ މައްކާއަށް."}},
+   {lesson:2,q:{ar:"لِمَاذَا أَنْتَ مُسَافِرٌ؟",en:"Why are you travelling?",dv:"ދަތުރުކުރަނީ ކީއްވެ؟"},a:{ar:"لِلصَّلَاةِ فِي الْمَسْجِدِ الْحَرَامِ.",en:"To pray in the Sacred Mosque.",dv:"މަސްޖިދުލްޙަރާމްގައި ނަމާދުކުރަން."}},
+   {lesson:2,q:{ar:"كَيْفَ سَتُسَافِرُ؟",en:"How will you travel?",dv:"ދަތުރުކުރާނީ ކިހިނެއް؟"},a:{ar:"سَأَرْكَبُ الطَّائِرَةَ.",en:"I will take the plane.",dv:"މަތިންދާބޯޓުގައި."}},
+   {lesson:3,q:{ar:"هَلِ الْمَسْجِدُ قَرِيبٌ؟",en:"Is the mosque near?",dv:"މިސްކިތް ކައިރިތަ؟"},a:{ar:"نَعَمْ، الْمَسْجِدُ قَرِيبٌ مِنَ الْبَيْتِ.",en:"Yes, the mosque is near the house.",dv:"އާނ، މިސްކިތް ހުރީ ގެއާ ކައިރީގައި."}},
+   {lesson:3,q:{ar:"هَلْ أَنْتَ مَرِيضٌ؟",en:"Are you sick?",dv:"ތިބާ ބަލިތަ؟"},a:{ar:"لَا، أَنَا بِخَيْرٍ.",en:"No, I am fine.",dv:"ނޫން، އަހަރެން ރަނގަޅު."}},
+   {lesson:3,q:{ar:"هَيَّا بِنَا إِلَى الْمَسْجِدِ.",en:"Let's go to the mosque.",dv:"ހިނގާ މިސްކިތަށް ދަމާ."},a:{ar:"اِنْتَظِرْ، أَنَا ذَاهِبٌ مَعَكَ.",en:"Wait, I am going with you.",dv:"މަޑުކުރޭ، އަހަރެންވެސް ދާނަން ތިބާއާއެކު."}}
+  ],
+  grammar:[
+   {lesson:1,title:"އަމުރު ފިޢުލު",body:"ކަމެއް ކުރުމަށް ބުނާއިރު އަމުރު ފިޢުލު ބޭނުންކުރެއެވެ. މުޟާރިޢުން އަމުރަށް ބަދަލުކުރާއިރު ފުރަތަމަ އަކުރު ނަގައި ފަހު އަކުރު ސުކުން ކުރެއެވެ.",
+    ex:[{ar:"تَسْتَيْقِظُ — اِسْتَيْقِظْ!",en:"you wake up — wake up!",dv:"ތިބާ ހޭލަނީ — ހޭލާ!"},{ar:"ضَعِ الْمُنَبِّهَ بِجَانِبِكَ.",en:"Put the alarm clock beside you.",dv:"އެލާމް ގަޑި ތިބާގެ ކައިރީގައި ބަހައްޓާ."}]},
+   {lesson:2,title:"އިސްމުލްފާޢިލް: مُسَافِرٌ، ذَاهِبٌ",body:"މިހާރު ކުރަމުންދާ ކަމެއް ބުނުމަށް ފިޢުލުގެ ބަދަލުގައި އިސްމުލްފާޢިލް ބޭނުންކުރެވެއެވެ. ޟަމީރާއެކު އެކަނި ބޭނުންކުރެވެއެވެ.",
+    ex:[{ar:"أَنَا مُسَافِرٌ إِلَى مَكَّةَ.",en:"I am travelling to Makkah.",dv:"އަހަރެން ދަތުރުކުރަނީ މައްކާއަށް."},{ar:"أَنَا ذَاهِبٌ إِلَى الْمَسْجِدِ.",en:"I am going to the mosque.",dv:"އަހަރެން މިދަނީ މިސްކިތަށް."}]},
+   {lesson:3,title:"أَفْضَلُ އާއި ސިފަތައް",body:"ދެ ކަމެއް އަޅާކިޔާއިރު أَفْضَلُ (މާ ރަނގަޅު) ބޭނުންކުރެއެވެ. ސިފަ އަންނަނީ ނަމުގެ ފަހަތަށެވެ: قَرِيبٌ / بَعِيدٌ، مَرِيضٌ / بِخَيْرٍ.",
+    ex:[{ar:"الصَّلَاةُ فِي الْمَسْجِدِ أَفْضَلُ.",en:"Prayer in the mosque is better.",dv:"މިސްކިތުގައި ނަމާދުކުރުން މާ ރަނގަޅު."},{ar:"الْمَسْجِدُ قَرِيبٌ، وَالْجَامِعَةُ بَعِيدَةٌ.",en:"The mosque is near, and the university is far.",dv:"މިސްކިތް ކައިރި، ޔުނިވަރސިޓީ ދުރު."}]}
+  ]
+};
+UNIT_DATA[7] = {
+  lessons:[
+   {num:55,ar:"الْجَدْوَلُ الدِّرَاسِيُّ",task:"ކްލާހުގެ ކުއްޖަކަށް ތިބާ ކިޔަވާ މާއްދާތަކާއި، ކިޔަވާ ދުވަސްތަކާއި، ޗުއްޓީ ދުވަސްތައް ޢަރަބިން ބުނެދީ."},
+   {num:56,ar:"فِي أَيِّ كُلِّيَّةٍ تَدْرُسُ؟",task:"ކްލާހުގެ ކުއްޖަކަށް ތިބާ ކިޔަވާ ޔުނިވަރސިޓީއާއި ކުއްލިއްޔާ ޢަރަބިން ބުނެދީ، ކުރިއަށް ކުރާނެ މަސައްކަތްވެސް ބުނެދީ."},
+   {num:57,ar:"الْيَوْمُ الدِّرَاسِيُّ",task:"ކްލާހުގެ ކުއްޖަކަށް ތިބާގެ ކިޔެވުން ފެށޭ ގަޑިއާއި ނިމޭ ގަޑިއާއި، ބްރޭކް ގަޑީގައި ކުރާ ކަންތައް ޢަރަބިން ބުނެދީ."}
+  ],
+  vocab:[
+   {lesson:1,ar:"اللُّغَةُ الْعَرَبِيَّةُ",en:"the Arabic language",dv:"ޢަރަބި ބަސް"},
+   {lesson:1,ar:"مَوَادُّ دِرَاسِيَّةٌ",en:"school subjects",dv:"ކިޔަވާ މާއްދާތައް"},
+   {lesson:1,ar:"جَدْوَلٌ دِرَاسِيٌّ",en:"timetable",dv:"ޓައިމްޓޭބަލް"},
+   {lesson:1,ar:"صَفٌّ",pl:"صُفُوفٌ",en:"classroom",dv:"ކްލާސްރޫމް"},
+   {lesson:1,ar:"الْحَاسُوبُ",en:"the computer",dv:"ކޮމްޕިއުޓަރު"},
+   {lesson:1,ar:"الْعُلُومُ",en:"science",dv:"ސައިންސް"},
+   {lesson:1,ar:"الرِّيَاضِيَّاتُ",en:"mathematics",dv:"ހިސާބު"},
+   {lesson:1,ar:"الثَّقَافَةُ الْإِسْلَامِيَّةُ",en:"Islamic studies",dv:"އިސްލާމް"},
+   {lesson:1,ar:"جَاءَ",en:"he came",dv:"އޭނާ އައި"},
+   {lesson:1,ar:"اِخْتِبَارٌ",pl:"اِخْتِبَارَاتٌ",en:"exam",dv:"އިމްތިޙާން"},
+   {lesson:1,ar:"حِصَّةٌ",pl:"حِصَصٌ",en:"lesson period",dv:"ގަޑި (ކިޔަވާ)"},
+   {lesson:1,ar:"لَوْحَةٌ",en:"board",dv:"ބޯޑު"},
+   {lesson:1,ar:"يَكْتُبُ",command:"اُكْتُبْ",en:"he writes",dv:"އޭނާ ލިޔަނީ"},
+   {lesson:1,ar:"يَنْتَهِي",en:"it ends",dv:"ނިމެނީ"},
+   {lesson:1,ar:"يَبْدَأُ",command:"اِبْدَأْ",en:"it begins",dv:"ފެށެނީ"},
+   {lesson:1,ar:"يَنْظُرُ",command:"اُنْظُرْ",en:"he looks",dv:"އޭނާ ބަލަނީ"},
+   {lesson:1,ar:"أُسْبُوعٌ",pl:"أَسَابِيعُ",en:"week",dv:"ހަފުތާ"},
+   {lesson:1,ar:"شَهْرٌ",pl:"أَشْهُرٌ",en:"month",dv:"މަސް"},
+   {lesson:2,ar:"يَدْرُسُ",command:"اُدْرُسْ",en:"he studies",dv:"އޭނާ ކިޔަވަނީ"},
+   {lesson:2,ar:"كُلِّيَّةُ الطِّبِّ",en:"faculty of medicine",dv:"މެޑިސިން ކުއްލިއްޔާ"},
+   {lesson:2,ar:"كُلِّيَّةُ التَّرْبِيَةِ",en:"faculty of education",dv:"ތަޢުލީމީ ކުއްލިއްޔާ"},
+   {lesson:2,ar:"مُدَرِّسَةٌ",pl:"مُدَرِّسَاتٌ",en:"teacher (female)",dv:"މުދައްރިސާ"},
+   {lesson:2,ar:"سَأَكُونُ",en:"I will be",dv:"އަހަރެން ވާނީ"},
+   {lesson:3,ar:"الْآنَ",en:"now",dv:"މިހާރު"},
+   {lesson:3,ar:"مُخْتَبَرٌ",pl:"مُخْتَبَرَاتٌ",en:"laboratory",dv:"ލެބޯޓަރީ"},
+   {lesson:3,ar:"مَكْتَبَةٌ",pl:"مَكْتَبَاتٌ",en:"library",dv:"ލައިބްރަރީ"},
+   {lesson:3,ar:"الْوَقْتُ",en:"the time",dv:"ވަގުތު"},
+   {lesson:3,ar:"اِسْتِرَاحَةٌ",en:"break",dv:"ބްރޭކް"},
+   {lesson:3,ar:"صَبَاحًا",en:"in the morning (a.m.)",dv:"ހެނދުނު"},
+   {lesson:3,ar:"ظُهْرًا",en:"at noon (p.m.)",dv:"މެންދުރު"}
+  ],
+  conv:[
+   {lesson:1,audio:"audio/u07-l55.mp3",lines:[
+    {who:"أَحْمَدُ",ar:"اُنْظُرْ إِلَى اللَّوْحَةِ يَا عَلِيُّ. هَذَا هُوَ الْجَدْوَلُ الدِّرَاسِيُّ.",en:"Look at the board, Ali. This is the timetable.",dv:"ޢަލީ، ބޯޑަށް ބަލާ. މިއީ ޓައިމްޓޭބަލް."},
+    {who:"عَلِيٌّ",ar:"الدِّرَاسَةُ خَمْسَةُ أَيَّامٍ فِي الْأُسْبُوعِ؟",en:"Is study five days a week?",dv:"ކިޔެވުން އޮންނަނީ ހަފުތާއަކު ފަސް ދުވަހުތަ؟"},
+    {who:"أَحْمَدُ",ar:"نَعَمْ، مِنْ يَوْمِ الْأَحَدِ إِلَى يَوْمِ الْخَمِيسِ. وَالْعُطْلَةُ يَوْمُ الْجُمُعَةِ وَيَوْمُ السَّبْتِ.",en:"Yes, from Sunday to Thursday. The holiday is Friday and Saturday.",dv:"އާނ، އާދީއްތައިން ބުރާސްފައްޗަށް. ޗުއްޓީއަކީ ހުކުރާއި ހޮނިހިރު."},
+    {who:"عَلِيٌّ",ar:"مَا هِيَ الْمَوَادُّ الدِّرَاسِيَّةُ؟",en:"What are the subjects?",dv:"ކިޔަވާ މާއްދާތަކަކީ ކޮބައި؟"},
+    {who:"أَحْمَدُ",ar:"اللُّغَةُ الْعَرَبِيَّةُ وَالثَّقَافَةُ الْإِسْلَامِيَّةُ وَالرِّيَاضِيَّاتُ وَالْعُلُومُ وَالْحَاسُوبُ.",en:"Arabic, Islamic studies, mathematics, science and computer.",dv:"ޢަރަބި ބަހާއި، އިސްލާމާއި، ހިސާބާއި، ސައިންސާއި، ކޮމްޕިއުޓަރު."},
+    {who:"عَلِيٌّ",ar:"مَتَى تَبْدَأُ الِاخْتِبَارَاتُ؟",en:"When do the exams begin?",dv:"އިމްތިޙާން ފެށެނީ ކޮން އިރަކު؟"},
+    {who:"أَحْمَدُ",ar:"تَبْدَأُ فِي شَهْرِ شَعْبَانَ.",en:"They begin in the month of Shaban.",dv:"ފެށެނީ ޝަޢުބާން މަހު."},
+    {who:"عَلِيٌّ",ar:"وَمَتَى يَنْتَهِي الْعَامُ الدِّرَاسِيُّ؟",en:"And when does the school year end?",dv:"ދިރާސީ އަހަރު ނިމެނީ ކޮން އިރަކު؟"},
+    {who:"أَحْمَدُ",ar:"يَنْتَهِي فِي شَهْرِ رَمَضَانَ.",en:"It ends in the month of Ramadan.",dv:"ނިމެނީ ރަމަޟާން މަހު."},
+    {who:"عَلِيٌّ",ar:"جَاءَ الْمُعَلِّمُ. هَيَّا بِنَا إِلَى الصَّفِّ.",en:"The teacher has come. Let's go to the classroom.",dv:"މުދައްރިސް އަތުވެއްޖެ. ހިނގާ ކްލާހަށް ދަމާ."}
+   ]},
+   {lesson:2,audio:"audio/u07-l56.mp3",lines:[
+    {who:"سَلْمَى",ar:"السَّلَامُ عَلَيْكُمْ. اِسْمِي سَلْمَى، أَنَا مَالْدِيفِيَّةٌ.",en:"Peace be upon you. My name is Salma. I am Maldivian.",dv:"ތިޔަބޭކަލުންނަށް ސަލާމް. އަހަރެންގެ ނަމަކީ ސަލްމާ. އަހަރެންނަކީ ދިވެއްސެއް."},
+    {who:"نُورُ",ar:"وَعَلَيْكُمُ السَّلَامُ. اِسْمِي نُورُ، أَنَا مِصْرِيَّةٌ.",en:"And upon you be peace. My name is Noor. I am Egyptian.",dv:"ތިޔަބޭކަލުންނަށްވެސް ސަލާމް. އަހަރެންގެ ނަމަކީ ނޫރު. އަހަރެންނަކީ މިޞްރު މީހެއް."},
+    {who:"سَلْمَى",ar:"أَنَا طَالِبَةٌ فِي الْجَامِعَةِ الْإِسْلَامِيَّةِ.",en:"I am a student at the Islamic University.",dv:"އަހަރެންނަކީ އިސްލާމިކް ޔުނިވަރސިޓީގެ ދަރިވަރެއް."},
+    {who:"نُورُ",ar:"وَأَنَا طَالِبَةٌ فِي جَامِعَةِ الْأَزْهَرِ.",en:"And I am a student at Al-Azhar University.",dv:"އަހަރެންނަކީ އަލްއަޒްހަރު ޔުނިވަރސިޓީގެ ދަރިވަރެއް."},
+    {who:"سَلْمَى",ar:"فِي أَيِّ كُلِّيَّةٍ تَدْرُسِينَ؟",en:"In which faculty do you study?",dv:"ތިބާ ކިޔަވަނީ ކޮން ކުއްލިއްޔާއެއްގައި؟"},
+    {who:"نُورُ",ar:"أَدْرُسُ فِي كُلِّيَّةِ الطِّبِّ. وَفِي أَيِّ كُلِّيَّةٍ تَدْرُسِينَ أَنْتِ؟",en:"I study in the faculty of medicine. And in which faculty do you study?",dv:"އަހަރެން ކިޔަވަނީ މެޑިސިން ކުއްލިއްޔާގައި. ތިބާ ކިޔަވަނީ ކޮން ކުއްލިއްޔާއެއްގައި؟"},
+    {who:"سَلْمَى",ar:"أَدْرُسُ فِي كُلِّيَّةِ التَّرْبِيَةِ.",en:"I study in the faculty of education.",dv:"އަހަރެން ކިޔަވަނީ ތަޢުލީމީ ކުއްލިއްޔާގައި."},
+    {who:"نُورُ",ar:"سَأَكُونُ طَبِيبَةً، إِنْ شَاءَ اللهُ.",en:"I will be a doctor, if Allah wills.",dv:"އަހަރެން ވާނީ ޑޮކްޓަރަކަށް، އިން ޝާއަ ﷲ."},
+    {who:"سَلْمَى",ar:"وَأَنَا سَأَكُونُ مُدَرِّسَةً، إِنْ شَاءَ اللهُ.",en:"And I will be a teacher, if Allah wills.",dv:"އަހަރެން ވާނީ މުދައްރިސާއަކަށް، އިން ޝާއަ ﷲ."}
+   ]},
+   {lesson:3,audio:"audio/u07-l57.mp3",lines:[
+    {who:"حَسَنٌ",ar:"إِلَى أَيْنَ تَذْهَبُ الْآنَ يَا إِبْرَاهِيمُ؟",en:"Where are you going now, Ibrahim?",dv:"އިބްރާހީމް، މިހާރު ތިބާ ދަނީ ކޮންތާކަށް؟"},
+    {who:"إِبْرَاهِيمُ",ar:"أَذْهَبُ إِلَى الْجَامِعَةِ.",en:"I am going to the university.",dv:"އަހަރެން ދަނީ ޔުނިވަރސިޓީއަށް."},
+    {who:"حَسَنٌ",ar:"الْوَقْتُ مُبَكِّرٌ! السَّاعَةُ السَّادِسَةُ صَبَاحًا.",en:"It is early! It is six in the morning.",dv:"އަދި ވަރަށް އަވަސް! މިހާރު ހެނދުނު ހައެއް ޖެހީ."},
+    {who:"إِبْرَاهِيمُ",ar:"الْجَامِعَةُ بَعِيدَةٌ عَنِ الْبَيْتِ.",en:"The university is far from home.",dv:"ޔުނިވަރސިޓީ ހުރީ ގެއާ ދުރުގައި."},
+    {who:"حَسَنٌ",ar:"مَتَى يَبْدَأُ الْيَوْمُ الدِّرَاسِيُّ؟",en:"When does the school day begin?",dv:"ކިޔެވުން ފެށެނީ ކޮން އިރަކު؟"},
+    {who:"إِبْرَاهِيمُ",ar:"يَبْدَأُ السَّاعَةَ الثَّامِنَةَ صَبَاحًا.",en:"It begins at eight in the morning.",dv:"ފެށެނީ ހެނދުނު އަށެއް ޖަހާއިރު."},
+    {who:"حَسَنٌ",ar:"وَمَتَى يَنْتَهِي؟",en:"And when does it end?",dv:"ނިމެނީ ކޮން އިރަކު؟"},
+    {who:"إِبْرَاهِيمُ",ar:"يَنْتَهِي السَّاعَةَ الثَّانِيَةَ ظُهْرًا.",en:"It ends at two in the afternoon.",dv:"ނިމެނީ މެންދުރުފަހު ދޭއް ޖަހާއިރު."},
+    {who:"حَسَنٌ",ar:"كَمْ حِصَّةً تَدْرُسُ فِي الْيَوْمِ؟",en:"How many periods do you study a day?",dv:"ދުވާލަކު ކިތައް ގަޑި ކިޔަވަން؟"},
+    {who:"إِبْرَاهِيمُ",ar:"أَدْرُسُ خَمْسَ حِصَصٍ.",en:"I study five periods.",dv:"އަހަރެން ކިޔަވަނީ ފަސް ގަޑި."},
+    {who:"حَسَنٌ",ar:"وَمَاذَا تَفْعَلُ فِي الِاسْتِرَاحَةِ؟",en:"And what do you do in the break?",dv:"ބްރޭކް ގަޑީގައި ކުރަނީ ކޮންކަމެއް؟"},
+    {who:"إِبْرَاهِيمُ",ar:"أَذْهَبُ إِلَى الْمَكْتَبَةِ أَوْ إِلَى الْمُخْتَبَرِ.",en:"I go to the library or to the laboratory.",dv:"ލައިބްރަރީއަށް ނުވަތަ ލެބޯޓަރީއަށް ދަން."}
+   ]}
+  ],
+  speak:[
+   {lesson:1,q:{ar:"كَمْ يَوْمًا الدِّرَاسَةُ فِي الْأُسْبُوعِ؟",en:"How many days a week is study?",dv:"ހަފުތާއަކު ކިތައް ދުވަހު ކިޔަވަން؟"},a:{ar:"الدِّرَاسَةُ خَمْسَةُ أَيَّامٍ فِي الْأُسْبُوعِ.",en:"Study is five days a week.",dv:"ކިޔެވުން އޮންނަނީ ހަފުތާއަކު ފަސް ދުވަހު."}},
+   {lesson:1,q:{ar:"مَتَى الْعُطْلَةُ؟",en:"When is the holiday?",dv:"ޗުއްޓީއަކީ ކޮން ދުވަހެއް؟"},a:{ar:"الْعُطْلَةُ يَوْمُ الْجُمُعَةِ وَيَوْمُ السَّبْتِ.",en:"The holiday is Friday and Saturday.",dv:"ޗުއްޓީއަކީ ހުކުރާއި ހޮނިހިރު."}},
+   {lesson:1,q:{ar:"مَتَى تَبْدَأُ الِاخْتِبَارَاتُ؟",en:"When do the exams begin?",dv:"އިމްތިޙާން ފެށެނީ ކޮން އިރަކު؟"},a:{ar:"تَبْدَأُ فِي شَهْرِ شَعْبَانَ.",en:"They begin in Shaban.",dv:"ފެށެނީ ޝަޢުބާން މަހު."}},
+   {lesson:2,q:{ar:"فِي أَيِّ كُلِّيَّةٍ تَدْرُسُ؟",en:"In which faculty do you study?",dv:"ތިބާ ކިޔަވަނީ ކޮން ކުއްލިއްޔާއެއްގައި؟"},a:{ar:"أَدْرُسُ فِي كُلِّيَّةِ التَّرْبِيَةِ.",en:"I study in the faculty of education.",dv:"އަހަރެން ކިޔަވަނީ ތަޢުލީމީ ކުއްލިއްޔާގައި."}},
+   {lesson:2,q:{ar:"فِي أَيِّ جَامِعَةٍ تَدْرُسُ؟",en:"At which university do you study?",dv:"ތިބާ ކިޔަވަނީ ކޮން ޔުނިވަރސިޓީއެއްގައި؟"},a:{ar:"أَدْرُسُ فِي الْجَامِعَةِ الْإِسْلَامِيَّةِ.",en:"I study at the Islamic University.",dv:"އަހަރެން ކިޔަވަނީ އިސްލާމިކް ޔުނިވަރސިޓީގައި."}},
+   {lesson:2,q:{ar:"مَاذَا سَتَكُونُ بَعْدَ الدِّرَاسَةِ؟",en:"What will you be after your studies?",dv:"ކިޔެވުމަށްފަހު ތިބާ ވާނީ ކޮން ފަރާތަކަށް؟"},a:{ar:"سَأَكُونُ مُدَرِّسًا، إِنْ شَاءَ اللهُ.",en:"I will be a teacher, if Allah wills.",dv:"އަހަރެން ވާނީ މުދައްރިސަކަށް، އިން ޝާއަ ﷲ."}},
+   {lesson:3,q:{ar:"مَتَى يَبْدَأُ الْيَوْمُ الدِّرَاسِيُّ؟",en:"When does the school day begin?",dv:"ކިޔެވުން ފެށެނީ ކޮން އިރަކު؟"},a:{ar:"يَبْدَأُ السَّاعَةَ السَّابِعَةَ صَبَاحًا.",en:"It begins at seven in the morning.",dv:"ފެށެނީ ހެނދުނު ހަތެއް ޖަހާއިރު."}},
+   {lesson:3,q:{ar:"كَمْ حِصَّةً تَدْرُسُ فِي الْيَوْمِ؟",en:"How many periods do you study a day?",dv:"ދުވާލަކު ކިތައް ގަޑި ކިޔަވަން؟"},a:{ar:"أَدْرُسُ سِتَّ حِصَصٍ.",en:"I study six periods.",dv:"އަހަރެން ކިޔަވަނީ ހަ ގަޑި."}},
+   {lesson:3,q:{ar:"مَاذَا تَفْعَلُ فِي الِاسْتِرَاحَةِ؟",en:"What do you do in the break?",dv:"ބްރޭކް ގަޑީގައި ކުރަނީ ކޮންކަމެއް؟"},a:{ar:"أَذْهَبُ إِلَى الْمَكْتَبَةِ.",en:"I go to the library.",dv:"ލައިބްރަރީއަށް ދަން."}}
+  ],
+  grammar:[
+   {lesson:1,title:"ހަފުތާގެ ދުވަސްތައް",body:"يَوْمُ الْأَحَدِ، يَوْمُ الِاثْنَيْنِ، يَوْمُ الثُّلَاثَاءِ، يَوْمُ الْأَرْبِعَاءِ، يَوْمُ الْخَمِيسِ، يَوْمُ الْجُمُعَةِ، يَوْمُ السَّبْتِ.",
+    ex:[{ar:"الدِّرَاسَةُ مِنْ يَوْمِ الْأَحَدِ إِلَى يَوْمِ الْخَمِيسِ.",en:"Study is from Sunday to Thursday.",dv:"ކިޔެވުން އޮންނަނީ އާދީއްތައިން ބުރާސްފައްޗަށް."},{ar:"الْعُطْلَةُ يَوْمُ الْجُمُعَةِ.",en:"The holiday is Friday.",dv:"ޗުއްޓީއަކީ ހުކުރު ދުވަސް."}]},
+   {lesson:2,title:"سَأَكُونُ + ...ًا",body:"ކުރިއަށް އޮތް ތަނުގައި ވާނެ ގޮތް ބުނުމަށް سَأَكُونُ ބޭނުންކުރެއެވެ. އޭގެ ފަހަތަށް އަންނަ ނަން ނިމެނީ ފަތުޙަ ތަންވީނުންނެވެ.",
+    ex:[{ar:"سَأَكُونُ طَبِيبًا.",en:"I will be a doctor.",dv:"އަހަރެން ވާނީ ޑޮކްޓަރަކަށް."},{ar:"سَأَكُونُ مُدَرِّسَةً.",en:"I will be a teacher (f).",dv:"އަހަރެން ވާނީ މުދައްރިސާއަކަށް."}]},
+   {lesson:3,title:"ގަޑި ބުނާ ގޮތް",body:"ގަޑި ބުނާއިރު السَّاعَةُ ގެ ފަހަތަށް ތަރުތީބު ޢަދަދު ގެނެއެވެ. ހެނދުނު ނަމަ صَبَاحًا އަދި މެންދުރު ނަމަ ظُهْرًا އިތުރުކުރެއެވެ.",
+    ex:[{ar:"السَّاعَةُ السَّابِعَةُ صَبَاحًا.",en:"Seven in the morning.",dv:"ހެނދުނު ހަތެއް ޖަހާއިރު."},{ar:"يَنْتَهِي الْيَوْمُ الدِّرَاسِيُّ السَّاعَةَ الْوَاحِدَةَ ظُهْرًا.",en:"The school day ends at one in the afternoon.",dv:"ކިޔެވުން ނިމެނީ މެންދުރުފަހު އެކެއް ޖަހާއިރު."}]}
+  ]
+};
+UNIT_DATA[8] = {
+  lessons:[
+   {num:64,ar:"مَاذَا تَعْمَلُ؟",task:"ކްލާހުގެ ކުއްޖަކާ ތިބާގެ މަސައްކަތާއި، މަސައްކަތްކުރާ ތަނާއި، ދުވާލަކު މަސައްކަތްކުރާ ގަޑިތައް ޢަރަބިން ޙިއްޞާކުރޭ."},
+   {num:65,ar:"بَعْدَ الدِّرَاسَةِ",task:"ކްލާހުގެ ކުދިންނާއެކު ވަށްބުރަކަށް ތިބެ، ކޮންމެ ކުއްޖަކު ކިޔަވާ ކުއްލިއްޔާއާއި ކުރިއަށް ކުރާނެ މަސައްކަތް ޢަރަބިން ބުނޭ."},
+   {num:66,ar:"مَا مِهْنَتُكِ؟",task:"ކްލާހުގެ ކުއްޖަކާ މަސައްކަތާއި ދަރިންގެ ވާހަކަ ޢަރަބިން ދައްކާ: މިހުނަ، މަރުޙަލާ، ކިތައް ކުދިން."}
+  ],
+  vocab:[
+   {lesson:1,ar:"شَرِكَةٌ",pl:"شَرِكَاتٌ",en:"company",dv:"ކުންފުނި"},
+   {lesson:1,ar:"مُسْتَشْفًى",pl:"مُسْتَشْفَيَاتٌ",en:"hospital",dv:"ހޮސްޕިޓަލް"},
+   {lesson:1,ar:"سَاعَةٌ",pl:"سَاعَاتٌ",en:"hour",dv:"ގަޑިއިރު"},
+   {lesson:1,ar:"يُحِبُّ",en:"he likes, loves",dv:"އޭނާ ލޯބިވަނީ"},
+   {lesson:1,ar:"يَعْمَلُ",command:"اِعْمَلْ",en:"he works",dv:"އޭނާ މަސައްކަތްކުރަނީ"},
+   {lesson:1,ar:"عَمَلٌ",pl:"أَعْمَالٌ",en:"work",dv:"މަސައްކަތް"},
+   {lesson:2,ar:"هَنْدَسَةٌ",en:"engineering",dv:"އިންޖިނިއަރިން"},
+   {lesson:2,ar:"صَيْدَلَةٌ",en:"pharmacy (field)",dv:"ފާމަސީ"},
+   {lesson:2,ar:"تَمْرِيضٌ",en:"nursing",dv:"ނަރސިން"},
+   {lesson:2,ar:"طَيَرَانٌ",en:"aviation",dv:"ޕައިލެޓުކަން"},
+   {lesson:2,ar:"صَيْدَلِيٌّ",en:"pharmacist",dv:"ފާމަސިސްޓް"},
+   {lesson:2,ar:"مُمَرِّضٌ",en:"nurse (male)",dv:"ނަރުސް"},
+   {lesson:2,ar:"طَيَّارٌ",en:"pilot",dv:"ޕައިލެޓު"},
+   {lesson:2,ar:"كُلِّيَّةٌ",pl:"كُلِّيَّاتٌ",en:"faculty, college",dv:"ކުއްލިއްޔާ"},
+   {lesson:3,ar:"مِهْنَةٌ",pl:"مِهَنٌ",en:"profession",dv:"މަސައްކަތް (ދާއިރާ)"},
+   {lesson:3,ar:"طِفْلٌ",pl:"أَطْفَالٌ",en:"child",dv:"ކުޑަކުއްޖާ"},
+   {lesson:3,ar:"الْمَرْحَلَةُ الِابْتِدَائِيَّةُ",en:"primary stage",dv:"ޕްރައިމަރީ މަރުޙަލާ"},
+   {lesson:3,ar:"الْمَرْحَلَةُ الْمُتَوَسِّطَةُ",en:"intermediate stage",dv:"މެދު މަރުޙަލާ"},
+   {lesson:3,ar:"لِي",en:"I have",dv:"އަހަރެންގެ އެބަހުރި"},
+   {lesson:3,ar:"لَكِ",en:"you have (f)",dv:"ތިބާގެ އެބަހުރި (އަންހެން)"}
+  ],
+  conv:[
+   {lesson:1,audio:"audio/u08-l64.mp3",lines:[
+    {who:"عَبْدُ اللهِ",ar:"مَاذَا تَعْمَلُ يَا يُوسُفُ؟",en:"What do you do, Yusuf?",dv:"ޔޫސުފް، ތިބާ ކުރަނީ ކޮން މަސައްކަތެއް؟"},
+    {who:"يُوسُفُ",ar:"أَعْمَلُ مُهَنْدِسًا. وَمَاذَا تَعْمَلُ أَنْتَ؟",en:"I work as an engineer. And what do you do?",dv:"އަހަރެން މަސައްކަތްކުރަނީ އިންޖިނޭރެއްގެ ގޮތުގައި. ތިބާ ކުރަނީ ކޮން މަސައްކަތެއް؟"},
+    {who:"عَبْدُ اللهِ",ar:"أَعْمَلُ طَبِيبًا.",en:"I work as a doctor.",dv:"އަހަރެން މަސައްކަތްކުރަނީ ޑޮކްޓަރެއްގެ ގޮތުގައި."},
+    {who:"يُوسُفُ",ar:"أَيْنَ تَعْمَلُ؟",en:"Where do you work?",dv:"މަސައްކަތްކުރަނީ ކޮންތާކު؟"},
+    {who:"عَبْدُ اللهِ",ar:"أَعْمَلُ فِي الْمُسْتَشْفَى. وَأَيْنَ تَعْمَلُ أَنْتَ؟",en:"I work in the hospital. And where do you work?",dv:"އަހަރެން މަސައްކަތްކުރަނީ ހޮސްޕިޓަލުގައި. ތިބާ މަސައްކަތްކުރަނީ ކޮންތާކު؟"},
+    {who:"يُوسُفُ",ar:"أَعْمَلُ فِي شَرِكَةٍ.",en:"I work in a company.",dv:"އަހަރެން މަސައްކަތްކުރަނީ ކުންފުންޏެއްގައި."},
+    {who:"عَبْدُ اللهِ",ar:"كَمْ سَاعَةً تَعْمَلُ فِي الْيَوْمِ؟",en:"How many hours do you work a day?",dv:"ދުވާލަކު ކިތައް ގަޑިއިރު މަސައްކަތްކުރަން؟"},
+    {who:"يُوسُفُ",ar:"أَعْمَلُ سَبْعَ سَاعَاتٍ. وَكَمْ سَاعَةً تَعْمَلُ أَنْتَ؟",en:"I work seven hours. And how many hours do you work?",dv:"އަހަރެން މަސައްކަތްކުރަނީ ހަތް ގަޑިއިރު. ތިބާ ކިތައް ގަޑިއިރު މަސައްކަތްކުރަން؟"},
+    {who:"عَبْدُ اللهِ",ar:"أَعْمَلُ ثَمَانِيَ سَاعَاتٍ.",en:"I work eight hours.",dv:"އަހަރެން މަސައްކަތްކުރަނީ އަށް ގަޑިއިރު."},
+    {who:"يُوسُفُ",ar:"هَلْ تُحِبُّ عَمَلَكَ؟",en:"Do you like your work?",dv:"ތިބާގެ މަސައްކަތް ދެކެ ލޯބިވަންތަ؟"},
+    {who:"عَبْدُ اللهِ",ar:"نَعَمْ، أُحِبُّ عَمَلِي.",en:"Yes, I like my work.",dv:"އާނ، އަހަރެންގެ މަސައްކަތް ދެކެ ލޯބިވަން."},
+    {who:"يُوسُفُ",ar:"وَأَنَا أُحِبُّ عَمَلِي أَيْضًا.",en:"And I like my work too.",dv:"އަހަރެންވެސް އަހަރެންގެ މަސައްކަތް ދެކެ ލޯބިވަން."}
+   ]},
+   {lesson:2,audio:"audio/u08-l65.mp3",lines:[
+    {who:"أَحْمَدُ",ar:"مَاذَا سَتَعْمَلُ بَعْدَ الدِّرَاسَةِ يَا عَلِيُّ؟",en:"What will you do after your studies, Ali?",dv:"ޢަލީ، ކިޔެވުމަށްފަހު ތިބާ ކުރާނީ ކޮން މަސައްކަތެއް؟"},
+    {who:"عَلِيٌّ",ar:"أَنَا أَدْرُسُ فِي كُلِّيَّةِ الطِّبِّ. سَأَعْمَلُ طَبِيبًا، إِنْ شَاءَ اللهُ.",en:"I study in the faculty of medicine. I will work as a doctor, if Allah wills.",dv:"އަހަރެން ކިޔަވަނީ މެޑިސިން ކުއްލިއްޔާގައި. އަހަރެން ވާނީ ޑޮކްޓަރަކަށް، އިން ޝާއަ ﷲ."},
+    {who:"أَحْمَدُ",ar:"وَأَنْتَ يَا حَسَنُ؟",en:"And you, Hassan?",dv:"ޙަސަން، ތިބާ؟"},
+    {who:"حَسَنٌ",ar:"أَنَا أَدْرُسُ فِي كُلِّيَّةِ الْهَنْدَسَةِ. سَأَعْمَلُ مُهَنْدِسًا، إِنْ شَاءَ اللهُ.",en:"I study in the faculty of engineering. I will work as an engineer, if Allah wills.",dv:"އަހަރެން ކިޔަވަނީ އިންޖިނިއަރިން ކުއްލިއްޔާގައި. އަހަރެން ވާނީ އިންޖިނޭރަކަށް، އިން ޝާއަ ﷲ."},
+    {who:"أَحْمَدُ",ar:"وَأَنْتَ يَا عُمَرُ؟",en:"And you, Umar?",dv:"ޢުމަރު، ތިބާ؟"},
+    {who:"عُمَرُ",ar:"أَنَا أَدْرُسُ فِي كُلِّيَّةِ الصَّيْدَلَةِ. سَأَعْمَلُ صَيْدَلِيًّا، إِنْ شَاءَ اللهُ.",en:"I study in the faculty of pharmacy. I will work as a pharmacist, if Allah wills.",dv:"އަހަރެން ކިޔަވަނީ ފާމަސީ ކުއްލިއްޔާގައި. އަހަރެން ވާނީ ފާމަސިސްޓަކަށް، އިން ޝާއަ ﷲ."},
+    {who:"أَحْمَدُ",ar:"وَأَنْتَ يَا يُوسُفُ؟",en:"And you, Yusuf?",dv:"ޔޫސުފް، ތިބާ؟"},
+    {who:"يُوسُفُ",ar:"أَنَا أَدْرُسُ فِي كُلِّيَّةِ الطَّيَرَانِ. سَأَعْمَلُ طَيَّارًا، إِنْ شَاءَ اللهُ.",en:"I study in the faculty of aviation. I will work as a pilot, if Allah wills.",dv:"އަހަރެން ކިޔަވަނީ ޕައިލެޓުކަމުގެ ކުއްލިއްޔާގައި. އަހަރެން ވާނީ ޕައިލެޓަކަށް، އިން ޝާއަ ﷲ."},
+    {who:"عَلِيٌّ",ar:"وَمَاذَا سَتَعْمَلُ أَنْتَ يَا أَحْمَدُ؟",en:"And what will you do, Ahmed?",dv:"އަޙްމަދު، ތިބާ ކުރާނީ ކޮން މަސައްކަތެއް؟"},
+    {who:"أَحْمَدُ",ar:"أَنَا أَدْرُسُ فِي كُلِّيَّةِ التَّرْبِيَةِ. سَأَعْمَلُ مُدَرِّسًا، إِنْ شَاءَ اللهُ.",en:"I study in the faculty of education. I will work as a teacher, if Allah wills.",dv:"އަހަރެން ކިޔަވަނީ ތަޢުލީމީ ކުއްލިއްޔާގައި. އަހަރެން ވާނީ މުދައްރިސަކަށް، އިން ޝާއަ ﷲ."}
+   ]},
+   {lesson:3,audio:"audio/u08-l66.mp3",lines:[
+    {who:"عَائِشَةُ",ar:"مَا مِهْنَتُكِ يَا خَدِيجَةُ؟",en:"What is your profession, Khadijah?",dv:"ޚަދީޖާ، ތިބާގެ މަސައްކަތަކީ ކޮބައި؟"},
+    {who:"خَدِيجَةُ",ar:"أَنَا مُدَرِّسَةٌ. وَمَا مِهْنَتُكِ أَنْتِ؟",en:"I am a teacher. And what is your profession?",dv:"އަހަރެންނަކީ މުދައްރިސާއެއް. ތިބާގެ މަސައްކަތަކީ ކޮބައި؟"},
+    {who:"عَائِشَةُ",ar:"أَنَا مُدَرِّسَةٌ أَيْضًا.",en:"I am a teacher too.",dv:"އަހަރެންނަކީވެސް މުދައްރިސާއެއް."},
+    {who:"خَدِيجَةُ",ar:"فِي أَيِّ مَرْحَلَةٍ تُدَرِّسِينَ؟",en:"In which stage do you teach?",dv:"ތިބާ ކިޔަވައިދެނީ ކޮން މަރުޙަލާއެއްގައި؟"},
+    {who:"عَائِشَةُ",ar:"أُدَرِّسُ فِي الْمَرْحَلَةِ الِابْتِدَائِيَّةِ. وَأَنْتِ؟",en:"I teach in the primary stage. And you?",dv:"އަހަރެން ކިޔަވައިދެނީ ޕްރައިމަރީ މަރުޙަލާގައި. ތިބާ؟"},
+    {who:"خَدِيجَةُ",ar:"أُدَرِّسُ فِي الْمَرْحَلَةِ الْمُتَوَسِّطَةِ.",en:"I teach in the intermediate stage.",dv:"އަހަރެން ކިޔަވައިދެނީ މެދު މަރުޙަލާގައި."},
+    {who:"عَائِشَةُ",ar:"هَلْ لَكِ أَطْفَالٌ؟",en:"Do you have children?",dv:"ތިބާގެ ކުދިން އެބަތިބިތަ؟"},
+    {who:"خَدِيجَةُ",ar:"نَعَمْ، لِي أَطْفَالٌ.",en:"Yes, I have children.",dv:"އާނ، އަހަރެންގެ ކުދިން އެބަތިބި."},
+    {who:"عَائِشَةُ",ar:"كَمْ طِفْلًا لَكِ؟",en:"How many children do you have?",dv:"ތިބާގެ ކިތައް ކުދިން ތިބޭ؟"},
+    {who:"خَدِيجَةُ",ar:"لِي ثَلَاثَةُ أَطْفَالٍ.",en:"I have three children.",dv:"އަހަރެންގެ ތިން ކުދިން ތިބޭ."},
+    {who:"عَائِشَةُ",ar:"هَلْ تُحِبِّينَ عَمَلَكِ؟",en:"Do you like your work?",dv:"ތިބާގެ މަސައްކަތް ދެކެ ލޯބިވަންތަ؟"},
+    {who:"خَدِيجَةُ",ar:"نَعَمْ، أُحِبُّ عَمَلِي.",en:"Yes, I like my work.",dv:"އާނ، އަހަރެންގެ މަސައްކަތް ދެކެ ލޯބިވަން."},
+    {who:"عَائِشَةُ",ar:"وَأَنَا أُحِبُّ عَمَلِي أَيْضًا.",en:"And I like my work too.",dv:"އަހަރެންވެސް އަހަރެންގެ މަސައްކަތް ދެކެ ލޯބިވަން."}
+   ]}
+  ],
+  speak:[
+   {lesson:1,q:{ar:"مَاذَا تَعْمَلُ؟",en:"What do you do?",dv:"ތިބާ ކުރަނީ ކޮން މަސައްކަތެއް؟"},a:{ar:"أَعْمَلُ مُدَرِّسًا.",en:"I work as a teacher.",dv:"އަހަރެން މަސައްކަތްކުރަނީ މުދައްރިސެއްގެ ގޮތުގައި."}},
+   {lesson:1,q:{ar:"أَيْنَ تَعْمَلُ؟",en:"Where do you work?",dv:"މަސައްކަތްކުރަނީ ކޮންތާކު؟"},a:{ar:"أَعْمَلُ فِي الْمَدْرَسَةِ.",en:"I work in the school.",dv:"އަހަރެން މަސައްކަތްކުރަނީ ސްކޫލުގައި."}},
+   {lesson:1,q:{ar:"كَمْ سَاعَةً تَعْمَلُ فِي الْيَوْمِ؟",en:"How many hours do you work a day?",dv:"ދުވާލަކު ކިތައް ގަޑިއިރު މަސައްކަތްކުރަން؟"},a:{ar:"أَعْمَلُ سِتَّ سَاعَاتٍ.",en:"I work six hours.",dv:"އަހަރެން މަސައްކަތްކުރަނީ ހަ ގަޑިއިރު."}},
+   {lesson:2,q:{ar:"فِي أَيِّ كُلِّيَّةٍ تَدْرُسُ؟",en:"In which faculty do you study?",dv:"ތިބާ ކިޔަވަނީ ކޮން ކުއްލިއްޔާއެއްގައި؟"},a:{ar:"أَدْرُسُ فِي كُلِّيَّةِ الْهَنْدَسَةِ.",en:"I study in the faculty of engineering.",dv:"އަހަރެން ކިޔަވަނީ އިންޖިނިއަރިން ކުއްލިއްޔާގައި."}},
+   {lesson:2,q:{ar:"مَاذَا سَتَعْمَلُ بَعْدَ الدِّرَاسَةِ؟",en:"What will you do after your studies?",dv:"ކިޔެވުމަށްފަހު ތިބާ ކުރާނީ ކޮން މަސައްކަތެއް؟"},a:{ar:"سَأَعْمَلُ مُهَنْدِسًا، إِنْ شَاءَ اللهُ.",en:"I will work as an engineer, if Allah wills.",dv:"އަހަރެން ވާނީ އިންޖިނޭރަކަށް، އިން ޝާއަ ﷲ."}},
+   {lesson:2,q:{ar:"مَنْ يَدْرُسُ فِي كُلِّيَّةِ الطِّبِّ؟",en:"Who studies in the faculty of medicine?",dv:"މެޑިސިން ކުއްލިއްޔާގައި ކިޔަވަނީ ކާކު؟"},a:{ar:"عَلِيٌّ يَدْرُسُ فِي كُلِّيَّةِ الطِّبِّ.",en:"Ali studies in the faculty of medicine.",dv:"ޢަލީ ކިޔަވަނީ މެޑިސިން ކުއްލިއްޔާގައި."}},
+   {lesson:3,q:{ar:"مَا مِهْنَتُكَ؟",en:"What is your profession?",dv:"ތިބާގެ މަސައްކަތަކީ ކޮބައި؟"},a:{ar:"أَنَا مُدَرِّسٌ.",en:"I am a teacher.",dv:"އަހަރެންނަކީ މުދައްރިސެއް."}},
+   {lesson:3,q:{ar:"هَلْ لَكَ أَطْفَالٌ؟",en:"Do you have children?",dv:"ތިބާގެ ކުދިން އެބަތިބިތަ؟"},a:{ar:"نَعَمْ، لِي طِفْلَانِ.",en:"Yes, I have two children.",dv:"އާނ، އަހަރެންގެ ދެ ކުދިން ތިބޭ."}},
+   {lesson:3,q:{ar:"فِي أَيِّ مَرْحَلَةٍ تُدَرِّسُ؟",en:"In which stage do you teach?",dv:"ތިބާ ކިޔަވައިދެނީ ކޮން މަރުޙަލާއެއްގައި؟"},a:{ar:"أُدَرِّسُ فِي الْمَرْحَلَةِ الِابْتِدَائِيَّةِ.",en:"I teach in the primary stage.",dv:"އަހަރެން ކިޔަވައިދެނީ ޕްރައިމަރީ މަރުޙަލާގައި."}}
+  ],
+  grammar:[
+   {lesson:1,title:"أَعْمَلُ + ...ًا",body:"މަސައްކަތް ބުނާއިރު أَعْمَلُ ގެ ފަހަތަށް އަންނަ ނަން ނިމެނީ ފަތުޙަ ތަންވީނުންނެވެ. عَمَلِي = އަހަރެންގެ މަސައްކަތް، عَمَلُكَ = ތިބާގެ މަސައްކަތް.",
+    ex:[{ar:"أَعْمَلُ طَبِيبًا.",en:"I work as a doctor.",dv:"އަހަރެން މަސައްކަތްކުރަނީ ޑޮކްޓަރެއްގެ ގޮތުގައި."},{ar:"هَلْ تُحِبُّ عَمَلَكَ؟ نَعَمْ، أُحِبُّ عَمَلِي.",en:"Do you like your work? Yes, I like my work.",dv:"ތިބާގެ މަސައްކަތް ދެކެ ލޯބިވަންތަ؟ އާނ، އަހަރެންގެ މަސައްކަތް ދެކެ ލޯބިވަން."}]},
+   {lesson:2,title:"ކުއްލިއްޔާއާއި މިހުނަ",body:"ކުއްލިއްޔާގެ ނަމުން މިހުނައިގެ ނަން ލިބެއެވެ: الطِّبُّ → طَبِيبٌ، الْهَنْدَسَةُ → مُهَنْدِسٌ، الصَّيْدَلَةُ → صَيْدَلِيٌّ، الطَّيَرَانُ → طَيَّارٌ.",
+    ex:[{ar:"أَدْرُسُ فِي كُلِّيَّةِ الصَّيْدَلَةِ.",en:"I study in the faculty of pharmacy.",dv:"އަހަރެން ކިޔަވަނީ ފާމަސީ ކުއްލިއްޔާގައި."},{ar:"سَأَعْمَلُ صَيْدَلِيًّا.",en:"I will work as a pharmacist.",dv:"އަހަރެން ވާނީ ފާމަސިސްޓަކަށް."}]},
+   {lesson:3,title:"لِي / لَكَ / لَكِ",body:"މިލްކުވެރިކަން ބުނުމަށް لِـ ބޭނުންކުރެއެވެ: لِي (އަހަރެންގެ އެބަހުރި)، لَكَ (ތިބާގެ، ފިރިހެން)، لَكِ (ތިބާގެ، އަންހެން).",
+    ex:[{ar:"هَلْ لَكِ أَطْفَالٌ؟",en:"Do you have children? (to a woman)",dv:"ތިބާގެ ކުދިން އެބަތިބިތަ؟ (އަންހެނަކަށް)"},{ar:"لِي ثَلَاثَةُ أَطْفَالٍ.",en:"I have three children.",dv:"އަހަރެންގެ ތިން ކުދިން ތިބޭ."}]}
+  ]
+};
+
+var TYPES = [["phrase","ޢިބާރާތް"],["noun","އިސްމު"],["verb","ފިޢުލު"],["tip","ޤަވާޢިދު"]];
+var NAV = [["read","ކިޔާ"],["practice","ފަރިތަކުރޭ"],["speak","ވާހަކަދައްކާ"],["help","އެހީ"]];
+var DEMO_PASSWORD = "1234"; /* prototype only; Supabase login replaces this */
+var AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
+var ICON_PLAY = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5v13l11-6.5z"/></svg>';
+var ICON_PAUSE = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5h3.5v13H3zM9.5 1.5H13v13H9.5z"/></svg>';
+
+
+var NAV = [["read","ކިޔާ","read"],["practice","ފަރިތަކުރޭ","practice"],["speak","ވާހަކަދައްކާ","speak"],["help","އެހީ","help"]];
+var ICONS = {
+  back:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+  menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+  more:'<path d="M12 5v.01M12 12v.01M12 19v.01" stroke-width="3"/>',
+  chev:'<path d="M15 6l-6 6 6 6"/>',
+  fwd:'<path d="M9 6l6 6-6 6"/>',
+  lock:'<path d="M7 11V8a5 5 0 0110 0v3M6 11h12v9H6z"/>',
+  check:'<path d="M5 12.5l4.5 4.5L19 7"/>',
+  redo:'<path d="M4 12a8 8 0 0113.6-5.7L20 8M20 4v4h-4"/><path d="M20 12a8 8 0 01-13.6 5.7L4 16M4 20v-4h4"/>',
+  eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  read:'<path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13c-3-.5-6 0-8 1.5zM12 6v13"/>',
+  practice:'<path d="M5 4h14v16H5zM9 12l2.5 2.5L15.5 9"/>',
+  speak:'<path d="M4 5h16v11H10l-5 4v-4H4z"/>',
+  help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 115 0c0 2-2.5 2-2.5 4M12 17v.01"/>'
+};
+function ic(n){ return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">'+ICONS[n]+'</svg>'; }
+
+/* ---------- storage (stand-in for Supabase) ---------- */
+var KEY = "aby-addon-v1";
+var store = {classes:[], entries:[]};
+try{ var raw = localStorage.getItem(KEY); if(raw){ var p = JSON.parse(raw); if(p && p.classes && p.entries) store = p; } }catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(store)); }catch(e){} }
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+
+/* ---------- state ---------- */
+var S = {dlg:0, review:false, unit:null, lesson:null, last:{}, tab:"read", readTab:"conv", pracTab:"fc", scope:"lesson", spTab:"qa", sp:0, spShown:false, open:{},
+         cls:false, classId:null, type:"phrase", practice:null, teacher:false};
+try{
+  var lastUnit = +localStorage.getItem("aby-unit"); if(lastUnit >= 1 && lastUnit <= UNITS.length) S.unit = lastUnit;
+  S.last = JSON.parse(localStorage.getItem("aby-last") || "{}") || {};
+}catch(e){}
+var fc = null, quiz = null, match = null, arr = null;
+var done = {}; try{ done = JSON.parse(localStorage.getItem("aby-done") || "{}") || {}; }catch(e){}
+function markDone(sec){
+  if(!S.unit || !S.lesson) return;
+  var k = S.unit+"-"+S.lesson; done[k] = done[k] || {};
+  if(done[k][sec]) return;
+  done[k][sec] = 1; try{ localStorage.setItem("aby-done", JSON.stringify(done)); }catch(e){}
+}
+function isDone(sec){ var d = done[S.unit+"-"+S.lesson]; return !!(d && d[sec]); }
+
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+function arNum(n){ return String(n).split("").map(function(d){ return AR_DIGITS[+d]; }).join(""); }
+function shuffle(a){ a = a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+/* translation block: English first, then Dhivehi */
+function meaning(it){ return (it.en ? '<span class="en" dir="ltr">'+esc(it.en)+'</span>' : '')+(it.dv ? '<span class="dv">'+esc(it.dv)+'</span>' : ''); }
+var app = document.getElementById("app"), modalRoot = document.getElementById("modalRoot");
+
+/* ---------- conversation audio: ONE player for the whole conversation ---------- */
+var player = new Audio(), au = {key:null, playing:false, err:null};
+function mmss(t){ t = Math.floor(t || 0); return Math.floor(t/60)+":"+("0"+(t%60)).slice(-2); }
+function auTime(){ return mmss(player.currentTime)+" / "+mmss(isFinite(player.duration) ? player.duration : 0); }
+player.addEventListener("timeupdate", function(){
+  var p = document.getElementById("auProg"), t = document.getElementById("auTime");
+  if(p && player.duration) p.style.width = (player.currentTime/player.duration*100)+"%";
+  if(t) t.textContent = auTime();
+});
+player.addEventListener("ended", function(){ au.playing = false; render(); });
+player.addEventListener("error", function(){ if(!au.key) return; au.playing = false; au.err = au.key; render(); });
+function stopAudio(){ try{ player.pause(); }catch(e){} au.playing = false; }
+function audioBtn(c, ci){
+  if(!c.audio) return "";
+  var playing = au.key === S.unit+"-"+ci && au.playing && !au.err;
+  return '<button class="pbtn" data-a="audio" data-i="'+ci+'" aria-label="'+(playing?"އަޑު މަޑުކުރޭ":"ޑައިލޮގްގެ އަޑު އަހާ")+'">'+(playing ? ICON_PAUSE : ICON_PLAY)+'</button>';
+}
+/* time + progress appear below the heading only after play is tapped */
+function audioBar(c, ci){
+  var key = S.unit+"-"+ci;
+  if(!c.audio || au.key !== key) return "";
+  if(au.err === key) return '<p class="auerr">މި ޑައިލޮގްގެ އަޑު ފައިލް އަދި އިތުރުކޮށްފައެއް ނުވޭ</p>';
+  var pct = player.duration ? (player.currentTime/player.duration*100) : 0;
+  return '<div class="player"><span class="plab"><small id="auTime">'+auTime()+'</small></span><div class="prog"><i id="auProg" style="width:'+pct+'%"></i></div></div>';
+}
+
+/* ---------- shared pieces ---------- */
+function seg(list, cur, action){
+  return '<div class="seg">'+list.map(function(t){ return '<button class="'+(cur===t[0]?"on":"")+'" data-a="'+action+'" data-t="'+t[0]+'">'+t[1]+'</button>'; }).join("")+'</div>';
+}
+function ofLesson(a){ return S.review ? a : a.filter(function(x){ return x.lesson === S.lesson; }); }
+/* practice can cover this lesson or the whole unit */
+function inLesson(a){ return (S.scope === "unit" || S.review) ? a : ofLesson(a); }
+var NOT_READY = '<div class="empty">މި ޔުނިޓްގެ ފިލާވަޅުތައް އަދި ތައްޔާރެއް ނުވޭ</div>';
+
+/* ---------- practice engines ---------- */
+function startFc(items){ fc = {items:shuffle(items), i:0, flipped:false}; }
+function fcHTML(){
+  if(!fc || !fc.items.length) return '<div class="empty">ފްލޭޝްކާޑަށް ލަފުޒެއް ނެތް</div>';
+  var it = fc.items[fc.i];
+  return '<button class="fc" data-a="fcFlip">'+(fc.flipped ? meaning(it)+wordForms(it) : '<span class="ar">'+esc(it.ar)+'</span><span class="hint">މާނަ ބެލުމަށް ފިއްތާލާ</span>')+'</button>'+
+    '<div class="ctrl"><button class="rb" data-a="fcPrev" aria-label="ކުރީގެ ކާޑު">'+ic("fwd")+'</button><span class="count">'+(fc.i+1)+' / '+fc.items.length+'</span><button class="rb" data-a="fcNext" aria-label="ދެން އޮތް ކާޑު">'+ic("chev")+'</button></div>';
+}
+function startQuiz(items){
+  var pool = items.filter(function(x){ return x.ar && x.dv; });
+  if(pool.length < 4){ quiz = {few:true}; return; }
+  var qs = shuffle(pool).slice(0,8).map(function(it){
+    var others = shuffle(pool.filter(function(x){ return x.ar !== it.ar && x.dv !== it.dv; })).slice(0,3);
+    var opts = shuffle(others.concat([it]));
+    return {toMeaning:Math.random() < .5, it:it, opts:opts, ans:opts.indexOf(it)};
+  });
+  quiz = {qs:qs, i:0, score:0, picked:null};
+}
+function quizHTML(){
+  if(!quiz || quiz.few) return '<div class="empty">ކުއިޒަށް މަދުވެގެން 4 ލަފުޒު ބޭނުންވޭ</div>';
+  if(quiz.i >= quiz.qs.length)
+    return '<div class="card"><p style="text-align:center;margin:0">ކުއިޒް ނިމުނީ</p><p class="score">'+quiz.score+' / '+quiz.qs.length+'</p><div class="ctrl" style="justify-content:center"><button class="rb" data-a="quizRestart" aria-label="އަލުން ފަށާ">'+ic("redo")+'</button></div></div>';
+  var q = quiz.qs[quiz.i], done = quiz.picked !== null;
+  var opts = q.opts.map(function(o,k){
+    var cls = "opt"+(q.toMeaning?"":" ar");
+    if(done && k === q.ans) cls += " right"; else if(done && k === quiz.picked) cls += " wrong";
+    return '<button class="'+cls+'" data-a="quizPick" data-k="'+k+'"'+(done?" disabled":"")+'>'+(q.toMeaning ? meaning(o) : esc(o.ar))+'</button>';
+  }).join("");
+  return '<div class="card"><div class="count">ސުވާލު '+(quiz.i+1)+' / '+quiz.qs.length+'</div>'+
+    '<div class="prompt">'+(q.toMeaning ? '<span class="ar">'+esc(q.it.ar)+'</span>' : meaning(q.it))+'</div><div class="opts">'+opts+'</div>'+
+    (done ? '<div class="ctrl"><span style="color:var(--'+(quiz.picked===q.ans?"good":"bad")+')">'+(quiz.picked===q.ans?"ރަނގަޅު":"ރަނގަޅެއް ނޫން")+'</span><button class="rb go" data-a="quizNext" aria-label="ދެން އޮތް ސުވާލު">'+ic("chev")+'</button></div>' : "")+'</div>';
+}
+function startMatch(items){
+  var pairs = shuffle(items).slice(0,5), idx = pairs.map(function(_,i){ return i; });
+  match = {pairs:pairs, left:shuffle(idx), right:shuffle(idx), selL:null, selR:null, done:{}, wrong:null};
+}
+function matchHTML(){
+  if(!match || match.pairs.length < 2) return '<div class="empty">ގުޅުވުމަށް ލަފުޒު މަދު</div>';
+  var all = Object.keys(match.done).length === match.pairs.length;
+  function col(order, side){
+    return '<div class="col">'+order.map(function(i){
+      var cls = "mbtn"+(side==="L"?" ar":"");
+      if(match.done[i]) cls += " done"; else if(match["sel"+side] === i) cls += " sel";
+      else if(match.wrong && match.wrong[side==="L"?0:1] === i) cls += " wrong";
+      return '<button class="'+cls+'" data-a="matchPick" data-side="'+side+'" data-i="'+i+'"'+(match.done[i]?" disabled":"")+'>'+(side==="L" ? esc(match.pairs[i].ar) : meaning(match.pairs[i]))+'</button>';
+    }).join("")+'</div>';
+  }
+  return '<div class="match">'+col(match.left,"L")+col(match.right,"R")+'</div>'+
+    '<p class="msg" style="color:var(--'+(match.wrong?"bad":"good")+')">'+(all ? "ހުރިހާ ޖޯޑެއް ގުޅުވައިފި" : match.wrong ? "ގުޅުމެއް ނެތް، އަލުން ބަލާ" : "ލަފުޒާއި އޭގެ މާނައިގައި ފިއްތާލާ")+'</p>'+
+    (all ? '<div class="ctrl" style="justify-content:center"><button class="rb" data-a="matchNew" aria-label="އާ ލަފުޒުތަކެއް">'+ic("redo")+'</button></div>' : '');
+}
+function sentences(d){
+  var seen = {}, out = [];
+  function add(x){ var n = x.ar.split(" ").length; if(n >= 3 && n <= 6 && !seen[x.ar]){ seen[x.ar] = 1; out.push(x); } }
+  inLesson(d.conv).forEach(function(c){ c.lines.forEach(add); });
+  inLesson(d.speak).forEach(function(x){ add(x.q); add(x.a); });
+  return out;
+}
+function loadArr(){
+  var it = arr.list[arr.i], words = it.ar.split(" "), bank, tries = 0;
+  do { bank = shuffle(words.map(function(w,k){ return {w:w, id:k}; })); tries++; }
+  while(tries < 10 && bank.map(function(b){ return b.w; }).join(" ") === it.ar);
+  arr.bank = bank; arr.picked = [];
+}
+function startArr(list){ arr = {list:shuffle(list), i:0}; if(arr.list.length) loadArr(); }
+function arrHTML(){
+  if(!arr || !arr.list.length) return '<div class="empty">ތަރުތީބުކުރުމަށް ޖުމްލައެއް ނެތް</div>';
+  var it = arr.list[arr.i], full = arr.picked.length === arr.bank.length;
+  function byId(id){ return arr.bank.filter(function(b){ return b.id === id; })[0]; }
+  var ok = full && arr.picked.map(function(id){ return byId(id).w; }).join(" ") === it.ar;
+  var slot = arr.picked.map(function(id){ return '<button class="word ar" data-a="arrBack" data-id="'+id+'"'+(ok?" disabled":"")+'>'+esc(byId(id).w)+'</button>'; }).join("");
+  var bank = arr.bank.filter(function(b){ return arr.picked.indexOf(b.id) < 0; }).map(function(b){ return '<button class="word ar" data-a="arrPick" data-id="'+b.id+'">'+esc(b.w)+'</button>'; }).join("");
+  return '<div class="card"><div class="count">ޖުމްލަ '+(arr.i+1)+' / '+arr.list.length+'</div><div class="prompt">'+meaning(it)+'</div>'+
+    '<div class="slot'+(full?(ok?" good":" bad"):"")+'">'+slot+'</div><div class="bank">'+bank+'</div>'+
+    '<p class="msg" style="color:var(--'+(ok?"good":full?"bad":"muted")+')">'+(full ? (ok ? "ރަނގަޅު" : "ތަރުތީބު ރަނގަޅެއް ނޫން. ލަފުޒެއްގައި ފިއްތައިގެން އަނބުރާ ނަގާ.") : "ލަފުޒުތަކުގައި ތަރުތީބުން ފިއްތާލާ")+'</p></div>'+
+    '<div class="ctrl"><button class="rb" data-a="arrReset" aria-label="އަލުން ފަށާ">'+ic("redo")+'</button><button class="rb'+(ok?" go":"")+'" data-a="arrNext" aria-label="ދެން އޮތް ޖުމްލަ">'+ic("chev")+'</button></div>';
+}
+/* speed round: tap the meaning before the clock runs out; tap-only */
+var speed = null, speedTimer = null;
+function startSpeed(items){
+  clearInterval(speedTimer);
+  var pool = items.filter(function(x){ return x.ar && x.dv; });
+  if(pool.length < 4){ speed = {few:true}; return; }
+  speed = {pool:pool, left:45, score:0, total:0, q:null, over:false, started:false};
+  speedQ();
+}
+function speedQ(){
+  var it = speed.pool[Math.floor(Math.random()*speed.pool.length)];
+  var others = shuffle(speed.pool.filter(function(x){ return x.ar !== it.ar && x.dv !== it.dv; })).slice(0,3);
+  var opts = shuffle(others.concat([it]));
+  speed.q = {it:it, opts:opts, ans:opts.indexOf(it), picked:null};
+}
+function speedTick(){
+  if(!speed || speed.over) return;
+  speed.left--;
+  var el = document.getElementById("spdLeft"); if(el) el.textContent = speed.left;
+  var bar = document.getElementById("spdBar"); if(bar) bar.style.width = (speed.left/45*100)+"%";
+  if(speed.left <= 0){ speed.over = true; clearInterval(speedTimer); render(); }
+}
+function speedHTML(){
+  if(!speed || speed.few) return '<div class="empty">މި ކުޅިވަރަށް މަދުވެގެން 4 ލަފުޒު ބޭނުންވޭ</div>';
+  if(speed.over) return '<div class="card"><p style="text-align:center;margin:0">ވަގުތު ހަމަވެއްޖެ</p><p class="score">'+speed.score+' / '+speed.total+'</p><div class="ctrl" style="justify-content:center"><button class="rb go" data-a="speedNew" aria-label="އަލުން ކުޅޭ">'+ic("redo")+'</button></div></div>';
+  if(!speed.started) return '<div class="card" style="text-align:center"><p style="margin:0 0 10px">45 ސިކުންތު ތެރޭގައި ވީހާވެސް ގިނަ ލަފުޒުތަކެއްގެ މާނަ ހޯދާ</p><button class="btn wide" data-a="speedGo">ފަށާ</button></div>';
+  var q = speed.q, done = q.picked !== null;
+  return '<div class="card"><div class="clabel"><span>'+speed.score+' / '+speed.total+'</span><span class="count"><b id="spdLeft">'+speed.left+'</b> ސ</span></div>'+
+    '<div class="prog" style="margin:6px 0 10px"><i id="spdBar" style="width:'+(speed.left/45*100)+'%"></i></div>'+
+    '<div class="prompt"><span class="ar">'+esc(q.it.ar)+'</span></div><div class="opts">'+q.opts.map(function(o,k){
+      var cls = "opt"; if(done && k === q.ans) cls += " right"; else if(done && k === q.picked) cls += " wrong";
+      return '<button class="'+cls+'" data-a="speedPick" data-k="'+k+'"'+(done?" disabled":"")+'>'+meaning(o)+'</button>'; }).join("")+'</div></div>';
+}
+function initPractice(){
+  clearInterval(speedTimer);
+  var d = UNIT_DATA[S.unit]; if(!d) return;
+  var v = inLesson(d.vocab);
+  if(S.pracTab === "fc") startFc(v); else if(S.pracTab === "quiz") startQuiz(v);
+  else if(S.pracTab === "match") startMatch(v); else if(S.pracTab === "speed") startSpeed(v); else startArr(sentences(d));
+}
+
+
+/* ---------- views ---------- */
+function bar(back, small, title, isAr){
+  return '<div class="hdr"><button class="ib" data-a="'+back+'" aria-label="ފަހަތަށް">'+ic("back")+'</button><div class="hc">'+
+    (small ? '<div class="hs ar">'+small+'</div>' : '')+'<div class="ht'+(isAr?" ar":"")+'">'+title+'</div></div>'+
+    '<button class="ib" data-a="menu" aria-label="މެނޫ">'+ic("more")+'</button></div>';
+}
+function renderChrome(){
+  var h;
+  if(S.cls){
+    var c = store.classes.filter(function(x){ return x.id === S.classId; })[0];
+    h = bar("clsBack", "", c ? esc(c.name) : "ތިބާގެ ކްލާސް", false);
+  }
+  else if(!S.unit) h = '<div class="home"><span class="logo">'+ic("read")+'</span><div class="hc"><div class="ht ar">العربية بين يديك</div><div class="hs">ފުރަތަމަ ފޮތް</div></div><button class="ib" data-a="menu" aria-label="މެނޫ">'+ic("menu")+'</button></div>';
+  else if(!S.lesson) h = bar("units", "", "ފިލާވަޅުތައް", false);
+  else h = '<div class="hdr"><button class="ib" data-a="lessons" aria-label="ފަހަތަށް">'+ic("back")+'</button>'+
+    '<div class="hc one"><span class="hs ar">الوحدة ('+arNum(S.unit)+')</span><span class="ht ar">'+UNITS[S.unit-1][0]+'</span><span class="hs ar">'+(S.review ? "مُرَاجَعَة" : "الدرس ("+arNum(UNIT_DATA[S.unit].lessons[S.lesson-1].num || S.lesson)+")")+'</span></div>'+
+    '<button class="ib" data-a="menu" aria-label="މެނޫ">'+ic("more")+'</button></div>';
+  document.getElementById("hdr").innerHTML = h;
+  var nav = document.getElementById("nav"), show = !!(S.unit && S.lesson && !S.cls);
+  nav.hidden = !show; document.body.classList.toggle("has-nav", show);
+  nav.innerHTML = NAV.map(function(n){
+    return '<button class="'+(S.tab===n[0]?"on":"")+'" data-a="tab" data-t="'+n[0]+'"'+(S.tab===n[0]?' aria-current="page"':'')+'>'+ic(n[2])+'<span>'+n[1]+'</span></button>'; }).join("");
+}
+function startHTML(){
+  return '<ul class="ulist">'+UNITS.map(function(u,i){
+    var n = i+1, ready = !!UNIT_DATA[n];
+    var sub = ready ? UNIT_DATA[n].lessons.length+' ފިލާވަޅު · '+UNIT_DATA[n].vocab.length+' ލަފުޒު' : 'އަދި ތައްޔާރެއް ނުވޭ';
+    return '<li><button class="ucard" data-a="unit" data-n="'+n+'">'+
+      '<span class="thumb ar">'+arNum(n)+'</span><span class="ut"><span class="uk ar">الوحدة '+arNum(n)+'</span><span class="un ar">'+u[0]+'</span><span class="ud">'+sub+'</span></span>'+
+      '<span class="uend">'+ic("chev")+'</span></button></li>';
+  }).join("")+'</ul>';
+}
+function lessonsHTML(){
+  var d = UNIT_DATA[S.unit], u = UNITS[S.unit-1];
+  var hero = '<div class="hero"><div class="hk ar">الوحدة ('+arNum(S.unit)+')</div><div class="hn ar">'+u[0]+'</div></div>';
+  if(!d) return hero+NOT_READY;
+  function meta(words, dl){ return '<span class="ud">'+words+' ލަފުޒު · '+dl+' ޑައިލޮގް · ގާތްގަނޑަކަށް '+(8 + Math.round(words/3))+' މިނެޓު</span>'; }
+  var review = '<button class="lcard'+(S.last[S.unit]==="r"?" cur":"")+'" data-a="lesson" data-n="r"><span class="lk ar">'+ic("redo")+'</span>'+
+    '<span class="ut"><span class="un" style="font-size:1.1rem;font-weight:700">މުޅި ޔުނިޓް މުރާޖަޢާކުރޭ</span>'+meta(d.vocab.length, d.conv.length)+'</span><span class="uend">'+ic("chev")+'</span></button>';
+  return hero+'<div class="llist">'+d.lessons.map(function(l,i){
+    var k = i+1, words = d.vocab.filter(function(v){ return v.lesson===k; }).length, dl = d.conv.filter(function(c){ return c.lesson===k; }).length;
+    var dk = done[S.unit+"-"+k], all = dk && dk.read && dk.practice && dk.speak && dk.help;
+    return '<button class="lcard'+(S.last[S.unit]===k?" cur":"")+'" data-a="lesson" data-n="'+k+'"><span class="lk ar'+(all?" ok":"")+'">'+(all ? ic("check") : arNum(l.num || k))+'</span>'+
+      '<span class="ut"><span class="un ar">'+esc(l.ar)+'</span>'+meta(words, dl)+'</span><span class="uend">'+ic("chev")+'</span></button>';
+  }).join("")+review+'</div>';
+}
+function convBlock(c, ci, n, total){
+  return '<section class="conv"><div class="chead"><b>ޑައިލޮގް '+n+'</b>'+audioBtn(c, ci)+
+    (total > 1 ? '<span class="count">'+n+' / '+total+'</span><button class="ib" data-a="dlgNext" aria-label="ދެން އޮތް ޑައިލޮގް">'+ic("chev")+'</button>' : '')+'</div>'+audioBar(c, ci)+c.lines.map(function(l,li){
+    var k = "c"+ci+"-"+li, on = !!S.open[k];
+    return '<button class="line'+(on?" on":"")+'" data-a="line" data-k="'+k+'" aria-expanded="'+on+'"><span class="who ar">'+esc(l.who)+'</span><span class="say ar">'+esc(l.ar)+'</span>'+ic("chev")+
+      (on ? '<span class="tr">'+meaning(l)+'</span>' : '')+'</button>';
+  }).join("")+'</section>';
+}
+/* extra forms shown under a word once it is opened: plural, present, command */
+function wordForms(v){
+  var f = [];
+  if(v.pl) f.push('<span>ޖަމްޢު: <span class="ar">'+esc(v.pl)+'</span></span>');
+  if(v.present) f.push('<span>މުޟާރިޢު: <span class="ar">'+esc(v.present)+'</span></span>');
+  if(v.command) f.push('<span>އަމުރު: <span class="ar">'+esc(v.command)+'</span></span>');
+  return f.length ? '<span class="forms">'+f.join("")+'</span>' : "";
+}
+function readHTML(){
+  var d = UNIT_DATA[S.unit], n = 0;
+  var h = seg([["conv","ޑައިލޮގް"],["vocab","ލަފުޒުތައް"]], S.readTab, "readTab");
+  if(S.readTab === "conv")
+  {
+    var idx = []; d.conv.forEach(function(c,ci){ if(S.review || c.lesson === S.lesson) idx.push(ci); });
+    if(!idx.length) return h+'<div class="empty">މި ފިލާވަޅުގައި ޑައިލޮގެއް ނެތް</div>';
+    n = S.dlg % idx.length;
+    var g = d.grammar.filter(function(x){ return x.lesson === S.lesson; }), gh = "";
+    if(!S.review && g.length){
+      gh = '<h2>މި ފިލާވަޅުގެ ޤަވާޢިދު</h2>'+g.map(function(x,i){
+        var k = "rg"+i, on = !!S.open[k];
+        return '<article class="note"><button class="nhead" data-a="line" data-k="'+k+'" aria-expanded="'+on+'"><span>'+esc(x.title)+'</span>'+ic("chev")+'</button>'+
+          (on ? '<div class="nbody"><p>'+esc(x.body)+'</p>'+x.ex.map(function(e){ return '<div class="ex"><span class="ar">'+esc(e.ar)+'</span><span class="tr">'+meaning(e)+'</span></div>'; }).join("")+'</div>' : '')+'</article>';
+      }).join("");
+    }
+    return h+convBlock(d.conv[idx[n]], idx[n], n+1, idx.length)+gh;
+  }
+  return h+'<ul class="vlist">'+d.vocab.map(function(v,i){
+    if(!S.review && v.lesson !== S.lesson) return "";
+    var k = "v"+i, on = !!S.open[k];
+    return '<li><button class="vcard'+(on?" on":"")+'" data-a="line" data-k="'+k+'" aria-expanded="'+on+'"><span class="ar">'+esc(v.ar)+'</span>'+(on ? '<span class="tr">'+meaning(v)+'</span>'+wordForms(v) : '')+'</button></li>';
+  }).join("")+'</ul>';
+}
+function practiceHTML(){
+  return seg([["fc","ކާޑު"],["quiz","ކުއިޒް"],["match","ގުޅުވާ"],["arr","ތަރުތީބު"],["speed","އަވަސް"]], S.pracTab, "pracTab")+
+    '<div class="scope"><select id="scopeSel" aria-label="ފަރިތަކުރާ ބައި"><option value="lesson"'+(S.scope==="lesson"?" selected":"")+'>ހަމައެކަނި މި ފިލާވަޅު</option><option value="unit"'+(S.scope==="unit"?" selected":"")+'>މުޅި ޔުނިޓް</option></select></div>'+
+    (S.pracTab==="fc" ? fcHTML() : S.pracTab==="quiz" ? quizHTML() : S.pracTab==="match" ? matchHTML() : S.pracTab==="speed" ? speedHTML() : arrHTML());
+}
+function sayList(d){ var out = []; ofLesson(d.speak).forEach(function(x){ out.push(x.q); out.push(x.a); }); return out; }
+function spCount(){ var d = UNIT_DATA[S.unit]; return S.spTab==="say" ? sayList(d).length : ofLesson(d.speak).length; }
+function speakHTML(){
+  var d = UNIT_DATA[S.unit], say = S.spTab === "say", list = say ? sayList(d) : ofLesson(d.speak), it = list[S.sp];
+  var h = seg([["qa","ސުވާލާއި ޖަވާބު"],["say","ޢަރަބިން ބުނޭ"]], S.spTab, "spTab");
+  if(!it) return h+'<div class="empty">މި ފިލާވަޅުގައި ސުވާލެއް ނެތް</div>';
+  return h+'<div class="card"><div class="clabel"><span>'+(say ? "ޢަރަބި ބަހުން ބުނެލާ" : "ސުވާލު")+'</span><span class="count">'+(S.sp+1)+' / '+list.length+'</span></div>'+
+    '<div class="prompt" style="margin:10px 0 14px">'+(say ? '<span class="dv">'+esc(it.dv)+'</span>' : '<span class="ar">'+esc(it.q.ar)+'</span>')+'</div>'+
+    (S.spShown ? '' : '<button class="btn wide reveal" data-a="spShow">'+ic("eye")+'<span>ޖަވާބު ދައްކާ</span></button>')+'</div>'+
+    (S.spShown ? '<div class="model"><div class="count">ނަމޫނާ ޖަވާބު</div><span class="ar">'+esc(say ? it.ar : it.a.ar)+'</span></div>' : '')+
+    '<div class="ctrl"><button class="rb" data-a="spPrev" aria-label="ކުރީގެ">'+ic("fwd")+'</button><button class="rb'+(S.spShown?" go":"")+'" data-a="spNext" aria-label="ދެން">'+ic("chev")+'</button></div>'+
+    (!S.review && d.lessons[S.lesson-1].task ? '<h2>ކްލާހުގެ ކުއްޖަކާއެކު</h2><div class="card tips"><p>'+esc(d.lessons[S.lesson-1].task)+'</p></div>' : '');
+}
+function helpHTML(){
+  var d = UNIT_DATA[S.unit];
+  return '<h2 style="margin-top:0">ޤަވާޢިދު</h2>'+d.grammar.map(function(g,i){
+    var k = "g"+i, on = !!S.open[k];
+    return '<article class="note"><button class="nhead" data-a="line" data-k="'+k+'" aria-expanded="'+on+'"><span>'+esc(g.title)+'</span>'+ic("chev")+'</button>'+
+      (on ? '<div class="nbody"><p>'+esc(g.body)+'</p>'+g.ex.map(function(e){ return '<div class="ex"><span class="ar">'+esc(e.ar)+'</span><span class="tr">'+meaning(e)+'</span></div>'; }).join("")+'</div>' : '')+'</article>';
+  }).join("")+
+    '<h2>ބޭނުންކުރާނެ ގޮތް</h2><div class="card tips">'+
+    '<p><strong>ކިޔާ:</strong> ޢަރަބި ޖުމްލަ ކިޔާ. މާނަ ބެލުމަށް ޖުމްލައިގައި ފިއްތާލާ.</p>'+
+    '<p><strong>ފަރިތަކުރޭ:</strong> ކާޑާއި، ކުއިޒާއި، ގުޅުވުމާއި، ތަރުތީބުކުރުން.</p>'+
+    '<p><strong>ވާހަކަދައްކާ:</strong> އަމިއްލައަށް ޖަވާބު ދިނުމަށްފަހު ނަމޫނާ ޖަވާބު ބަލާ.</p></div>'+
+    '<h2>ދަސްކުރުމަށް ލަފާ</h2><div class="card tips">'+
+    '<p>ކޮންމެ ދުވަހަކު ދިހަ މިނެޓު ފަރިތަކުރޭ.</p>'+
+    '<p>ތަރުޖަމާ ބެލުމުގެ ކުރިން ޢަރަބި ޖުމްލައިގެ މާނަ ދެނެގަންނަން މަސައްކަތްކުރޭ.</p>'+
+    '<p>ޖުމްލަތައް އަޑުހަރުކޮށް ކިޔާ.</p></div>';
+}
+
+/* ---------- class section ---------- */
+function classItems(id){ return store.entries.filter(function(e){ return e.classId === id && e.type !== "tip"; }); }
+function classListHTML(){
+  return (S.teacher ? '<p class="sub">މުދައްރިސް މޯޑް</p>' : '')+
+    (store.classes.length ? '<div class="chips">'+store.classes.map(function(c){
+        var n = store.entries.filter(function(e){ return e.classId === c.id; }).length;
+        return '<button class="chip" data-a="class" data-id="'+c.id+'">'+esc(c.name)+' ('+n+')</button>'; }).join("")+'</div>'
+      : '<div class="empty">'+(S.teacher ? "އަދި ކްލާހެއް ނެތް. ފުރަތަމަ ކްލާސް ހަދާ." : "އަދި ކްލާހެއް ހަދާފައެއް ނުވޭ")+'</div>')+
+    (S.teacher ? '<div class="row" style="margin-top:12px"><button class="btn" data-a="classNew">އާ ކްލާހެއް ހަދާ</button></div>' : "");
+}
+function entryHTML(e){
+  var x = e.extra || {}, k = "e"+e.id, on = S.teacher || !!S.open[k], h;
+  if(e.type === "tip"){
+    h = '<span class="dv" style="font-weight:700;display:block">'+esc(e.dv)+'</span>'+
+      (on ? '<span class="tr">'+(x.body?'<span class="dv">'+esc(x.body)+'</span>':'')+(e.ar?'<span class="ar" style="font-size:1.35rem">'+esc(e.ar)+'</span>':'')+(e.en?'<span class="en" dir="ltr">'+esc(e.en)+'</span>':'')+'</span>' : '');
+  } else {
+    h = '<span class="ar">'+esc(e.ar)+'</span>';
+    if(e.type === "noun" && x.plural) h += '<span class="forms"><span>ޖަމްޢު: <span class="ar">'+esc(x.plural)+'</span></span></span>';
+    if(e.type === "verb" && (x.present || x.command)) h += '<span class="forms">'+(x.present?'<span>މުޟާރިޢު: <span class="ar">'+esc(x.present)+'</span></span>':'')+(x.command?'<span>އަމުރު: <span class="ar">'+esc(x.command)+'</span></span>':'')+'</span>';
+    if(on) h += '<span class="tr">'+meaning(e)+'</span>';
+  }
+  return '<li><button class="vcard'+(on&&!S.teacher?" on":"")+'" data-a="line" data-k="'+k+'">'+h+'</button>'+
+    (S.teacher ? '<div class="tools"><button class="btn ghost small" data-a="entryEdit" data-id="'+e.id+'">ބަދަލުކުރޭ</button><button class="btn danger small" data-a="entryDel" data-id="'+e.id+'">ޑިލީޓްކުރޭ</button></div>' : '')+'</li>';
+}
+
+function classHTML(){
+  var c = store.classes.filter(function(x){ return x.id === S.classId; })[0];
+  if(!c){ S.classId = null; return classListHTML(); }
+  if(S.practice)
+    return seg([["","ލިސްޓު"],["fc","ކާޑު"],["quiz","ކުއިޒް"]], S.practice, "practice")+(S.practice === "fc" ? fcHTML() : quizHTML());
+  var list = store.entries.filter(function(e){ return e.classId === c.id && e.type === S.type; });
+  return seg(TYPES, S.type, "type")+
+    (list.length ? '<ul class="vlist">'+list.map(entryHTML).join("")+'</ul>' : '<div class="empty">މި ބައިގައި އަދި އެއްޗެއް ނެތް</div>')+
+    '<div class="row" style="margin-top:12px">'+
+    (S.teacher ? '<button class="btn" data-a="entryNew">އިތުރުކުރޭ</button>' : "")+
+    (classItems(c.id).length ? '<button class="btn ghost" data-a="practice" data-t="fc">ކާޑު</button><button class="btn ghost" data-a="practice" data-t="quiz">ކުއިޒް</button>' : "")+'</div>'+
+    (S.teacher ? '<div class="row" style="margin-top:18px"><button class="btn ghost small" data-a="classRename">ނަން ބަދަލުކުރޭ</button><button class="btn danger small" data-a="classDel">ކްލާސް ޑިލީޓްކުރޭ</button></div>' : "");
+}
+function render(){
+  renderChrome();
+  if(S.cls) app.innerHTML = S.classId ? classHTML() : classListHTML();
+  else if(!S.unit) app.innerHTML = startHTML();
+  else if(!S.lesson) app.innerHTML = lessonsHTML();
+  else app.innerHTML = S.tab === "practice" ? practiceHTML() : S.tab === "speak" ? speakHTML() : S.tab === "help" ? helpHTML() : readHTML();
+}
+function menuModal(){
+  openModal('<div class="menu"><button data-a="clsOpen">ތިބާގެ ކްލާސް</button>'+
+    (S.unit || S.cls ? '<button data-a="units">ހުރިހާ ޔުނިޓްތައް</button>' : '')+
+    (S.teacher ? '<button data-a="logout">މުދައްރިސް ލޮގްއައުޓް</button>' : '<button data-a="loginOpen">މުދައްރިސް ލޮގިން</button>')+
+    '<button class="q" data-a="close">ލައްޕާ</button></div>');
+}
+
+/* ---------- modals ---------- */
+function closeModal(){ modalRoot.innerHTML = ""; }
+function openModal(html){
+  modalRoot.innerHTML = '<div class="veil" data-a="veil"><div class="modal" role="dialog" aria-modal="true">'+html+'</div></div>';
+  var f = modalRoot.querySelector("input,select,textarea"); if(f) f.focus();
+}
+function val(id){ var el = document.getElementById(id); return el ? el.value.trim() : ""; }
+function fail(msg){ var el = document.getElementById("err"); if(el) el.textContent = msg; }
+var BTNS = function(action, id){ return '<p class="err" id="err"></p><div class="row"><button class="btn" data-a="'+action+'" data-id="'+(id||"")+'">ސޭވްކުރޭ</button><button class="btn ghost" data-a="close">ކެންސަލްކުރޭ</button></div>'; };
+function loginModal(){
+  openModal('<h3>މުދައްރިސް ލޮގިން</h3><label for="pw">ޕާސްވޯޑް</label><input id="pw" type="password" dir="ltr" autocomplete="off">'+
+    '<p class="err" id="err"></p><div class="row"><button class="btn" data-a="loginDo">ލޮގިންވޭ</button><button class="btn ghost" data-a="close">ކެންސަލްކުރޭ</button></div>');
+}
+function classModal(c){
+  openModal('<h3>'+(c?"ކްލާހުގެ ނަން ބަދަލުކުރޭ":"އާ ކްލާހެއް ހަދާ")+'</h3><label for="cname">ކްލާހުގެ ނަން</label><input id="cname" value="'+esc(c?c.name:"")+'">'+BTNS("classSave", c?c.id:""));
+}
+function confirmModal(text, action, id){
+  openModal('<h3>'+text+'</h3><p class="sub">މި ކަން އަނބުރާ ގެނެވޭކަށް ނެތް</p><div class="row"><button class="btn danger" data-a="'+action+'" data-id="'+(id||"")+'">ޑިލީޓްކުރޭ</button><button class="btn ghost" data-a="close">ކެންސަލްކުރޭ</button></div>');
+}
+function entryFields(type, e){
+  e = e || {}; var x = e.extra || {};
+  function inp(id, label, v, cls, dir){ return '<label for="'+id+'">'+label+'</label><input id="'+id+'" class="'+(cls||"")+'" dir="'+(dir||"rtl")+'" value="'+esc(v||"")+'">'; }
+  if(type === "tip") return inp("f_dv","ސުރުޚީ (ދިވެހި)",e.dv)+'<label for="f_body">ތަފްޞީލު (ދިވެހި)</label><textarea id="f_body" rows="3">'+esc(x.body||"")+'</textarea>'+
+    inp("f_ar","މިސާލު (ޢަރަބި)",e.ar,"ar")+inp("f_en","މިސާލުގެ އިނގިރޭސި މާނަ",e.en,"en","ltr");
+  var h = inp("f_ar", type==="verb" ? "މާޟީ (ޢަރަބި)" : type==="noun" ? "މުފްރަދު (ޢަރަބި)" : "ޢަރަބި", e.ar, "ar");
+  if(type === "noun") h += inp("f_plural","ޖަމްޢު (ޢަރަބި)",x.plural,"ar");
+  if(type === "verb") h += inp("f_present","މުޟާރިޢު (ޢަރަބި)",x.present,"ar")+inp("f_command","އަމުރު (ޢަރަބި)",x.command,"ar");
+  return h+inp("f_en","އިނގިރޭސި މާނަ",e.en,"en","ltr")+inp("f_dv","ދިވެހި މާނަ",e.dv);
+}
+function entryModal(e){
+  var type = e ? e.type : S.type;
+  openModal('<h3>'+(e?"ބަދަލުކުރޭ":"އިތުރުކުރޭ")+'</h3><label for="f_type">ބާވަތް</label><select id="f_type"'+(e?" disabled":"")+'>'+
+    TYPES.map(function(t){ return '<option value="'+t[0]+'"'+(t[0]===type?" selected":"")+'>'+t[1]+'</option>'; }).join("")+'</select>'+
+    '<div id="fields">'+entryFields(type, e)+'</div>'+BTNS("entrySave", e?e.id:""));
+}
+document.addEventListener("change", function(ev){
+  if(ev.target.id === "scopeSel"){ S.scope = ev.target.value; initPractice(); render(); }
+  if(ev.target.id === "f_type") document.getElementById("fields").innerHTML = entryFields(ev.target.value);
+});
+document.addEventListener("keydown", function(ev){
+  if(ev.key === "Escape") closeModal();
+  if(ev.key === "Enter" && ev.target.tagName === "INPUT"){ var b = modalRoot.querySelector(".modal .btn"); if(b) b.click(); }
+});
+
+
+/* ---------- actions ---------- */
+var A = {
+  menu:function(){ menuModal(); return false; },
+  units:function(){ closeModal(); stopAudio(); S.cls=false; S.unit=null; S.lesson=null; S.practice=null; window.scrollTo(0,0); },
+  unit:function(d){ S.unit=+d.n; S.lesson=null; try{ localStorage.setItem("aby-unit", String(S.unit)); }catch(e){} window.scrollTo(0,0); },
+  lessons:function(){ stopAudio(); S.lesson=null; S.review=false; window.scrollTo(0,0); },
+  lesson:function(d){
+    S.review = d.n==="r"; S.lesson = S.review ? 1 : +d.n; S.dlg=0; S.tab="read"; S.readTab="conv"; S.scope="lesson"; S.open={}; S.sp=0; S.spShown=false; S.last[S.unit]=S.review ? "r" : S.lesson;
+    try{ localStorage.setItem("aby-last", JSON.stringify(S.last)); }catch(e){}
+    window.scrollTo(0,0);
+  },
+  tab:function(d){
+    stopAudio(); clearInterval(speedTimer); S.tab=d.t;
+    if(d.t==="practice") initPractice();
+    if(d.t==="speak"){ S.sp=0; S.spShown=false; }
+    if(d.t==="help") markDone("help");
+    window.scrollTo(0,0);
+  },
+  clsOpen:function(){ closeModal(); stopAudio(); S.cls=true; S.classId=null; S.practice=null; window.scrollTo(0,0); },
+  clsBack:function(){ if(S.practice) S.practice=null; else if(S.classId) S.classId=null; else S.cls=false; },
+  readTab:function(d){ S.readTab=d.t; stopAudio(); if(d.t==="vocab") markDone("read"); },
+  dlgNext:function(){ stopAudio(); S.dlg++; },
+  pracTab:function(d){ S.pracTab=d.t; initPractice(); },
+  spTab:function(d){ S.spTab=d.t; S.sp=0; S.spShown=false; },
+  line:function(d){ S.open[d.k]=!S.open[d.k]; },
+  audio:function(d){
+    var c = UNIT_DATA[S.unit].conv[+d.i], key = S.unit+"-"+d.i;
+    if(au.key === key && au.playing){ player.pause(); au.playing = false; return; }
+    if(au.key !== key || au.err){ au.key = key; au.err = null; player.src = c.audio; }
+    au.playing = true;
+    var p = player.play();
+    if(p && p.catch) p.catch(function(){ au.playing = false; au.err = key; render(); });
+  },
+  spShow:function(){ S.spShown=true; if(S.sp===spCount()-1) markDone("speak"); },
+  spNext:function(){ S.sp=(S.sp+1)%spCount(); S.spShown=false; },
+  spPrev:function(){ var n=spCount(); S.sp=(S.sp-1+n)%n; S.spShown=false; },
+  fcFlip:function(){ fc.flipped=!fc.flipped; },
+  fcNext:function(){ if(S.tab==="practice" && fc.i===fc.items.length-1) markDone("practice"); fc.i=(fc.i+1)%fc.items.length; fc.flipped=false; },
+  fcPrev:function(){ fc.i=(fc.i-1+fc.items.length)%fc.items.length; fc.flipped=false; },
+  quizPick:function(d){ if(quiz.picked!==null) return; quiz.picked=+d.k; if(quiz.picked===quiz.qs[quiz.i].ans) quiz.score++; },
+  quizNext:function(){ quiz.i++; quiz.picked=null; if(S.tab==="practice" && quiz.i >= quiz.qs.length) markDone("practice"); },
+  quizRestart:function(){ startQuiz(S.cls ? classItems(S.classId) : inLesson(UNIT_DATA[S.unit].vocab)); },
+  matchPick:function(d){
+    var i = +d.i; match.wrong = null;
+    if(d.side === "L") match.selL = match.selL === i ? null : i; else match.selR = match.selR === i ? null : i;
+    if(match.selL !== null && match.selR !== null){
+      if(match.selL === match.selR) match.done[match.selL] = true; else match.wrong = [match.selL, match.selR];
+      match.selL = match.selR = null;
+    }
+  },
+  speedGo:function(){ speed.started = true; clearInterval(speedTimer); speedTimer = setInterval(speedTick, 1000); },
+  speedPick:function(d){
+    if(speed.over || speed.q.picked !== null) return;
+    speed.q.picked = +d.k; speed.total++; if(speed.q.picked === speed.q.ans) speed.score++;
+    render(); setTimeout(function(){ if(speed && !speed.over){ speedQ(); render(); } }, 450); return false;
+  },
+  speedNew:function(){ startSpeed(inLesson(UNIT_DATA[S.unit].vocab)); },
+  matchNew:function(){ startMatch(inLesson(UNIT_DATA[S.unit].vocab)); },
+  arrPick:function(d){ arr.picked.push(+d.id); },
+  arrBack:function(d){ arr.picked = arr.picked.filter(function(x){ return x !== +d.id; }); },
+  arrReset:function(){ arr.picked = []; },
+  arrNext:function(){ arr.i = (arr.i+1) % arr.list.length; loadArr(); },
+  "class":function(d){ S.classId=d.id; S.type="phrase"; S.practice=null; window.scrollTo(0,0); },
+  classList:function(){ S.classId=null; S.practice=null; },
+  type:function(d){ S.type=d.t; },
+  practice:function(d){ S.practice=d.t||null; var it=classItems(S.classId); if(d.t==="fc") startFc(it); if(d.t==="quiz") startQuiz(it); },
+  loginOpen:function(){ loginModal(); return false; },
+  loginDo:function(){ if(val("pw")===DEMO_PASSWORD){ S.teacher=true; closeModal(); } else { fail("ޕާސްވޯޑް ރަނގަޅެއް ނޫން"); return false; } },
+  logout:function(){ S.teacher=false; closeModal(); },
+  close:function(){ closeModal(); return false; },
+  veil:function(d,ev){ if(ev.target.classList.contains("veil")) closeModal(); return false; },
+  classNew:function(){ classModal(null); return false; },
+  classRename:function(){ classModal(store.classes.filter(function(c){ return c.id===S.classId; })[0]); return false; },
+  classSave:function(d){
+    var name = val("cname"); if(!name){ fail("ކްލާހުގެ ނަން ލިޔޭ"); return false; }
+    if(d.id){ store.classes.forEach(function(c){ if(c.id===d.id) c.name=name; }); }
+    else { var c={id:uid(), name:name}; store.classes.push(c); S.cls=true; S.classId=c.id; S.type="phrase"; S.practice=null; }
+    save(); closeModal();
+  },
+  classDel:function(){ confirmModal("މި ކްލާހާއި އޭގައިވާ ހުރިހާ އެއްޗެއް ޑިލީޓްކުރަންވީތަ؟","classDelDo"); return false; },
+  classDelDo:function(){
+    store.entries = store.entries.filter(function(e){ return e.classId!==S.classId; });
+    store.classes = store.classes.filter(function(c){ return c.id!==S.classId; });
+    save(); closeModal(); S.classId=null;
+  },
+  entryNew:function(){ entryModal(null); return false; },
+  entryEdit:function(d){ entryModal(store.entries.filter(function(e){ return e.id===d.id; })[0]); return false; },
+  entrySave:function(d){
+    var type = document.getElementById("f_type").value;
+    var e = {type:type, ar:val("f_ar"), dv:val("f_dv"), en:val("f_en"), extra:{}};
+    if(type==="noun") e.extra.plural = val("f_plural");
+    if(type==="verb"){ e.extra.present = val("f_present"); e.extra.command = val("f_command"); }
+    if(type==="tip"){ e.extra.body = val("f_body"); if(!e.dv){ fail("ސުރުޚީ ލިޔޭ"); return false; } }
+    else if(!e.ar || !e.dv || !e.en){ fail("ޢަރަބި، އިނގިރޭސި އަދި ދިވެހި ތިން ބައި ފުރިހަމަކުރޭ"); return false; }
+    if(d.id){ store.entries.forEach(function(x){ if(x.id===d.id){ x.ar=e.ar; x.dv=e.dv; x.en=e.en; x.extra=e.extra; } }); }
+    else { e.id=uid(); e.classId=S.classId; store.entries.push(e); S.type=type; }
+    save(); closeModal();
+  },
+  entryDel:function(d){ confirmModal("މި އެއްޗެއް ޑިލީޓްކުރަންވީތަ؟","entryDelDo",d.id); return false; },
+  entryDelDo:function(d){ store.entries = store.entries.filter(function(e){ return e.id!==d.id; }); save(); closeModal(); }
+};
+
+document.addEventListener("click", function(ev){
+  var t = ev.target.closest("[data-a]"); if(!t) return;
+  var fn = A[t.dataset.a]; if(!fn) return;
+  if(fn(t.dataset, ev) !== false) render();
+});
+render();
+
+</script>
+</body>
+</html>
