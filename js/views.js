@@ -310,7 +310,24 @@ function libMatches(){
   });
   return out;
 }
+/* vocabulary review: Arabic first, flip for meanings, Known / Practise again */
+function rvHTML(){
+  var qn = rv.queue.length;
+  if(rv.i >= qn)
+    return '<div class="card" style="text-align:center"><p style="margin:0">'+T("reviewDone")+'</p><p class="score">'+num(rv.known, qn)+'</p>'+
+      '<div class="row" style="justify-content:center"><button class="btn" data-a="rvStart">'+T("restart")+'</button><button class="btn ghost" data-a="rvClose">'+T("close")+'</button></div></div>';
+  var key = rv.queue[rv.i], w = vocabStore.words[key], v = vResolve(key);
+  if(!v){ rv.queue.splice(rv.i, 1); return rvHTML(); }
+  var u = w ? w.u : +key.split("|")[0];
+  var head = '<div class="rvhead"><button class="ib" data-a="rvClose" aria-label="'+T("close")+'">'+ic("x")+'</button><span class="count">'+num(rv.i+1, qn)+'</span></div>';
+  if(!rv.flipped)
+    return head+'<button class="fc" data-a="rvFlip"><span class="ar">'+esc(v.ar)+'</span><span class="hint">'+T("tapMeaning")+'</span></button>';
+  return head+'<div class="fc rvback"><span class="ar">'+esc(v.ar)+'</span><span class="tr">'+meaning(v)+'</span>'+wordForms(v)+vExHTML(u, v)+'<span class="vref">'+T("unit")+' '+u+' · '+T("lesson")+' '+v.lesson+'</span></div>'+
+    '<div class="row rvbtns"><button class="btn" data-a="rvKnown">'+T("known")+'</button><button class="btn ghost" data-a="rvAgain">'+T("needsPractice")+'</button>'+
+    (w && w.st !== "mastered" ? '<button class="btn ghost small" data-a="rvMaster">'+T("markMastered")+'</button>' : '')+'</div>';
+}
 function libHTML(){
+  if(S.libReview && rv) return rvHTML();
   var h = seg([["book",T("bookVocab")],["mine",T("myWords")]], S.libTab, "libTab")+
     '<input id="libQ" class="search" type="search" placeholder="'+T("searchPh")+'" aria-label="'+T("searchPh")+'" value="'+esc(S.libQ)+'">';
   if(S.libTab === "book"){
@@ -328,7 +345,8 @@ function libHTML(){
     var mine = myWords();
     if(Object.keys(vocabStore.words).length === 0) h += '<div class="empty">'+T("noSaved")+'</div>';
     else {
-      h += '<p class="sub">'+mine.length+' '+T("wordsN")+'</p>';
+      h += '<p class="sub">'+mine.length+' '+T("wordsN")+'</p>'+
+        (mine.length ? '<div class="row" style="margin-bottom:12px"><button class="btn" data-a="rvStart">'+T("reviewWords")+' ('+mine.length+')</button></div>' : '');
       h += mine.length ? '<ul class="vlist">'+mine.map(function(x){ return libCard(x.u, x.v, stChip(x.key, x.w.st)); }).join("")+'</ul>'
                        : '<div class="empty">'+T("noResults")+'</div>';
     }

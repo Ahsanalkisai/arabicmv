@@ -180,6 +180,10 @@ html[data-ui="en"] .line.on>.ic.d,html[data-ui="en"] .nhead[aria-expanded="true"
 .vstar.on{color:var(--primary)}
 .vstar.on .ic{fill:currentColor}
 .vref{display:block; font-size:.78rem; color:var(--muted); margin-top:4px}
+.rvhead{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px}
+.rvback .ar{font-size:2rem}
+.rvback .vexs{align-self:stretch; text-align:center}
+.rvbtns{justify-content:center; margin-top:12px}
 .vst{position:absolute; top:7px; inset-inline-end:7px; border:0; border-radius:999px; font-size:.72rem; padding:2px 10px; background:var(--surface); color:var(--muted)}
 .vst-learning{background:var(--accent); color:var(--on-accent)}
 .vst-mastered{background:var(--good-bg); color:var(--good)}

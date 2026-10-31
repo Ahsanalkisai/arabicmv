@@ -90,6 +90,8 @@ function applyMode(){
 }
 applyMode();
 var fc = null, quiz = null, match = null, arr = null;
+var rv = null; /* vocabulary review session, separate from the lesson flashcards */
+function rvAdvance(){ rv.i++; rv.flipped = false; }
 var done = {}; try{ done = JSON.parse(localStorage.getItem("aby-done") || "{}") || {}; }catch(e){}
 function markDone(sec){
   if(!S.unit || !S.lesson) return;
@@ -315,6 +317,28 @@ var A = {
     w.st = w.st === "new" ? "learning" : w.st === "learning" ? "mastered" : "new";
     saveVocabStore();
   },
+  rvStart:function(){
+    var items = myWords(); if(!items.length) return false;
+    rv = {queue:items.map(function(x){ return x.key; }), i:0, flipped:false, known:0};
+    S.libReview = true; window.scrollTo(0,0);
+  },
+  rvFlip:function(){ if(rv) rv.flipped = true; },
+  rvKnown:function(){
+    var w = vocabStore.words[rv.queue[rv.i]];
+    if(w){ w.k = (w.k||0)+1; if(w.st === "new") w.st = "learning"; saveVocabStore(); }
+    rv.known++; rvAdvance();
+  },
+  rvAgain:function(){
+    var k = rv.queue[rv.i], w = vocabStore.words[k];
+    if(w && w.st !== "mastered"){ w.st = "learning"; saveVocabStore(); }
+    rv.queue.push(k); rvAdvance();
+  },
+  rvMaster:function(){
+    var w = vocabStore.words[rv.queue[rv.i]];
+    if(w){ w.st = "mastered"; saveVocabStore(); }
+    rv.known++; rvAdvance();
+  },
+  rvClose:function(){ S.libReview = false; rv = null; },
   "class":function(d){ S.classId=d.id; S.type="phrase"; S.practice=null; window.scrollTo(0,0); },
   classList:function(){ S.classId=null; S.practice=null; },
   type:function(d){ S.type=d.t; },
