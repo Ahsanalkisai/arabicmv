@@ -18,7 +18,7 @@ function renderChrome(){
   }
   else if(S.sec === "book" && S.unit && !S.lesson) h = bar("units", "", T("lessons"), false);
   else if(inLessonView()) h = '<div class="hdr"><button class="ib" data-a="'+(S.tab==="read" && S.readTab==="turn" ? "turnBack" : "lessons")+'" aria-label="'+T("back")+'">'+ic("back")+'</button>'+
-    '<div class="hc"><div class="hl" dir="rtl">الوحدة ('+arNum(S.unit)+') - '+UNITS[S.unit-1][0].replace(/[\u064B-\u0652\u0670]/g,"")+' - '+(S.review ? "مراجعة" : "الدرس ("+arNum(UNIT_DATA[S.unit].lessons[S.lesson-1].num || S.lesson)+")")+'</div></div>'+
+    '<div class="hc"><div class="hl" dir="rtl">الوحدة ('+arNum(S.unit)+') - '+UNITS[S.unit-1][0]+' - '+(S.review ? "مراجعة" : "الدرس ("+arNum(UNIT_DATA[S.unit].lessons[S.lesson-1].num || S.lesson)+")")+'</div></div>'+
     '<button class="ib" data-a="menu" aria-label="'+T("menu")+'">'+ic("more")+'</button></div>';
   else { var sec = SECTIONS().filter(function(x){ return x[0] === S.sec; })[0]; h = bar("", "", sec ? sec[1] : "", false); }
   document.getElementById("hdr").innerHTML = h;
