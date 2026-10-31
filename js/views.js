@@ -44,12 +44,27 @@ function welcomeHTML(){
     opt("both","Arabic + English + Dhivehi","ދިވެހި އިންޓަރފޭސް، އިނގިރޭސި އަދި ދިވެހި ތަރުޖަމާ")+
     '<p class="wnote">You can change this later from the menu · ފަހުން މެނޫއިން ބަދަލުކުރެވޭނެ</p></div>';
 }
+/* fully completed lessons in a unit (all four section flags set) */
+function lessonsDoneIn(u){
+  var d = UNIT_DATA[u], n = 0;
+  if(!d) return 0;
+  d.lessons.forEach(function(_,i){ var dk = done[u+"-"+(i+1)]; if(dk && dk.read && dk.practice && dk.speak && dk.help) n++; });
+  return n;
+}
+/* four section-progress dots (read, practice, speak, help) for one lesson */
+function sdots(u, l){
+  var dk = done[u+"-"+l] || {};
+  return '<span class="sdots" aria-hidden="true">'+["read","practice","speak","help"].map(function(s){ return '<i class="'+(dk[s]?"on":"")+'"></i>'; }).join("")+'</span>';
+}
 function startHTML(){
   return '<ul class="ulist">'+UNITS.map(function(u,i){
-    var n = i+1, ready = !!UNIT_DATA[n];
-    var sub = ready ? UNIT_DATA[n].lessons.length+' '+T("lessonsN")+' · '+UNIT_DATA[n].vocab.length+' '+T("wordsN") : T("notReady");
+    var n = i+1, d = UNIT_DATA[n];
+    if(!d) return '<li><button class="ucard off" disabled>'+
+      '<span class="thumb ar">'+arNum(n)+'</span><span class="ut"><span class="uk ar">الوحدة '+arNum(n)+'</span><span class="un ar">'+u[0]+'</span><span class="ud">'+esc(unitSub(i))+' · '+T("notReady")+'</span></span></button></li>';
+    var total = d.lessons.length, dn = lessonsDoneIn(n);
+    var sub = total+' '+T("lessonsN")+' · '+d.vocab.length+' '+T("wordsN");
     return '<li><button class="ucard" data-a="unit" data-n="'+n+'">'+
-      '<span class="thumb ar">'+arNum(n)+'</span><span class="ut"><span class="uk ar">الوحدة '+arNum(n)+'</span><span class="un ar">'+u[0]+'</span><span class="ud">'+esc(unitSub(i))+' · '+sub+'</span></span>'+
+      '<span class="thumb ar">'+arNum(n)+'</span><span class="ut"><span class="uk ar">الوحدة '+arNum(n)+'</span><span class="un ar">'+u[0]+'</span><span class="ud">'+esc(unitSub(i))+' · '+sub+'</span><span class="pbar upbar"><i style="width:'+(total ? Math.round(dn/total*100) : 0)+'%"></i></span></span>'+
       '<span class="uend">'+ic("chev")+'</span></button></li>';
   }).join("")+'</ul>';
 }
@@ -64,13 +79,13 @@ function lessonsHTML(){
     var k = i+1, words = d.vocab.filter(function(v){ return v.lesson===k; }).length, dl = d.conv.filter(function(c){ return c.lesson===k; }).length;
     var dk = done[S.unit+"-"+k], all = dk && dk.read && dk.practice && dk.speak && dk.help;
     return '<button class="lcard'+(S.last[S.unit]===k?" cur":"")+'" data-a="lesson" data-n="'+k+'"><span class="lk ar'+(all?" ok":"")+'">'+(all ? ic("check") : arNum(l.num || k))+'</span>'+
-      '<span class="ut"><span class="un ar">'+esc(l.ar)+'</span>'+meta(words, dl)+'</span><span class="uend">'+ic("chev")+'</span></button>';
+      '<span class="ut"><span class="un ar">'+esc(l.ar)+'</span>'+meta(words, dl)+sdots(S.unit, k)+'</span><span class="uend">'+ic("chev")+'</span></button>';
   }).join("")+review+'</div>';
 }
 function convBlock(c, ci, n, total){
   /* the dialogue itself is Arabic, so its lines always run right-to-left, whatever the interface language */
   return '<section class="conv"><div class="chead"><b>'+T("dialogue")+' '+n+'</b>'+
-    (total > 1 ? '<span class="count">'+n+' / '+total+'</span><button class="ib" data-a="dlgPrev" aria-label="'+T("prevDialogue")+'">'+ic("fwd")+'</button><button class="ib" data-a="dlgNext" aria-label="'+T("nextDialogue")+'">'+ic("chev")+'</button>' : '')+'</div>'+
+    (total > 1 ? '<span class="count">'+num(n, total)+'</span><button class="ib" data-a="dlgPrev" aria-label="'+T("prevDialogue")+'">'+ic("fwd")+'</button><button class="ib" data-a="dlgNext" aria-label="'+T("nextDialogue")+'">'+ic("chev")+'</button>' : '')+'</div>'+
     '<div class="lines" dir="rtl">'+c.lines.map(function(l,li){
     var k = "c"+ci+"-"+li, on = !!S.open[k];
     return '<button class="line'+(on?" on":"")+'" data-a="line" data-k="'+k+'" aria-expanded="'+on+'"><span class="who ar">'+esc(l.who)+'</span><span class="say ar">'+esc(l.ar)+'</span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">'+ICONS.chev+'</svg>'+
@@ -108,7 +123,7 @@ function readHTML(){
 function practiceHTML(){
   if(S.sec === "practice" && !UNIT_DATA[S.pUnit]) return "";
   var tabs = seg([["fc",T("cards")],["quiz",T("quiz")],["match",T("match")],["arr",T("arrange")],["speed",T("speed")]], S.pracTab, "pracTab");
-  var cnt = (S.pracTab==="quiz" && quiz && quiz.qs && quiz.i < quiz.qs.length) ? '<span class="count tcount">'+T("question")+' '+(quiz.i+1)+' / '+quiz.qs.length+'</span>' : '';
+  var cnt = (S.pracTab==="quiz" && quiz && quiz.qs && quiz.i < quiz.qs.length) ? '<span class="count tcount">'+T("question")+' '+num(quiz.i+1, quiz.qs.length)+'</span>' : '';
   tabs = tabs.replace('</div>', cnt+'</div>');
   if(!S.review && S.sec !== "practice") tabs = '<div class="segrow">'+tabs+'<button class="fbtn'+(S.scope==="unit"?" on":"")+'" data-a="scopeToggle" aria-pressed="'+(S.scope==="unit")+'" aria-label="'+T("scope")+'" title="'+(S.scope==="unit" ? T("wholeUnit") : T("thisLesson"))+'">'+ic("filter")+'</button></div>';
   return tabs+
@@ -121,7 +136,7 @@ function speakHTML(){
   var h = seg([["qa",T("qa")],["say",T("sayIt")]], S.spTab, "spTab");
   if(!it) return h+'<div class="empty">'+T("noQuestions")+'</div>';
   var task = S.review ? "" : lTask(d.lessons[S.lesson-1]);
-  return h+'<div class="card"><div class="clabel"><span>'+(say ? T("sayPrompt") : T("question"))+'</span><span class="count">'+(S.sp+1)+' / '+list.length+'</span></div>'+
+  return h+'<div class="card"><div class="clabel"><span>'+(say ? T("sayPrompt") : T("question"))+'</span><span class="count">'+num(S.sp+1, list.length)+'</span></div>'+
     '<div class="prompt" style="margin:10px 0 14px">'+(say ? meaning(it) : '<span class="ar">'+esc(it.q.ar)+'</span>')+'</div>'+
     (S.spShown ? '' : '<button class="btn wide reveal" data-a="spShow">'+ic("eye")+'<span>'+T("showAnswer")+'</span></button>')+'</div>'+
     (S.spShown ? '<div class="model"><div class="count">'+T("modelAnswer")+'</div><span class="ar">'+esc(say ? it.ar : it.a.ar)+'</span></div>' : '')+
@@ -182,8 +197,7 @@ function lessonLabel(u, l){
 function dashStats(){
   var st = {unitsReady:0, unitsDone:0, lessonsTotal:0, lessonsDone:0, words:0};
   Object.keys(UNIT_DATA).forEach(function(k){
-    var dd = UNIT_DATA[k], n = 0;
-    dd.lessons.forEach(function(_,i){ var dk = done[k+"-"+(i+1)]; if(dk && dk.read && dk.practice && dk.speak && dk.help) n++; });
+    var dd = UNIT_DATA[k], n = lessonsDoneIn(k);
     st.unitsReady++; st.lessonsTotal += dd.lessons.length; st.lessonsDone += n; st.words += dd.vocab.length;
     if(n === dd.lessons.length) st.unitsDone++;
   });
@@ -201,8 +215,8 @@ function dashHTML(){
     : '<button class="ccard" data-a="dashStart"><span class="cbody"><span class="ck">'+T("startL")+'</span><span class="cv ar">'+UNITS[0][0]+'</span><span class="cs">'+T("startHint")+' · '+esc(unitSub(0))+'</span></span><span class="cgo">'+ic("chev")+'</span></button>';
   /* C. learning overview — every number is computed from UNIT_DATA and aby-done */
   h += '<h2>'+T("overview")+'</h2><div class="stats">'+
-    '<div class="stat"><b>'+st.unitsDone+' / '+st.unitsReady+'</b><span>'+T("unitsDone")+'</span></div>'+
-    '<div class="stat"><b>'+st.lessonsDone+' / '+st.lessonsTotal+'</b><span>'+T("lessonsDone")+'</span></div>'+
+    '<div class="stat"><b class="num">'+st.unitsDone+' / '+st.unitsReady+'</b><span>'+T("unitsDone")+'</span></div>'+
+    '<div class="stat"><b class="num">'+st.lessonsDone+' / '+st.lessonsTotal+'</b><span>'+T("lessonsDone")+'</span></div>'+
     '<div class="stat"><b>'+st.words+'</b><span>'+T("wordsAvail")+'</span></div>'+
     '<div class="stat"><b>'+st.pct+'%</b><span>'+T("overallProgress")+'</span></div></div>'+
     '<div class="pbar dpbar"><i style="width:'+st.pct+'%"></i></div>';
@@ -234,10 +248,9 @@ function placeholderHTML(key){
 function progressHTML(){
   var h = '<h2 style="margin-top:0">'+T("textbookProgress")+'</h2><ul class="plist">';
   Object.keys(UNIT_DATA).forEach(function(k){
-    var dd = UNIT_DATA[k], n = 0;
-    dd.lessons.forEach(function(_,i){ var dk = done[k+"-"+(i+1)]; if(dk && dk.read && dk.practice && dk.speak && dk.help) n++; });
+    var dd = UNIT_DATA[k], n = lessonsDoneIn(k);
     var st = n === dd.lessons.length ? T("completed") : n ? T("inProgress") : T("notStarted");
-    h += '<li><span class="ar">'+UNITS[k-1][0]+'</span><span class="pbar"><i style="width:'+(n/dd.lessons.length*100)+'%"></i></span><span class="count">'+n+' / '+dd.lessons.length+' · '+st+'</span></li>';
+    h += '<li><span class="ar">'+UNITS[k-1][0]+'</span><span class="pbar"><i style="width:'+(n/dd.lessons.length*100)+'%"></i></span><span class="count">'+num(n, dd.lessons.length)+' · '+st+'</span></li>';
   });
   return h+'</ul><p class="sub">'+T("savedOnDevice")+'</p>';
 }

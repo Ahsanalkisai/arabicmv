@@ -1,11 +1,13 @@
 /* ArabicMV — reusable exercise engines: flashcards, quiz, match, arrange, speed. */
+/* "n / m" counters must read left-to-right even inside the RTL interface */
+function num(a, b){ return '<span class="num">'+a+' / '+b+'</span>'; }
 /* ---------- practice engines ---------- */
 function startFc(items){ fc = {items:shuffle(items), i:0, flipped:false}; }
 function fcHTML(){
   if(!fc || !fc.items.length) return '<div class="empty">'+T("noCards")+'</div>';
   var it = fc.items[fc.i];
   return '<button class="fc" data-a="fcFlip">'+(fc.flipped ? meaning(it)+wordForms(it) : '<span class="ar">'+esc(it.ar)+'</span><span class="hint">'+T("tapMeaning")+'</span>')+'</button>'+
-    '<div class="ctrl"><button class="rb" data-a="fcPrev" aria-label="'+T("prev")+'">'+ic("fwd")+'</button><span class="count">'+(fc.i+1)+' / '+fc.items.length+'</span><button class="rb" data-a="fcNext" aria-label="'+T("next")+'">'+ic("chev")+'</button></div>';
+    '<div class="ctrl"><button class="rb" data-a="fcPrev" aria-label="'+T("prev")+'">'+ic("fwd")+'</button><span class="count">'+num(fc.i+1, fc.items.length)+'</span><button class="rb" data-a="fcNext" aria-label="'+T("next")+'">'+ic("chev")+'</button></div>';
 }
 function startQuiz(items){
   var pool = items.filter(function(x){ return x.ar && x.dv; });
@@ -21,7 +23,7 @@ function startQuiz(items){
 function quizHTML(){
   if(!quiz || quiz.few) return '<div class="empty">'+T("quizFew")+'</div>';
   if(quiz.i >= quiz.qs.length)
-    return '<div class="card"><p style="text-align:center;margin:0">'+T("quizDone")+'</p><p class="score">'+quiz.score+' / '+quiz.qs.length+'</p><div class="ctrl" style="justify-content:center"><button class="rb" data-a="quizRestart" aria-label="'+T("restart")+'">'+ic("redo")+'</button></div></div>';
+    return '<div class="card"><p style="text-align:center;margin:0">'+T("quizDone")+'</p><p class="score">'+num(quiz.score, quiz.qs.length)+'</p><div class="ctrl" style="justify-content:center"><button class="rb" data-a="quizRestart" aria-label="'+T("restart")+'">'+ic("redo")+'</button></div></div>';
   var q = quiz.qs[quiz.i], chk = quiz.checked, right = chk && quiz.sel === q.ans;
   var opts = q.opts.map(function(o,k){
     var cls = "opt"+(q.toMeaning?"":" ar");
@@ -75,7 +77,7 @@ function arrHTML(){
   var ok = full && arr.picked.map(function(id){ return byId(id).w; }).join(" ") === it.ar;
   var slot = arr.picked.map(function(id){ return '<button class="word ar" data-a="arrBack" data-id="'+id+'"'+(ok?" disabled":"")+'>'+esc(byId(id).w)+'</button>'; }).join("");
   var bank = arr.bank.filter(function(b){ return arr.picked.indexOf(b.id) < 0; }).map(function(b){ return '<button class="word ar" data-a="arrPick" data-id="'+b.id+'">'+esc(b.w)+'</button>'; }).join("");
-  return '<div class="card"><div class="count">'+T("sentence")+' '+(arr.i+1)+' / '+arr.list.length+'</div><div class="prompt">'+meaning(it)+'</div>'+
+  return '<div class="card"><div class="count">'+T("sentence")+' '+num(arr.i+1, arr.list.length)+'</div><div class="prompt">'+meaning(it)+'</div>'+
     '<div class="slot'+(full?(ok?" good":" bad"):"")+'">'+slot+'</div><div class="bank">'+bank+'</div>'+
     '<p class="msg" style="color:var(--'+(ok?"good":full?"bad":"muted")+')">'+(full ? (ok ? T("correct") : T("arrWrong")) : T("arrHint"))+'</p></div>'+
     '<div class="ctrl"><button class="rb" data-a="arrReset" aria-label="'+T("restart")+'">'+ic("redo")+'</button><button class="rb'+(ok?" go":"")+'" data-a="arrNext" aria-label="'+T("nextSentence")+'">'+ic("chev")+'</button></div>';
@@ -105,10 +107,10 @@ function speedTick(){
 }
 function speedHTML(){
   if(!speed || speed.few) return '<div class="empty">'+T("speedFew")+'</div>';
-  if(speed.over) return '<div class="card"><p style="text-align:center;margin:0">'+T("timeUp")+'</p><p class="score">'+speed.score+' / '+speed.total+'</p><div class="ctrl" style="justify-content:center"><button class="rb go" data-a="speedNew" aria-label="'+T("playAgain")+'">'+ic("redo")+'</button></div></div>';
+  if(speed.over) return '<div class="card"><p style="text-align:center;margin:0">'+T("timeUp")+'</p><p class="score">'+num(speed.score, speed.total)+'</p><div class="ctrl" style="justify-content:center"><button class="rb go" data-a="speedNew" aria-label="'+T("playAgain")+'">'+ic("redo")+'</button></div></div>';
   if(!speed.started) return '<div class="card" style="text-align:center"><p style="margin:0 0 10px">'+T("speedIntro")+'</p><button class="btn wide" data-a="speedGo">'+T("start")+'</button></div>';
   var q = speed.q, done = q.picked !== null;
-  return '<div class="qcard"><div class="clabel"><span>'+speed.score+' / '+speed.total+'</span><span class="count"><b id="spdLeft">'+speed.left+'</b> '+T("sec")+'</span></div>'+
+  return '<div class="qcard"><div class="clabel"><span>'+num(speed.score, speed.total)+'</span><span class="count"><b id="spdLeft">'+speed.left+'</b> '+T("sec")+'</span></div>'+
     '<div class="prog" style="margin:6px 0 10px"><i id="spdBar" style="width:'+(speed.left/45*100)+'%"></i></div>'+
     '<div class="prompt"><span class="ar">'+esc(q.it.ar)+'</span></div></div><div class="opts">'+q.opts.map(function(o,k){
       var cls = "opt"; if(done && k === q.ans) cls += " right"; else if(done && k === q.picked) cls += " wrong";
