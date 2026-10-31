@@ -281,6 +281,23 @@ function libMatch(v, q, qa, ql){
     (v.command && stripTash(v.command).indexOf(qa) >= 0) ||
     v.en.toLowerCase().indexOf(ql) >= 0 || v.dv.indexOf(q) >= 0;
 }
+/* saved words resolved to live entries; unresolvable references are skipped */
+function myWords(){
+  var q = S.libQ.trim(), qa = stripTash(q), ql = q.toLowerCase(), out = [];
+  Object.keys(vocabStore.words).forEach(function(k){
+    var w = vocabStore.words[k], v = vResolve(k);
+    if(!v) return;
+    if(S.libSt !== "all" && w.st !== S.libSt) return;
+    if(q && !libMatch(v, q, qa, ql)) return;
+    out.push({key:k, w:w, u:w.u, v:v});
+  });
+  out.sort(function(a, b){ return a.u - b.u || a.v.lesson - b.v.lesson; });
+  return out;
+}
+function stChip(key, st){
+  var lab = st === "mastered" ? "stMastered" : st === "learning" ? "stLearning" : "stNew";
+  return '<button class="vst vst-'+st+'" data-a="vStatus" data-k="'+esc(key)+'" aria-label="'+T(lab)+'">'+T(lab)+'</button>';
+}
 function libMatches(){
   var q = S.libQ.trim(), qa = stripTash(q), ql = q.toLowerCase(), out = [];
   Object.keys(UNIT_DATA).forEach(function(u){
@@ -307,7 +324,14 @@ function libHTML(){
     h += '<p class="sub">'+list.length+' '+T("wordsN")+'</p>';
     h += list.length ? '<ul class="vlist">'+list.map(function(x){ return libCard(x.u, x.v); }).join("")+'</ul>' : '<div class="empty">'+T("noResults")+'</div>';
   } else {
-    h += '<div class="empty">'+T("noSaved")+'</div>';
+    h += seg([["all",T("all")],["new",T("stNew")],["learning",T("stLearning")],["mastered",T("stMastered")]], S.libSt, "libSt");
+    var mine = myWords();
+    if(Object.keys(vocabStore.words).length === 0) h += '<div class="empty">'+T("noSaved")+'</div>';
+    else {
+      h += '<p class="sub">'+mine.length+' '+T("wordsN")+'</p>';
+      h += mine.length ? '<ul class="vlist">'+mine.map(function(x){ return libCard(x.u, x.v, stChip(x.key, x.w.st)); }).join("")+'</ul>'
+                       : '<div class="empty">'+T("noResults")+'</div>';
+    }
   }
   return h+'<p class="sub" style="margin-top:14px">'+T("moreComing")+'</p>';
 }
