@@ -1,0 +1,118 @@
+{
+ "book": 1,
+ "title_ar": "العربية بين يديك",
+ "units": [
+  {
+   "unit": 1,
+   "title_ar": "التَّحِيَّةُ وَالتَّعَارُفُ",
+   "title_dv": "ސަލާމްކުރުމާއި ދެނެގަތުން",
+   "title_en": "Greetings and introductions",
+   "file": "unit01.json"
+  },
+  {
+   "unit": 2,
+   "title_ar": "الأُسْرَةُ",
+   "title_dv": "ޢާއިލާ",
+   "title_en": "The family",
+   "file": "unit02.json"
+  },
+  {
+   "unit": 3,
+   "title_ar": "السَّكَنُ",
+   "title_dv": "ދިރިއުޅޭ ތަން",
+   "title_en": "Housing",
+   "file": "unit03.json"
+  },
+  {
+   "unit": 4,
+   "title_ar": "الحَيَاةُ اليَوْمِيَّةُ",
+   "title_dv": "ދުވަހުގެ ދިރިއުޅުން",
+   "title_en": "Daily life",
+   "file": "unit04.json"
+  },
+  {
+   "unit": 5,
+   "title_ar": "الطَّعَامُ وَالشَّرَابُ",
+   "title_dv": "ކެއުމާއި ބުއިން",
+   "title_en": "Food and drink",
+   "file": "unit05.json"
+  },
+  {
+   "unit": 6,
+   "title_ar": "الصَّلَاةُ",
+   "title_dv": "ނަމާދު",
+   "title_en": "Prayer",
+   "file": "unit06.json"
+  },
+  {
+   "unit": 7,
+   "title_ar": "الدِّرَاسَةُ",
+   "title_dv": "ކިޔެވުން",
+   "title_en": "Study",
+   "file": "unit07.json"
+  },
+  {
+   "unit": 8,
+   "title_ar": "العَمَلُ",
+   "title_dv": "މަސައްކަތް",
+   "title_en": "Work",
+   "file": "unit08.json"
+  },
+  {
+   "unit": 9,
+   "title_ar": "التَّسَوُّقُ",
+   "title_dv": "ބާޒާރުކުރުން",
+   "title_en": "Shopping",
+   "file": null
+  },
+  {
+   "unit": 10,
+   "title_ar": "الجَوُّ",
+   "title_dv": "މޫސުން",
+   "title_en": "The weather",
+   "file": null
+  },
+  {
+   "unit": 11,
+   "title_ar": "النَّاسُ وَالأَمَاكِنُ",
+   "title_dv": "މީހުންނާއި ތަންތަން",
+   "title_en": "People and places",
+   "file": null
+  },
+  {
+   "unit": 12,
+   "title_ar": "الهِوَايَاتُ",
+   "title_dv": "ޝައުޤުވެރި ކަންކަން",
+   "title_en": "Hobbies",
+   "file": null
+  },
+  {
+   "unit": 13,
+   "title_ar": "السَّفَرُ",
+   "title_dv": "ދަތުރު",
+   "title_en": "Travel",
+   "file": null
+  },
+  {
+   "unit": 14,
+   "title_ar": "الحَجُّ وَالعُمْرَةُ",
+   "title_dv": "ޙައްޖާއި ޢުމްރާ",
+   "title_en": "Hajj and Umrah",
+   "file": null
+  },
+  {
+   "unit": 15,
+   "title_ar": "الصِّحَّةُ",
+   "title_dv": "ޞިއްޙަތު",
+   "title_en": "Health",
+   "file": null
+  },
+  {
+   "unit": 16,
+   "title_ar": "العُطْلَةُ",
+   "title_dv": "ޗުއްޓީ",
+   "title_en": "Holidays",
+   "file": null
+  }
+ ]
+}
