@@ -29,7 +29,8 @@ var ICONS = {
   cardsI:'<rect x="8" y="3" width="13" height="15" rx="2"/><path d="M16 21H5a2 2 0 01-2-2V8"/>',
   matchI:'<path d="M10.5 13.5a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1.2 1.2"/><path d="M13.5 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1.2-1.2"/>',
   arrangeI:'<path d="M4 7h16M4 12h11M4 17h6"/>',
-  speedI:'<path d="M13 2L5 13.5h6L11 22l8-11.5h-6z"/>'
+  speedI:'<path d="M13 2L5 13.5h6L11 22l8-11.5h-6z"/>',
+  bookmark:'<path d="M7 3h10a1 1 0 011 1v17l-6-4.2L6 21V4a1 1 0 011-1z"/>'
 };
 var DIR_ICONS = {back:1, chev:1, fwd:1};
 function ic(n){ return '<svg class="ic'+(DIR_ICONS[n]?" d":"")+'" viewBox="0 0 24 24" aria-hidden="true">'+ICONS[n]+'</svg>'; }
@@ -73,7 +74,8 @@ function uid(){ return Date.now().toString(36) + Math.random().toString(36).slic
 
 /* ---------- state ---------- */
 var S = {mode:null, ui:"dv", sec:"dash", pUnit:1, pLesson:0, dlg:0, review:false, unit:null, lesson:null, last:{}, tab:"read", readTab:"conv", pracTab:"fc", scope:"lesson", spTab:"qa", sp:0, spShown:false, open:{},
-         cls:false, classId:null, type:"phrase", practice:null, teacher:false};
+         cls:false, classId:null, type:"phrase", practice:null, teacher:false,
+         libTab:"book", libQ:"", libU:0, libL:0, libSt:"all", libReview:false};
 try{
   var m = localStorage.getItem("aby-mode"); if(MODES.indexOf(m) >= 0) S.mode = m;
   var lastUnit = +localStorage.getItem("aby-unit"); if(lastUnit >= 1 && lastUnit <= 16) S.unit = lastUnit;
@@ -131,6 +133,40 @@ function recordRecent(u, l){
   try{ localStorage.setItem("aby-recent", JSON.stringify(recent)); }catch(e){}
 }
 
+/* ---------- personal vocabulary (aby-vocab-v1) ----------
+   Saved words are references (unit + Arabic string), never copies; details are
+   always resolved live from UNIT_DATA so textbook corrections propagate. */
+var vocabStore = {words:{}};
+try{ var vraw = localStorage.getItem("aby-vocab-v1"); if(vraw){ var vp = JSON.parse(vraw); if(vp && vp.words) vocabStore = vp; } }catch(e){}
+function saveVocabStore(){ try{ localStorage.setItem("aby-vocab-v1", JSON.stringify(vocabStore)); }catch(e){} }
+function stripTash(s){ return String(s || "").replace(/[ً-ْٰ]/g, ""); }
+function vKey(u, ar){ return u+"|"+ar; }
+function vSaved(u, ar){ return !!vocabStore.words[vKey(u, ar)]; }
+/* resolve a saved reference to its live vocab entry; tashkeel-insensitive
+   fallback covers later spelling corrections, null means safely skip */
+function vResolve(key){
+  var i = key.indexOf("|"), u = +key.slice(0, i), ar = key.slice(i+1), d = UNIT_DATA[u], hit = null;
+  if(!d) return null;
+  d.vocab.forEach(function(v){ if(!hit && v.ar === ar) hit = v; });
+  if(!hit){ var bare = stripTash(ar); d.vocab.forEach(function(v){ if(!hit && stripTash(v.ar) === bare) hit = v; }); }
+  return hit;
+}
+/* genuine example sentences: textbook lines of the same unit containing the word,
+   deduplicated and never the bare word echoed back as its own example */
+function vExamples(u, ar){
+  function bare(s){ return stripTash(s).replace(/[.،؟!:]/g, "").replace(/\s+/g, " ").trim(); }
+  var d = UNIT_DATA[u], w = bare(ar), out = [], seen = {};
+  if(!d || w.length < 2) return out;
+  function scan(line){
+    if(out.length >= 2 || !line || !line.ar) return;
+    var b = bare(line.ar);
+    if(b.indexOf(w) >= 0 && b !== w && !seen[b]){ seen[b] = 1; out.push(line); }
+  }
+  d.conv.forEach(function(c){ c.lines.forEach(scan); });
+  d.speak.forEach(function(s){ scan(s.q); scan(s.a); });
+  return out;
+}
+
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
 function arNum(n){ return String(n).split("").map(function(d){ return AR_DIGITS[+d]; }).join(""); }
 function shuffle(a){ a = a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
@@ -157,6 +193,7 @@ var A = {
     closeModal(); clearInterval(speedTimer); S.sec = d.s; S.cls = false;
     if(d.s === "book"){ S.lesson = null; S.review = false; }
     if(d.s === "practice"){ if(!UNIT_DATA[S.pUnit]) S.pUnit = 1; initPracticeFor(S.pUnit, S.pLesson); }
+    if(d.s === "ref") S.libReview = false;
     window.scrollTo(0,0);
   },
   resume:function(){
@@ -265,6 +302,19 @@ var A = {
     if(S.lesson < d.lessons.length) return A.lesson({n:String(S.lesson+1)});
     return A.lesson({n:"r"});
   },
+  libTab:function(d){ S.libTab = d.t; },
+  libSt:function(d){ S.libSt = d.t; },
+  vSave:function(d){
+    var k = vKey(+d.u, d.ar);
+    if(vocabStore.words[k]) delete vocabStore.words[k];
+    else vocabStore.words[k] = {u:+d.u, l:+d.l || 0, st:"new", k:0, added:dayKey()};
+    saveVocabStore();
+  },
+  vStatus:function(d){
+    var w = vocabStore.words[d.k]; if(!w) return false;
+    w.st = w.st === "new" ? "learning" : w.st === "learning" ? "mastered" : "new";
+    saveVocabStore();
+  },
   "class":function(d){ S.classId=d.id; S.type="phrase"; S.practice=null; window.scrollTo(0,0); },
   classList:function(){ S.classId=null; S.practice=null; },
   type:function(d){ S.type=d.t; },
@@ -313,6 +363,15 @@ document.addEventListener("click", function(ev){
 document.addEventListener("change", function(ev){
   if(ev.target.id === "pUnitSel"){ A.pUnit({n:ev.target.value}); render(); }
   if(ev.target.id === "pLessonSel"){ A.pLesson({n:ev.target.value}); render(); }
+  if(ev.target.id === "libUSel"){ S.libU = +ev.target.value; S.libL = 0; render(); }
+  if(ev.target.id === "libLSel"){ S.libL = +ev.target.value; render(); }
+});
+document.addEventListener("input", function(ev){
+  if(ev.target.id === "libQ"){
+    S.libQ = ev.target.value; render();
+    var el = document.getElementById("libQ");
+    if(el){ el.focus(); var n = el.value.length; try{ el.setSelectionRange(n, n); }catch(e){} }
+  }
 });
 app.innerHTML = '<div class="empty">'+T("loading")+'</div>';
 loadBook().then(function(){ if(S.unit && !UNIT_DATA[S.unit]) S.unit = null; render(); })

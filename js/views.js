@@ -131,7 +131,7 @@ function readHTML(){
   return h+'<ul class="vlist">'+d.vocab.map(function(v,i){
     if(!S.review && v.lesson !== S.lesson) return "";
     var k = "v"+i, on = !!S.open[k];
-    return '<li><button class="vcard'+(on?" on":"")+'" data-a="line" data-k="'+k+'" aria-expanded="'+on+'"><span class="ar">'+esc(v.ar)+'</span>'+(on ? '<span class="tr">'+meaning(v)+'</span>'+wordForms(v) : '<span class="vhint" aria-hidden="true">'+ic("eye")+'</span>')+'</button></li>';
+    return '<li class="vli"><button class="vcard'+(on?" on":"")+'" data-a="line" data-k="'+k+'" aria-expanded="'+on+'"><span class="ar">'+esc(v.ar)+'</span>'+(on ? '<span class="tr">'+meaning(v)+'</span>'+wordForms(v) : '<span class="vhint" aria-hidden="true">'+ic("eye")+'</span>')+'</button>'+vStarBtn(S.unit, v.lesson, v.ar)+'</li>';
   }).join("")+'</ul>';
 }
 function practiceHTML(){
@@ -256,6 +256,61 @@ function practicePickHTML(){
   var ls = '<option value="0"'+(S.pLesson===0?" selected":"")+'>'+T("allLessons")+'</option>'+d.lessons.map(function(l,i){ return '<option value="'+(i+1)+'"'+(S.pLesson===i+1?" selected":"")+'>'+T("lesson")+' '+(l.num||i+1)+' · '+esc(l.ar)+'</option>'; }).join("");
   return '<div class="pick"><select id="pUnitSel" aria-label="'+T("unit")+'">'+us+'</select><select id="pLessonSel" aria-label="'+T("lesson")+'">'+ls+'</select></div>';
 }
+/* ---------- vocabulary library (Reference section) ---------- */
+/* example sentences block for a word's reveal, textbook content only */
+function vExHTML(u, v){
+  var exs = vExamples(u, v.ar);
+  if(!exs.length) return "";
+  return '<span class="vexs"><span class="count">'+T("examples")+'</span>'+exs.map(function(e){
+    return '<span class="vex"><span class="ar">'+esc(e.ar)+'</span><span class="tr">'+meaning(e)+'</span></span>'; }).join("")+'</span>';
+}
+function vStarBtn(u, l, ar){
+  var saved = vSaved(u, ar);
+  return '<button class="vstar'+(saved?" on":"")+'" data-a="vSave" data-u="'+u+'" data-l="'+l+'" data-ar="'+esc(ar)+'" aria-label="'+T(saved ? "unsaveWord" : "saveWord")+'" aria-pressed="'+saved+'">'+ic("bookmark")+'</button>';
+}
+function libCard(u, v, extra){
+  var k = "L"+u+"|"+v.ar, on = !!S.open[k];
+  return '<li class="vli"><button class="vcard'+(on?" on":"")+'" data-a="line" data-k="'+esc(k)+'" aria-expanded="'+on+'">'+
+    '<span class="ar">'+esc(v.ar)+'</span>'+
+    (on ? '<span class="tr">'+meaning(v)+'</span>'+wordForms(v)+'<span class="vref">'+T("unit")+' '+u+' · '+T("lesson")+' '+v.lesson+'</span>'+vExHTML(u, v) : '<span class="vhint" aria-hidden="true">'+ic("eye")+'</span>')+
+    '</button>'+vStarBtn(u, v.lesson, v.ar)+(extra || "")+'</li>';
+}
+function libMatch(v, q, qa, ql){
+  return stripTash(v.ar).indexOf(qa) >= 0 ||
+    (v.pl && stripTash(v.pl).indexOf(qa) >= 0) ||
+    (v.command && stripTash(v.command).indexOf(qa) >= 0) ||
+    v.en.toLowerCase().indexOf(ql) >= 0 || v.dv.indexOf(q) >= 0;
+}
+function libMatches(){
+  var q = S.libQ.trim(), qa = stripTash(q), ql = q.toLowerCase(), out = [];
+  Object.keys(UNIT_DATA).forEach(function(u){
+    if(S.libU && +u !== S.libU) return;
+    UNIT_DATA[u].vocab.forEach(function(v){
+      if(S.libU && S.libL && v.lesson !== S.libL) return;
+      if(q && !libMatch(v, q, qa, ql)) return;
+      out.push({u:+u, v:v});
+    });
+  });
+  return out;
+}
+function libHTML(){
+  var h = seg([["book",T("bookVocab")],["mine",T("myWords")]], S.libTab, "libTab")+
+    '<input id="libQ" class="search" type="search" placeholder="'+T("searchPh")+'" aria-label="'+T("searchPh")+'" value="'+esc(S.libQ)+'">';
+  if(S.libTab === "book"){
+    var us = '<option value="0">'+T("allUnits")+'</option>'+Object.keys(UNIT_DATA).map(function(k){
+      return '<option value="'+k+'"'+(+k===S.libU?" selected":"")+'>'+T("unit")+' '+k+' · '+esc(UNITS[k-1][0])+'</option>'; }).join("");
+    var d = UNIT_DATA[S.libU];
+    var ls = '<option value="0">'+T("allLessons")+'</option>'+(d ? d.lessons.map(function(l,i){
+      return '<option value="'+(i+1)+'"'+(S.libL===i+1?" selected":"")+'>'+T("lesson")+' '+(l.num||i+1)+'</option>'; }).join("") : '');
+    h += '<div class="pick"><select id="libUSel" aria-label="'+T("unit")+'">'+us+'</select><select id="libLSel" aria-label="'+T("lesson")+'"'+(d?'':' disabled')+'>'+ls+'</select></div>';
+    var list = libMatches();
+    h += '<p class="sub">'+list.length+' '+T("wordsN")+'</p>';
+    h += list.length ? '<ul class="vlist">'+list.map(function(x){ return libCard(x.u, x.v); }).join("")+'</ul>' : '<div class="empty">'+T("noResults")+'</div>';
+  } else {
+    h += '<div class="empty">'+T("noSaved")+'</div>';
+  }
+  return h+'<p class="sub" style="margin-top:14px">'+T("moreComing")+'</p>';
+}
 function placeholderHTML(key){
   return '<div class="card"><p style="margin:0 0 8px">'+T("comingSoon")+'</p><h2 style="margin:8px 0 4px;font-size:1rem">'+T("planned")+'</h2><p class="sub" style="margin:0">'+T(key)+'</p></div>';
 }
@@ -276,7 +331,7 @@ function render(){
     case "dash": app.innerHTML = dashHTML(); break;
     case "practice": app.innerHTML = practicePickHTML()+practiceHTML(); break;
     case "talk": app.innerHTML = placeholderHTML("talkItems"); break;
-    case "ref": app.innerHTML = placeholderHTML("refItems"); break;
+    case "ref": app.innerHTML = libHTML(); break;
     case "progress": app.innerHTML = progressHTML(); break;
     default:
       if(!S.unit) app.innerHTML = startHTML();

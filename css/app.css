@@ -170,6 +170,20 @@ html[data-ui="en"] .line.on>.ic.d,html[data-ui="en"] .nhead[aria-expanded="true"
 .vcard.on{background:var(--surface)}
 .vhint{color:var(--muted); opacity:.55; display:flex}
 .vhint .ic{width:16px; height:16px}
+
+/* vocabulary library */
+.search{width:100%; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:8px 16px; margin-bottom:12px; font-size:1rem}
+.vli{position:relative}
+.vstar{position:absolute; top:4px; inset-inline-start:4px; width:34px; height:34px; border:0; background:none; color:var(--muted); display:grid; place-items:center; padding:0; border-radius:50%}
+.vstar .ic{width:18px; height:18px}
+.vstar:hover{background:var(--surface)}
+.vstar.on{color:var(--primary)}
+.vstar.on .ic{fill:currentColor}
+.vref{display:block; font-size:.78rem; color:var(--muted); margin-top:4px}
+.vexs{display:block; margin-top:8px; border-top:1px dashed var(--line); padding-top:6px}
+.vexs>.count{font-size:.78rem}
+.vex{display:block; margin-top:4px}
+.vex .ar{font-size:1.25rem; display:block}
 .vcard>.ar{font-size:1.75rem; color:var(--primary); line-height:1.8}
 .vcard>.ic{display:none}
 .vcard .tr{align-items:center; text-align:center}
