@@ -25,7 +25,11 @@ var ICONS = {
   ref:'<path d="M4 5h6a3 3 0 013 3v12a2 2 0 00-2-2H4zM20 5h-6a3 3 0 00-3 3v12a2 2 0 012-2h7z"/>',
   progress:'<path d="M4 19h16M7 16V9M12 16V5M17 16v-4"/>',
   user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/>',
-  help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 115 0c0 2-2.5 2-2.5 4M12 17v.01"/>'
+  help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 115 0c0 2-2.5 2-2.5 4M12 17v.01"/>',
+  cardsI:'<rect x="8" y="3" width="13" height="15" rx="2"/><path d="M16 21H5a2 2 0 01-2-2V8"/>',
+  matchI:'<path d="M10.5 13.5a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1.2 1.2"/><path d="M13.5 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1.2-1.2"/>',
+  arrangeI:'<path d="M4 7h16M4 12h11M4 17h6"/>',
+  speedI:'<path d="M13 2L5 13.5h6L11 22l8-11.5h-6z"/>'
 };
 var DIR_ICONS = {back:1, chev:1, fwd:1};
 function ic(n){ return '<svg class="ic'+(DIR_ICONS[n]?" d":"")+'" viewBox="0 0 24 24" aria-hidden="true">'+ICONS[n]+'</svg>'; }
@@ -90,8 +94,31 @@ function markDone(sec){
   var k = S.unit+"-"+S.lesson; done[k] = done[k] || {};
   if(done[k][sec]) return;
   done[k][sec] = 1; try{ localStorage.setItem("aby-done", JSON.stringify(done)); }catch(e){}
+  recordDay();
 }
 function isDone(sec){ var d = done[S.unit+"-"+S.lesson]; return !!(d && d[sec]); }
+
+/* ---------- daily activity + recent lessons (new keys; existing keys untouched) ---------- */
+/* aby-days holds the dates on which a lesson section was completed, recorded from first use on;
+   nothing is back-filled, so the streak only ever reflects real recorded activity */
+var days = []; try{ days = JSON.parse(localStorage.getItem("aby-days") || "[]") || []; }catch(e){}
+function dayKey(t){ var d = t || new Date(); return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
+function recordDay(){
+  var k = dayKey();
+  if(days.indexOf(k) < 0){ days.push(k); if(days.length > 400) days = days.slice(-400); try{ localStorage.setItem("aby-days", JSON.stringify(days)); }catch(e){} }
+}
+function streak(){
+  var n = 0, t = new Date();
+  if(days.indexOf(dayKey(t)) < 0) t.setDate(t.getDate()-1); /* today only joins the streak once something is done */
+  while(days.indexOf(dayKey(t)) >= 0){ n++; t.setDate(t.getDate()-1); }
+  return n;
+}
+var recent = []; try{ recent = JSON.parse(localStorage.getItem("aby-recent") || "[]") || []; }catch(e){}
+function recordRecent(u, l){
+  recent = recent.filter(function(r){ return !(r.u === u && r.l === l); });
+  recent.unshift({u:u, l:l}); recent = recent.slice(0,5);
+  try{ localStorage.setItem("aby-recent", JSON.stringify(recent)); }catch(e){}
+}
 
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
 function arNum(n){ return String(n).split("").map(function(d){ return AR_DIGITS[+d]; }).join(""); }
@@ -138,6 +165,7 @@ var A = {
   lesson:function(d){
     S.review = d.n==="r"; S.lesson = S.review ? 1 : +d.n; S.dlg=0; S.tab="read"; S.readTab="conv"; S.scope="lesson"; S.open={}; S.sp=0; S.spShown=false; S.last[S.unit]=S.review ? "r" : S.lesson;
     try{ localStorage.setItem("aby-last", JSON.stringify(S.last)); }catch(e){}
+    recordRecent(S.unit, S.review ? "r" : S.lesson);
     window.scrollTo(0,0);
   },
   tab:function(d){
@@ -204,6 +232,17 @@ var A = {
   arrBack:function(d){ arr.picked = arr.picked.filter(function(x){ return x !== +d.id; }); },
   arrReset:function(){ arr.picked = []; },
   arrNext:function(){ arr.i = (arr.i+1) % arr.list.length; loadArr(); },
+  dashStart:function(){ S.sec="book"; S.cls=false; return A.unit({n:"1"}); },
+  dashPractice:function(d){
+    closeModal(); clearInterval(speedTimer); S.sec="practice"; S.cls=false; S.pracTab=d.t;
+    if(UNIT_DATA[S.unit]) S.pUnit = S.unit; else if(!UNIT_DATA[S.pUnit]) S.pUnit = 1;
+    initPracticeFor(S.pUnit, 0); window.scrollTo(0,0);
+  },
+  goRecent:function(d){
+    var u = +d.u; if(!UNIT_DATA[u]) return;
+    S.sec="book"; S.cls=false; S.unit=u; try{ localStorage.setItem("aby-unit", String(u)); }catch(e){}
+    return A.lesson({n:d.l});
+  },
   "class":function(d){ S.classId=d.id; S.type="phrase"; S.practice=null; window.scrollTo(0,0); },
   classList:function(){ S.classId=null; S.practice=null; },
   type:function(d){ S.type=d.t; },

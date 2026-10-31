@@ -175,16 +175,51 @@ function classHTML(){
     (classItems(c.id).length ? '<button class="btn ghost" data-a="practice" data-t="fc">'+T("cards")+'</button><button class="btn ghost" data-a="practice" data-t="quiz">'+T("quiz")+'</button>' : "")+'</div>'+
     (S.teacher ? '<div class="row" style="margin-top:18px"><button class="btn ghost small" data-a="classRename">'+T("rename")+'</button><button class="btn danger small" data-a="classDel">'+T("delClass")+'</button></div>' : "");
 }
+function lessonLabel(u, l){
+  var d = UNIT_DATA[u];
+  return l === "r" ? T("reviewUnit") : T("lesson")+' '+(d && d.lessons[l-1] ? (d.lessons[l-1].num || l) : l);
+}
+function dashStats(){
+  var st = {unitsReady:0, unitsDone:0, lessonsTotal:0, lessonsDone:0, words:0};
+  Object.keys(UNIT_DATA).forEach(function(k){
+    var dd = UNIT_DATA[k], n = 0;
+    dd.lessons.forEach(function(_,i){ var dk = done[k+"-"+(i+1)]; if(dk && dk.read && dk.practice && dk.speak && dk.help) n++; });
+    st.unitsReady++; st.lessonsTotal += dd.lessons.length; st.lessonsDone += n; st.words += dd.vocab.length;
+    if(n === dd.lessons.length) st.unitsDone++;
+  });
+  st.pct = st.lessonsTotal ? Math.round(st.lessonsDone / st.lessonsTotal * 100) : 0;
+  return st;
+}
 function dashHTML(){
-  var u = S.unit, l = S.last[u], d = u && UNIT_DATA[u];
-  var ready = Object.keys(UNIT_DATA).length, lessonsTotal = 0, lessonsDone = 0, words = 0;
-  Object.keys(UNIT_DATA).forEach(function(k){ var dd = UNIT_DATA[k]; lessonsTotal += dd.lessons.length; words += dd.vocab.length;
-    dd.lessons.forEach(function(_,i){ var dk = done[k+"-"+(i+1)]; if(dk && dk.read && dk.practice && dk.speak && dk.help) lessonsDone++; }); });
-  var cont = d && l ? '<button class="ccard" data-a="resume"><span class="ck">'+T("continueL")+'</span><span class="cv ar">'+UNITS[u-1][0]+'</span><span class="cs">'+(l==="r" ? T("reviewUnit") : T("lesson")+' '+(d.lessons[l-1] ? (d.lessons[l-1].num || l) : l))+'</span>'+ic("chev")+'</button>'
-                      : '<button class="ccard" data-a="sec" data-s="book"><span class="ck">'+T("startL")+'</span><span class="cv ar">العربية بين يديك</span><span class="cs">'+T("book1")+'</span>'+ic("chev")+'</button>';
-  return '<h1 class="wh2">'+T("welcome")+'</h1>'+cont+
-    '<h2>'+T("overview")+'</h2><div class="stats"><div class="stat"><b>'+ready+'</b><span>'+T("unitsN")+'</span></div><div class="stat"><b>'+lessonsDone+' / '+lessonsTotal+'</b><span>'+T("lessonsDone")+'</span></div><div class="stat"><b>'+words+'</b><span>'+T("wordsAvail")+'</span></div></div>'+
-    '<div class="row" style="margin-top:14px"><button class="btn ghost" data-a="sec" data-s="book">'+T("openBook")+'</button><button class="btn ghost" data-a="sec" data-s="practice">'+T("quickPractice")+'</button></div>'+
+  var st = dashStats(), u = S.unit, l = S.last[u], d = u && UNIT_DATA[u];
+  var started = st.lessonsDone > 0 || !!(d && l);
+  /* A. welcome */
+  var h = '<div class="dhead"><h1 class="wh2">'+T(started ? "welcomeBack" : "welcome")+'</h1><p class="dsub">'+T("dashSub")+'</p></div>';
+  /* B. continue learning (or a starting recommendation) */
+  h += d && l
+    ? '<button class="ccard" data-a="resume"><span class="cbody"><span class="ck">'+T("continueL")+'</span><span class="cv ar">'+UNITS[u-1][0]+'</span><span class="cs">'+lessonLabel(u, l)+'</span></span><span class="cgo">'+ic("chev")+'</span></button>'
+    : '<button class="ccard" data-a="dashStart"><span class="cbody"><span class="ck">'+T("startL")+'</span><span class="cv ar">'+UNITS[0][0]+'</span><span class="cs">'+T("startHint")+' · '+esc(unitSub(0))+'</span></span><span class="cgo">'+ic("chev")+'</span></button>';
+  /* C. learning overview — every number is computed from UNIT_DATA and aby-done */
+  h += '<h2>'+T("overview")+'</h2><div class="stats">'+
+    '<div class="stat"><b>'+st.unitsDone+' / '+st.unitsReady+'</b><span>'+T("unitsDone")+'</span></div>'+
+    '<div class="stat"><b>'+st.lessonsDone+' / '+st.lessonsTotal+'</b><span>'+T("lessonsDone")+'</span></div>'+
+    '<div class="stat"><b>'+st.words+'</b><span>'+T("wordsAvail")+'</span></div>'+
+    '<div class="stat"><b>'+st.pct+'%</b><span>'+T("overallProgress")+'</span></div></div>'+
+    '<div class="pbar dpbar"><i style="width:'+st.pct+'%"></i></div>';
+  /* D. daily activity — streak counts only days recorded in aby-days */
+  var sk = streak(), today = days.indexOf(dayKey()) >= 0;
+  h += '<h2>'+T("dailyActivity")+'</h2><div class="daily card">'+
+    '<div class="dstreak"><b>'+sk+'</b><span>'+T("streakN")+'</span></div>'+
+    '<div class="dtoday"><span class="drow"><span class="dot'+(today ? " on" : "")+'"></span><span>'+T(today ? "doneToday" : "notToday")+'</span></span><span class="sub2">'+T("dailyGoalHint")+'</span></div></div>';
+  /* E. today's practice — shortcuts into the existing engines */
+  h += '<h2>'+T("todaysPractice")+'</h2><div class="pgrid">'+[["fc","cards","cardsI"],["quiz","quiz","help"],["match","match","matchI"],["arr","arrange","arrangeI"],["speed","speed","speedI"]].map(function(p){
+    return '<button class="pbtn" data-a="dashPractice" data-t="'+p[0]+'">'+ic(p[2])+'<span>'+T(p[1])+'</span></button>'; }).join("")+'</div>';
+  /* F. recent lessons (recorded in aby-recent from first use on) */
+  var rec = recent.filter(function(r){ return UNIT_DATA[r.u]; });
+  if(rec.length)
+    h += '<h2>'+T("recent")+'</h2><div class="rlist">'+rec.map(function(r){
+      return '<button class="rcard" data-a="goRecent" data-u="'+r.u+'" data-l="'+r.l+'"><span class="rk ar">'+arNum(r.u)+'</span><span class="ut"><span class="un ar">'+UNITS[r.u-1][0]+'</span><span class="ud">'+lessonLabel(r.u, r.l)+'</span></span><span class="uend">'+ic("chev")+'</span></button>'; }).join("")+'</div>';
+  return h+'<div class="row" style="margin-top:14px"><button class="btn ghost" data-a="sec" data-s="book">'+T("openBook")+'</button><button class="btn ghost" data-a="sec" data-s="practice">'+T("quickPractice")+'</button></div>'+
     '<p class="sub" style="margin-top:16px">'+T("savedOnDevice")+'</p>';
 }
 function practicePickHTML(){
