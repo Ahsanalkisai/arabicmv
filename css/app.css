@@ -6,24 +6,24 @@
   font-weight:normal; font-style:normal; font-display:swap;
 }
 :root{
-  --bg:#f8fafb; --surface:#edf2f4; --card:#ffffff; --ink:#1c2733; --muted:#5e6b78;
-  --primary:#0e8a5f; --on-primary:#ffffff; --accent:#e2eef9; --on-accent:#1a6fae; --line:#e2e8ec;
-  --good:#1e8f5a; --good-bg:#e4f5ec; --bad:#c6403a; --bad-bg:#fbe6e4; --shadow:0 1px 2px rgba(16,24,40,.04), 0 3px 10px rgba(16,24,40,.06);
+  --bg:#ffffff; --surface:#f1edf9; --card:#ffffff; --ink:#1d1a2b; --muted:#6a6680;
+  --primary:#4b2a8a; --on-primary:#ffffff; --accent:#e9e1f7; --on-accent:#4b2a8a; --line:#e4e0ee;
+  --good:#1e8f5a; --good-bg:#e4f5ec; --bad:#c6403a; --bad-bg:#fbe6e4; --shadow:0 1px 2px rgba(75,42,138,.05), 0 3px 10px rgba(75,42,138,.06);
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0f1519; --surface:#1b242b; --card:#151d23; --ink:#e9eef2; --muted:#9aa7b2;
-    --primary:#4ecb98; --on-primary:#07231a; --accent:#17334a; --on-accent:#9ccdef; --line:#263139;
-    --good:#5fd39a; --good-bg:#16372a; --bad:#f08a80; --bad-bg:#44262a; --shadow:0 1px 2px rgba(0,0,0,.35);
+    --bg:#141220; --surface:#221e33; --card:#1b1829; --ink:#efecf7; --muted:#a6a1bd;
+    --primary:#b79cf2; --on-primary:#1b1529; --accent:#2f2847; --on-accent:#d9ccf6; --line:#2e2944;
+    --good:#5fd39a; --good-bg:#1c3a2c; --bad:#f08a80; --bad-bg:#44262a; --shadow:0 1px 2px rgba(0,0,0,.35);
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0f1519; --surface:#1b242b; --card:#151d23; --ink:#e9eef2; --muted:#9aa7b2;
-  --primary:#4ecb98; --on-primary:#07231a; --accent:#17334a; --on-accent:#9ccdef; --line:#263139;
-  --good:#5fd39a; --good-bg:#16372a; --bad:#f08a80; --bad-bg:#44262a; --shadow:0 1px 2px rgba(0,0,0,.35);
+  --bg:#141220; --surface:#221e33; --card:#1b1829; --ink:#efecf7; --muted:#a6a1bd;
+  --primary:#b79cf2; --on-primary:#1b1529; --accent:#2f2847; --on-accent:#d9ccf6; --line:#2e2944;
+  --good:#5fd39a; --good-bg:#1c3a2c; --bad:#f08a80; --bad-bg:#44262a; --shadow:0 1px 2px rgba(0,0,0,.35);
 }
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -259,7 +259,7 @@ html[data-ui="en"] .line.on>.ic.d,html[data-ui="en"] .nhead[aria-expanded="true"
 .chip{display:flex; justify-content:space-between; align-items:center; background:var(--card); border:0; border-radius:14px; padding:8px 14px; box-shadow:var(--shadow); text-align:start}
 
 /* bottom nav */
-.nav{position:fixed; bottom:0; left:0; right:0; z-index:5; display:grid; grid-template-columns:repeat(6,1fr); gap:4px; background:var(--card); border-radius:22px 22px 0 0; box-shadow:0 -4px 18px rgba(16,24,40,.08); padding:8px 8px calc(6px + env(safe-area-inset-bottom,0px))}
+.nav{position:fixed; bottom:0; left:0; right:0; z-index:5; display:grid; grid-template-columns:repeat(6,1fr); gap:4px; background:var(--card); border-radius:22px 22px 0 0; box-shadow:0 -4px 18px rgba(75,42,138,.08); padding:8px 8px calc(6px + env(safe-area-inset-bottom,0px))}
 .nav button{display:flex; flex-direction:column; align-items:center; gap:0; background:none; border:0; border-radius:12px; padding:3px 0 2px; font-size:.78rem; line-height:1.5; color:var(--muted); white-space:nowrap; min-width:0}
 .nav button span{max-width:100%; overflow:hidden; text-overflow:ellipsis}
 .nav button .ic{width:20px; height:20px; padding:6px; box-sizing:content-box; border-radius:50%}
