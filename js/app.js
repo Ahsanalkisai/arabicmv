@@ -97,6 +97,17 @@ function markDone(sec){
   recordDay();
 }
 function isDone(sec){ var d = done[S.unit+"-"+S.lesson]; return !!(d && d[sec]); }
+/* the read section is done after revealing 5 translations in the lesson
+   (or every one of them, in the rare lesson with fewer than 5) */
+function checkReadDone(){
+  if(!S.unit || !S.lesson || S.cls) return;
+  var d = UNIT_DATA[S.unit]; if(!d) return;
+  var n = 0, k; for(k in S.open){ if(S.open[k] && (k.charAt(0)==="c" || k.charAt(0)==="v")) n++; }
+  var total = 0;
+  d.conv.forEach(function(c){ if(S.review || c.lesson === S.lesson) total += c.lines.length; });
+  d.vocab.forEach(function(v){ if(S.review || v.lesson === S.lesson) total++; });
+  if(total && n >= Math.min(5, total)) markDone("read");
+}
 
 /* ---------- daily activity + recent lessons (new keys; existing keys untouched) ---------- */
 /* aby-days holds the dates on which a lesson section was completed, recorded from first use on;
@@ -177,7 +188,7 @@ var A = {
   },
   clsOpen:function(){ closeModal(); S.cls=true; S.classId=null; S.practice=null; window.scrollTo(0,0); },
   clsBack:function(){ if(S.practice) S.practice=null; else if(S.classId) S.classId=null; else S.cls=false; },
-  readTab:function(d){ S.readTab=d.t; clearInterval(speedTimer); if(d.t==="vocab") markDone("read"); if(d.t==="turn") initPractice(); },
+  readTab:function(d){ S.readTab=d.t; clearInterval(speedTimer); if(d.t==="turn") initPractice(); },
   turnBack:function(){ clearInterval(speedTimer); S.readTab="conv"; window.scrollTo(0,0); },
   dlgNext:function(){ S.dlg++; },
   dlgPrev:function(){ S.dlg--; },
@@ -194,6 +205,8 @@ var A = {
     S.open[d.k]=!S.open[d.k];
     /* grammar counts as studied once a note is actually opened, not on tab visit */
     if(S.open[d.k] && d.k.charAt(0)==="g" && S.tab==="help") markDone("help");
+    /* reading counts once enough dialogue lines or words have been revealed */
+    if(S.open[d.k] && S.tab==="read" && (d.k.charAt(0)==="c" || d.k.charAt(0)==="v")) checkReadDone();
   },
   spShow:function(){ S.spShown=true; if(S.sp===spCount()-1) markDone("speak"); },
   spNext:function(){ S.sp=(S.sp+1)%spCount(); S.spShown=false; },

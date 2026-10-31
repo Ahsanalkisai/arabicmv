@@ -114,13 +114,15 @@ button:disabled{cursor:default}
 .lk{width:40px; height:40px; flex:none; border-radius:12px; background:var(--surface); color:var(--primary); display:grid; place-items:center; font-size:1.1rem; font-weight:700}
 .lcard .un{font-size:1.5rem; font-weight:400}
 
-/* segmented control */
-.seg{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px}
+/* segmented control: one row, horizontal swipe on narrow screens */
+.seg{display:flex; flex-wrap:nowrap; gap:8px; margin-bottom:12px; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:2px}
+.seg::-webkit-scrollbar{display:none}
+.seg button{flex:none}
 .seg button{background:var(--card); border:1px solid var(--line); border-radius:999px; padding:4px 18px; color:var(--muted); white-space:nowrap; font-size:1rem}
 .seg button.on{background:var(--accent); border-color:transparent; color:var(--primary); font-weight:700}
 .scope{display:flex; justify-content:flex-end; margin:-4px 0 8px}
 .segrow{display:flex; align-items:flex-start; gap:8px; margin-bottom:12px}
-.segrow .seg{flex:1; margin-bottom:0}
+.segrow .seg{flex:1; min-width:0; margin-bottom:0}
 .fbtn{flex:none; width:38px; height:36px; display:grid; place-items:center; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:0; color:var(--muted)}
 .fbtn .ic{width:20px; height:20px}
 .fbtn.on{background:var(--accent); border-color:var(--primary); color:var(--primary)}
@@ -166,6 +168,8 @@ html[data-ui="en"] .line.on>.ic.d,html[data-ui="en"] .nhead[aria-expanded="true"
 .vlist li{display:flex}
 .vcard{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; width:100%; min-height:84px; text-align:center; background:var(--card); border:0; border-radius:16px; padding:10px 8px; box-shadow:var(--shadow)}
 .vcard.on{background:var(--surface)}
+.vhint{color:var(--muted); opacity:.55; display:flex}
+.vhint .ic{width:16px; height:16px}
 .vcard>.ar{font-size:1.75rem; color:var(--primary); line-height:1.8}
 .vcard>.ic{display:none}
 .vcard .tr{align-items:center; text-align:center}
@@ -180,10 +184,11 @@ html[data-ui="en"] .line.on>.ic.d,html[data-ui="en"] .nhead[aria-expanded="true"
 .nhead{display:flex; justify-content:space-between; align-items:center; width:100%; background:none; border:0; padding:10px 14px; font-weight:700; text-align:start}
 .nbody{padding:0 14px 10px}
 .nbody p{margin:0 0 6px; font-size:1rem; color:var(--muted)}
-.ex{display:grid; grid-template-columns:auto 1fr; gap:12px; align-items:center; border-top:1px solid var(--line); padding:6px 0}
+/* grammar examples: Arabic on its own line, translation inset beneath it */
+.ex{border-top:1px solid var(--line); padding:8px 0}
 .badge{background:var(--accent); color:var(--on-accent)}
-.ex .ar{font-size:1.4rem}
-.ex .tr{margin:0}
+.ex .ar{font-size:1.4rem; display:block}
+.ex .tr{margin:2px 0 0; padding-inline-start:10px; border-inline-start:2px solid var(--accent)}
 .tips p{margin:0 0 6px; font-size:1rem}
 .tips p:last-child{margin:0}
 

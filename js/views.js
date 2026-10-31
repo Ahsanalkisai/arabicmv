@@ -1,7 +1,8 @@
 /* ArabicMV — screens. Each function returns HTML for one view. */
 /* ---------- views ---------- */
 function SECTIONS(){ return [["dash",T("secDash"),"dash",T("navDash")],["book",T("secBook"),"read",T("navBook")],["practice",T("secPractice"),"practice",T("navPractice")],["talk",T("secTalk"),"speak",T("navTalk")],["ref",T("secRef"),"ref",T("navRef")],["progress",T("secProgress"),"progress",T("navProgress")]]; }
-function LESSON_TABS(){ return [["read",T("read")],["practice",T("doo")],["speak",T("speak")],["help",T("help")]]; }
+/* the last tab shows grammar; its storage key stays "help" for saved progress */
+function LESSON_TABS(){ return [["read",T("read")],["practice",T("doo")],["speak",T("speak")],["help",T("grammar")]]; }
 function TYPESL(){ return TYPES.map(function(t){ return [t[0], T(t[0])]; }); }
 function bar(back, small, title, isAr){
   return '<div class="hdr">'+(back ? '<button class="ib" data-a="'+back+'" aria-label="'+T("back")+'">'+ic("back")+'</button>' : '<span class="ib"></span>')+'<div class="hc">'+
@@ -44,7 +45,7 @@ function flowHTML(){
   function btn(action, extra, label){ return '<button class="flow" data-a="'+action+'"'+extra+'><span>'+label+'</span>'+ic("chev")+'</button>'; }
   if(S.tab === "read") return btn("tab", ' data-t="practice"', T("next")+': '+T("doo"));
   if(S.tab === "practice") return btn("tab", ' data-t="speak"', T("next")+': '+T("speak"));
-  if(S.tab === "speak") return btn("tab", ' data-t="help"', T("next")+': '+T("help"));
+  if(S.tab === "speak") return btn("tab", ' data-t="help"', T("next")+': '+T("grammar"));
   if(S.review) return btn("lessons", '', T("allLessons"));
   return btn("nextLesson", '', S.lesson < d.lessons.length ? T("nextLessonL") : T("reviewUnit"));
 }
@@ -130,7 +131,7 @@ function readHTML(){
   return h+'<ul class="vlist">'+d.vocab.map(function(v,i){
     if(!S.review && v.lesson !== S.lesson) return "";
     var k = "v"+i, on = !!S.open[k];
-    return '<li><button class="vcard'+(on?" on":"")+'" data-a="line" data-k="'+k+'" aria-expanded="'+on+'"><span class="ar">'+esc(v.ar)+'</span>'+(on ? '<span class="tr">'+meaning(v)+'</span>'+wordForms(v) : '')+'</button></li>';
+    return '<li><button class="vcard'+(on?" on":"")+'" data-a="line" data-k="'+k+'" aria-expanded="'+on+'"><span class="ar">'+esc(v.ar)+'</span>'+(on ? '<span class="tr">'+meaning(v)+'</span>'+wordForms(v) : '<span class="vhint" aria-hidden="true">'+ic("eye")+'</span>')+'</button></li>';
   }).join("")+'</ul>';
 }
 function practiceHTML(){
