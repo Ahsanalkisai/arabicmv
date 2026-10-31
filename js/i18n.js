@@ -69,6 +69,7 @@ var L = {
   dailyGoalHint:["Goal: one lesson section a day","އަމާޒު: ދުވާލަކު ފިލާވަޅެއްގެ އެއް ބައި"],
   todaysPractice:["Today's practice","މިއަދުގެ ފަރިތަކުރުން"],
   recent:["Recent lessons","ފަހުން ކިޔެވި ފިލާވަޅުތައް"],
+  nextLessonL:["Next lesson","ދެން އޮތް ފިލާވަޅު"],
   comingSoon:["This section is being built. It will arrive in a later stage.","މި ބައި ތައްޔާރުކުރަމުންދަނީ. ފަހުގެ މަރުޙަލާއެއްގައި އަންނާނެ."],
   planned:["Planned content","ރާވާފައިވާ ބައިތައް"],
   talkItems:["Guided conversations, real-life situations (airport, university, hospital, shopping) and speaking practice.","ގައިޑެޑް މުޙާވަރާތަކާއި، ޙަޤީޤީ ޙާލަތްތަކާއި (އެއާޕޯޓު، ޔުނިވަރސިޓީ، ހޮސްޕިޓަލް، ބާޒާރު)، ވާހަކަދެއްކުމުގެ ފަރިތަކުރުން."],

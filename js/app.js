@@ -173,7 +173,6 @@ var A = {
     if(d.t==="read" && S.readTab==="turn") S.readTab="conv";
     if(d.t==="practice") initPractice();
     if(d.t==="speak"){ S.sp=0; S.spShown=false; }
-    if(d.t==="help") markDone("help");
     window.scrollTo(0,0);
   },
   clsOpen:function(){ closeModal(); S.cls=true; S.classId=null; S.practice=null; window.scrollTo(0,0); },
@@ -191,7 +190,11 @@ var A = {
   },
   scopeSet:function(d){ S.scope = d.v; closeModal(); initPractice(); },
   spTab:function(d){ S.spTab=d.t; S.sp=0; S.spShown=false; },
-  line:function(d){ S.open[d.k]=!S.open[d.k]; },
+  line:function(d){
+    S.open[d.k]=!S.open[d.k];
+    /* grammar counts as studied once a note is actually opened, not on tab visit */
+    if(S.open[d.k] && d.k.charAt(0)==="g" && S.tab==="help") markDone("help");
+  },
   spShow:function(){ S.spShown=true; if(S.sp===spCount()-1) markDone("speak"); },
   spNext:function(){ S.sp=(S.sp+1)%spCount(); S.spShown=false; },
   spPrev:function(){ var n=spCount(); S.sp=(S.sp-1+n)%n; S.spShown=false; },
@@ -242,6 +245,12 @@ var A = {
     var u = +d.u; if(!UNIT_DATA[u]) return;
     S.sec="book"; S.cls=false; S.unit=u; try{ localStorage.setItem("aby-unit", String(u)); }catch(e){}
     return A.lesson({n:d.l});
+  },
+  nextLesson:function(){
+    var d = UNIT_DATA[S.unit]; if(!d) return;
+    if(S.review) return A.lessons();
+    if(S.lesson < d.lessons.length) return A.lesson({n:String(S.lesson+1)});
+    return A.lesson({n:"r"});
   },
   "class":function(d){ S.classId=d.id; S.type="phrase"; S.practice=null; window.scrollTo(0,0); },
   classList:function(){ S.classId=null; S.practice=null; },

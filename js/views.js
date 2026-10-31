@@ -18,7 +18,7 @@ function renderChrome(){
   }
   else if(S.sec === "book" && S.unit && !S.lesson) h = bar("units", "", T("lessons"), false);
   else if(inLessonView()) h = '<div class="hdr"><button class="ib" data-a="'+(S.tab==="read" && S.readTab==="turn" ? "turnBack" : "lessons")+'" aria-label="'+T("back")+'">'+ic("back")+'</button>'+
-    '<div class="hc"><div class="hl" dir="rtl">الوحدة ('+arNum(S.unit)+') - '+UNITS[S.unit-1][0]+' - '+(S.review ? "مراجعة" : "الدرس ("+arNum(UNIT_DATA[S.unit].lessons[S.lesson-1].num || S.lesson)+")")+'</div></div>'+
+    '<div class="hc"><div class="hl" dir="rtl">الوحدة ('+arNum(S.unit)+')<span class="hmid"> - '+UNITS[S.unit-1][0]+'</span> - '+(S.review ? "مراجعة" : "الدرس ("+arNum(UNIT_DATA[S.unit].lessons[S.lesson-1].num || S.lesson)+")")+'</div></div>'+
     '<button class="ib" data-a="menu" aria-label="'+T("menu")+'">'+ic("more")+'</button></div>';
   else { var sec = SECTIONS().filter(function(x){ return x[0] === S.sec; })[0]; h = bar("", "", sec ? sec[1] : "", false); }
   document.getElementById("hdr").innerHTML = h;
@@ -33,7 +33,20 @@ function renderChrome(){
     '<div class="sfoot"><span class="avatar">'+ic("user")+'</span><span>'+T("guest")+'</span></div>';
 }
 function lessonTabs(){
-  return '<div class="ltabs">'+LESSON_TABS().map(function(t){ return '<button class="'+(S.tab===t[0]?"on":"")+'" data-a="tab" data-t="'+t[0]+'">'+t[1]+'</button>'; }).join("")+'</div>';
+  return '<div class="ltabs">'+LESSON_TABS().map(function(t){
+    var dn = !S.review && isDone(t[0]);
+    return '<button class="'+(S.tab===t[0]?"on":"")+'" data-a="tab" data-t="'+t[0]+'">'+t[1]+(dn ? '<span class="td" aria-hidden="true"></span>' : '')+'</button>';
+  }).join("")+'</div>';
+}
+/* guided flow: one quiet call-to-action at the end of each lesson tab */
+function flowHTML(){
+  var d = UNIT_DATA[S.unit];
+  function btn(action, extra, label){ return '<button class="flow" data-a="'+action+'"'+extra+'><span>'+label+'</span>'+ic("chev")+'</button>'; }
+  if(S.tab === "read") return btn("tab", ' data-t="practice"', T("next")+': '+T("doo"));
+  if(S.tab === "practice") return btn("tab", ' data-t="speak"', T("next")+': '+T("speak"));
+  if(S.tab === "speak") return btn("tab", ' data-t="help"', T("next")+': '+T("help"));
+  if(S.review) return btn("lessons", '', T("allLessons"));
+  return btn("nextLesson", '', S.lesson < d.lessons.length ? T("nextLessonL") : T("reviewUnit"));
 }
 function welcomeHTML(){
   function opt(m, lab, sub){ return '<button class="wopt" data-a="setMode" data-m="'+m+'"><span class="wl">'+lab+'</span><span class="ws">'+sub+'</span></button>'; }
@@ -267,7 +280,7 @@ function render(){
     default:
       if(!S.unit) app.innerHTML = startHTML();
       else if(!S.lesson) app.innerHTML = lessonsHTML();
-      else app.innerHTML = lessonTabs()+(S.tab === "practice" ? practiceHTML() : S.tab === "speak" ? speakHTML() : S.tab === "help" ? helpHTML() : readHTML());
+      else app.innerHTML = lessonTabs()+(S.tab === "practice" ? practiceHTML() : S.tab === "speak" ? speakHTML() : S.tab === "help" ? helpHTML() : readHTML())+flowHTML();
   }
 }
 function menuModal(){

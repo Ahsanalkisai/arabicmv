@@ -57,6 +57,8 @@ button:disabled{cursor:default}
    metrics size the line box, so stacked tashkeel is never cut off */
 .ht.ar{font-size:1.45rem; line-height:normal}
 .hl{font-family:"Amiri","Traditional Arabic","Scheherazade New",serif; font-size:1.15rem; color:var(--ink); line-height:normal; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; direction:rtl; unicode-bidi:isolate}
+/* narrow screens: keep unit and lesson numbers visible, drop the long unit title */
+@media (max-width:540px){ .hl .hmid{display:none} }
 .hc.one{display:flex; align-items:baseline; justify-content:space-between; gap:6px}
 .hc.one .hs{font-size:1rem; color:var(--primary); white-space:nowrap}
 .hc.one .ht{flex:1; font-size:1.35rem; text-align:center; color:var(--ink)}
@@ -291,8 +293,13 @@ html[data-ui="en"] .line.on>.ic.d,html[data-ui="en"] .nhead[aria-expanded="true"
 
 /* lesson sub-tabs (Read / Do / Speak / Help) */
 .ltabs{display:grid; grid-template-columns:repeat(4,1fr); gap:4px; background:var(--surface); border-radius:12px; padding:3px; margin:2px 0 12px}
-.ltabs button{background:none; border:0; border-radius:9px; padding:3px 4px; color:var(--muted); font-size:.95rem; white-space:nowrap}
+.ltabs button{position:relative; background:none; border:0; border-radius:9px; padding:3px 4px; color:var(--muted); font-size:.95rem; white-space:nowrap}
 .ltabs button.on{background:var(--card); color:var(--primary); font-weight:700; box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.ltabs .td{position:absolute; top:4px; inset-inline-end:5px; width:6px; height:6px; border-radius:50%; background:var(--good)}
+/* guided-flow footer at the end of each lesson tab */
+.flow{display:flex; justify-content:space-between; align-items:center; gap:10px; width:100%; margin-top:18px; background:var(--surface); color:var(--primary); border:0; border-radius:14px; padding:10px 14px; font-weight:600; text-align:start}
+.flow:hover{background:var(--accent)}
+.flow .ic{color:var(--primary)}
 
 /* dashboard */
 .wh2{font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; font-size:1.5rem; margin:0; color:var(--ink); direction:ltr; text-align:start}
