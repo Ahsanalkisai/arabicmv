@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ArabicMV Audio Prototype</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%234b2a8a' d='M3 9v6h4l5 4V5L7 9H3zm13.5 3a4.5 4.5 0 00-2.5-4v8a4.5 4.5 0 002.5-4z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Standalone prototype — intentionally not linked to css/app.css so the main
+   app stays untouched. Tokens copied from the ArabicMV purple palette. */
+:root{
+  --primary:#4b2a8a; --bg:#ffffff; --surface:#f1edf9; --accent:#e9e1f7;
+  --line:#e4e0ee; --ink:#1d1a2b; --muted:#6a6680; --good:#1e8f5a; --bad:#b3261e;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --primary:#b79cf2; --bg:#141220; --surface:#221e33; --accent:#2f2847;
+    --line:#332d4a; --ink:#efecf7; --muted:#a49fc0; --good:#4cc08a; --bad:#f2938c;
+  }
+}
+*{box-sizing:border-box; margin:0; padding:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif; font-size:16px; line-height:1.55;
+  max-width:720px; margin:0 auto; padding:24px 16px 64px;
+}
+h1{font-size:1.35rem; color:var(--primary); margin-bottom:4px}
+.sub{color:var(--muted); font-size:.9rem; margin-bottom:20px}
+h2{font-size:1rem; margin:28px 0 10px; color:var(--primary)}
+.ar{font-family:"Amiri",serif; line-height:1.9; direction:rtl}
+.card{
+  background:var(--surface); border:1px solid var(--line); border-radius:14px;
+  padding:14px 16px; margin-bottom:10px;
+  display:flex; align-items:center; gap:12px;
+}
+.card .tx{flex:1; min-width:0}
+.card .ar{font-size:1.45rem}
+.card .en{color:var(--muted); font-size:.85rem; margin-top:2px}
+.card .who{color:var(--primary); font-size:.95rem; font-weight:700}
+.pbtn{
+  flex:none; width:46px; height:46px; border-radius:50%;
+  border:1px solid var(--line); background:var(--bg); color:var(--primary);
+  cursor:pointer; display:flex; align-items:center; justify-content:center;
+}
+.pbtn:active{background:var(--accent)}
+.pbtn svg{width:20px; height:20px; fill:currentColor}
+.pbtn.playing{background:var(--primary); color:var(--bg); border-color:var(--primary)}
+.vrow{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:6px}
+.vrow label{flex:1 1 240px; font-size:.8rem; color:var(--muted)}
+.vrow select, .vrow input[type=range]{
+  width:100%; margin-top:4px; padding:8px; border-radius:10px;
+  border:1px solid var(--line); background:var(--surface); color:var(--ink); font:inherit;
+}
+.note{
+  background:var(--accent); border-radius:12px; padding:12px 14px;
+  font-size:.85rem; margin:10px 0 4px;
+}
+.note b{color:var(--primary)}
+#status{font-size:.85rem; min-height:1.4em; margin-top:8px}
+#status.err{color:var(--bad)}
+#status.ok{color:var(--good)}
+.seg{display:flex; gap:6px; margin:8px 0 2px}
+.seg button{
+  padding:8px 14px; border-radius:999px; border:1px solid var(--line);
+  background:var(--surface); color:var(--ink); font:inherit; font-size:.85rem; cursor:pointer;
+}
+.seg button.on{background:var(--primary); color:var(--bg); border-color:var(--primary)}
+</style>
+</head>
+<body>
+<h1>ArabicMV — Audio Prototype</h1>
+<p class="sub">Phase 4A test page. Isolated from the app; reads unit01.json, changes nothing.</p>
+
+<div class="note">
+  This page uses the browser's built-in <b>SpeechSynthesis</b> voices.
+  On <b>Microsoft Edge</b> (desktop) pick the "Online (Natural)" Arabic voices —
+  they are the same Azure neural voices (Hamed = male, Zariyah = female) that the
+  paid Azure API would render to MP3. On <b>Android Chrome</b> the Google TTS
+  Arabic voice is used. Voice quality depends on the device.
+</div>
+
+<div class="vrow">
+  <label>Voice
+    <select id="voiceSel"></select>
+  </label>
+  <label>Speed <span id="rateVal">0.9</span>
+    <input type="range" id="rate" min="0.5" max="1.2" step="0.05" value="0.9">
+  </label>
+</div>
+<div class="seg" id="quick"></div>
+<div id="status"></div>
+
+<h2>Vocabulary (Unit 1, Lesson 1 — 5 words)</h2>
+<div id="vocab"></div>
+
+<h2>Dialogue (Unit 1, Dialogue 1 — 2 exchanges)</h2>
+<div id="dlg"></div>
+
+<script>
+(function(){
+  "use strict";
+  var statusEl = document.getElementById("status");
+  function setStatus(msg, cls){ statusEl.textContent = msg; statusEl.className = cls || ""; }
+  function esc(s){
+    return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  if(!("speechSynthesis" in window)){
+    setStatus("This browser has no SpeechSynthesis support.", "err");
+    return;
+  }
+
+  /* ---- voices ---- */
+  var sel = document.getElementById("voiceSel");
+  var quick = document.getElementById("quick");
+  var voices = [];
+  function knownGender(name){
+    if(/hamed|naayf|shakir|zayd|bassel|taim|laith|ismael|rami|omar|bashkar/i.test(name)) return " — male";
+    if(/zariyah|salma|hala|zeina|amany|layla|fatima|mouna|rana|aysha|iman|sana|hoda|amal|amina|noura/i.test(name)) return " — female";
+    return "";
+  }
+  function loadVoices(){
+    var all = window.speechSynthesis.getVoices();
+    voices = all.filter(function(v){ return (v.lang || "").toLowerCase().indexOf("ar") === 0; });
+    sel.innerHTML = "";
+    quick.innerHTML = "";
+    if(!voices.length){
+      var opt = document.createElement("option");
+      opt.textContent = "No Arabic voice found on this device";
+      sel.appendChild(opt);
+      setStatus(all.length ?
+        ("No Arabic voice among the " + all.length + " voices on this device. On Android: install/enable Google Text-to-Speech Arabic.") :
+        "Voice list not ready yet — tap a play button once to initialise.", "err");
+      return;
+    }
+    voices.forEach(function(v, i){
+      var opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = v.name + " (" + v.lang + ")" + knownGender(v.name) + (v.localService ? " [offline]" : " [online]");
+      sel.appendChild(opt);
+    });
+    /* quick toggles for the first recognisably male + female voice */
+    var mi = -1, fi = -1;
+    voices.forEach(function(v, i){
+      if(mi < 0 && knownGender(v.name) === " — male") mi = i;
+      if(fi < 0 && knownGender(v.name) === " — female") fi = i;
+    });
+    function seg(label, idx){
+      var b = document.createElement("button");
+      b.textContent = label;
+      b.onclick = function(){
+        sel.value = String(idx); syncSeg();
+      };
+      b.dataset.idx = idx;
+      quick.appendChild(b);
+    }
+    if(mi >= 0) seg("Male voice", mi);
+    if(fi >= 0) seg("Female voice", fi);
+    function syncSeg(){
+      var bs = quick.querySelectorAll("button");
+      for(var i = 0; i < bs.length; i++) bs[i].className = (bs[i].dataset.idx === sel.value) ? "on" : "";
+    }
+    sel.onchange = syncSeg;
+    if(mi >= 0){ sel.value = String(mi); }
+    syncSeg();
+    setStatus(voices.length + " Arabic voice(s) available.", "ok");
+  }
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+
+  /* ---- rate ---- */
+  var rateEl = document.getElementById("rate"), rateVal = document.getElementById("rateVal");
+  rateEl.oninput = function(){ rateVal.textContent = rateEl.value; };
+
+  /* ---- playback ---- */
+  var current = null;
+  function play(text, btn){
+    window.speechSynthesis.cancel();
+    if(current){ current.classList.remove("playing"); }
+    if(current === btn){ current = null; return; }  /* tap again = stop */
+    if(!voices.length){ loadVoices(); if(!voices.length){ setStatus("No Arabic voice available.", "err"); return; } }
+    var u = new SpeechSynthesisUtterance(text);
+    u.voice = voices[+sel.value] || voices[0];
+    u.lang = u.voice.lang;
+    u.rate = +rateEl.value;
+    u.onstart = function(){ setStatus("Playing with " + u.voice.name + "…"); };
+    u.onend = function(){ btn.classList.remove("playing"); current = null; setStatus("Done.", "ok"); };
+    u.onerror = function(e){
+      btn.classList.remove("playing"); current = null;
+      setStatus("Speech error: " + (e.error || "unknown") + ". Online voices need an internet connection.", "err");
+    };
+    btn.classList.add("playing");
+    current = btn;
+    window.speechSynthesis.speak(u);
+  }
+  var PLAY = '<svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg>';
+
+  function card(ar, sub, who){
+    var d = document.createElement("div");
+    d.className = "card";
+    d.innerHTML =
+      '<button class="pbtn" aria-label="Play">' + PLAY + '</button>' +
+      '<div class="tx">' +
+        (who ? '<div class="who ar">' + esc(who) + '</div>' : '') +
+        '<div class="ar">' + esc(ar) + '</div>' +
+        (sub ? '<div class="en">' + esc(sub) + '</div>' : '') +
+      '</div>';
+    d.querySelector(".pbtn").onclick = function(){ play(ar, this); };
+    return d;
+  }
+
+  /* ---- content: fetched from the real JSON so strings are byte-exact ---- */
+  fetch("../../data/book1/unit01.json")
+    .then(function(r){ if(!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(function(d){
+      var vbox = document.getElementById("vocab");
+      d.vocab.slice(0, 5).forEach(function(v){
+        vbox.appendChild(card(v.ar, v.en + (v.pl ? "  · pl. " + v.pl : "")));
+      });
+      var dbox = document.getElementById("dlg");
+      /* first two exchanges = first 4 lines of dialogue 1 */
+      d.dialogues[0].lines.slice(0, 4).forEach(function(ln){
+        dbox.appendChild(card(ln.ar, ln.en, ln.who));
+      });
+    })
+    .catch(function(e){
+      setStatus("Could not load unit01.json (" + e.message + "). Serve this page from the project root, e.g. http://localhost:8000/prototype/audio/", "err");
+    });
+})();
+</script>
+</body>
+</html>
