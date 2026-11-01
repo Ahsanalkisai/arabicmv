@@ -31,6 +31,28 @@
 var fs = require("fs"), path = require("path"), https = require("https");
 
 var VOICES = { m: "ar-SA-HamedNeural", f: "ar-SA-ZariyahNeural" };
+
+/* Voice policy (approved 2026-11-01):
+ *  - vocabulary + word forms: both voices
+ *  - dialogue lines: ONLY the speaker's voice, by the speaker's gender
+ *    (all male speakers = Hamed, all female speakers = Zariyah; no pitch tricks)
+ *  - speaking exercises + grammar examples: both voices (pilot)
+ * Speaker genders below are taken from the names/roles in data/book1 units 1-8.
+ * نُورُ is verified female from her own lines in unit 7 (أَنَا مِصْرِيَّةٌ، طَالِبَةٌ).
+ * A dialogue speaker missing from this map stops the script — nothing is guessed. */
+var SPEAKERS = {
+  /* male names */
+  "أَحْمَدُ":"m", "عَلِيٌّ":"m", "حَسَنٌ":"m", "يُوسُفُ":"m", "إِبْرَاهِيمُ":"m",
+  "خَالِدٌ":"m", "سَعِيدٌ":"m", "مُحَمَّدٌ":"m", "عُمَرُ":"m", "عَبْدُ اللهِ":"m",
+  /* male roles (masculine forms) */
+  "الْأَبُ":"m", "الِابْنُ":"m", "الْبَائِعُ":"m", "الْمُشْتَرِي":"m",
+  "الْمُسَافِرُ":"m", "الزَّوْجُ":"m",
+  /* female names */
+  "عَائِشَةُ":"f", "مَرْيَمُ":"f", "خَدِيجَةُ":"f", "فَاطِمَةُ":"f", "زَيْنَبُ":"f",
+  "هُدَى":"f", "نُورُ":"f", "لَيْلَى":"f", "آمِنَةُ":"f", "سَلْمَى":"f",
+  /* female roles (feminine forms) */
+  "الْأُمُّ":"f", "الِابْنَةُ":"f", "الْمُضِيفَةُ":"f", "الزَّوْجَةُ":"f"
+};
 var FORMAT = "audio-24khz-48kbitrate-mono-mp3"; /* good speech quality, ~6 KB/s */
 var DELAY_MS = 250; /* pause between requests — gentle on the free tier */
 
@@ -65,36 +87,47 @@ var d = JSON.parse(fs.readFileSync(unitFile, "utf8"));
 function pad3(n){ return ("00" + n).slice(-3); }
 function pad2(n){ return ("0" + n).slice(-2); }
 var items = [];
-function add(id, type, lesson, text){
+function add(id, type, lesson, text, voices, who){
   if(!text) return;
-  items.push({ id: id, type: type, lesson: lesson, text: text, chars: text.length });
+  var vs = voices.filter(function(k){ return voiceKeys.indexOf(k) >= 0; });
+  if(!vs.length) return; /* excluded by --voice filter */
+  var it = { id: id, type: type, lesson: lesson, text: text, chars: text.length, voices: vs };
+  if(who) it.who = who;
+  items.push(it);
 }
+var BOTH = ["m", "f"];
 if(ONLY.indexOf("vocab") >= 0){
   (d.vocab || []).forEach(function(v, i){
     var base = "u" + uu + "-v" + pad3(i + 1);
-    add(base, "vocab", v.lesson, v.ar);
-    add(base + "-pl", "vocab-plural", v.lesson, v.pl);
-    add(base + "-cm", "vocab-command", v.lesson, v.command);
+    add(base, "vocab", v.lesson, v.ar, BOTH);
+    add(base + "-pl", "vocab-plural", v.lesson, v.pl, BOTH);
+    add(base + "-cm", "vocab-command", v.lesson, v.command, BOTH);
   });
 }
 if(ONLY.indexOf("dialogues") >= 0){
   (d.dialogues || []).forEach(function(c, ci){
     (c.lines || []).forEach(function(ln, li){
-      add("u" + uu + "-d" + pad2(ci + 1) + "-l" + pad2(li + 1), "dialogue", c.lesson, ln.ar);
+      var g = SPEAKERS[ln.who];
+      if(!g){
+        console.error("Unknown dialogue speaker \"" + ln.who + "\" (unit " + UNIT + ", dialogue " +
+          (ci + 1) + ", line " + (li + 1) + "). Add them to SPEAKERS — genders are never guessed.");
+        process.exit(1);
+      }
+      add("u" + uu + "-d" + pad2(ci + 1) + "-l" + pad2(li + 1), "dialogue", c.lesson, ln.ar, [g], ln.who);
     });
   });
 }
 if(ONLY.indexOf("speak") >= 0){
   (d.speak || []).forEach(function(s, si){
     var base = "u" + uu + "-s" + pad2(si + 1);
-    add(base + "-q", "speak-q", s.lesson, s.q && s.q.ar);
-    add(base + "-a", "speak-a", s.lesson, s.a && s.a.ar);
+    add(base + "-q", "speak-q", s.lesson, s.q && s.q.ar, BOTH);
+    add(base + "-a", "speak-a", s.lesson, s.a && s.a.ar, BOTH);
   });
 }
 if(ONLY.indexOf("grammar") >= 0){
   (d.grammar || []).forEach(function(g, gi){
     (g.examples || []).forEach(function(e, ei){
-      add("u" + uu + "-g" + pad2(gi + 1) + "-e" + pad2(ei + 1), "grammar", g.lesson, e.ar);
+      add("u" + uu + "-g" + pad2(gi + 1) + "-e" + pad2(ei + 1), "grammar", g.lesson, e.ar, BOTH);
     });
   });
 }
@@ -102,23 +135,28 @@ if(ONLY.indexOf("grammar") >= 0){
 /* ---- manifest ---- */
 var outDir = path.join(AUDIO_ROOT, "u" + uu);
 var totalChars = items.reduce(function(a, it){ return a + it.chars; }, 0);
+var totalFiles = items.reduce(function(a, it){ return a + it.voices.length; }, 0);
+var billedChars = items.reduce(function(a, it){ return a + it.chars * it.voices.length; }, 0);
 var manifest = {
   generated: new Date().toISOString().slice(0, 10),
   unit: UNIT,
   source: "data/book1/unit" + uu + ".json",
   voices: VOICES,
+  voicePolicy: "vocab/forms/speak/grammar: both voices; dialogue lines: speaker's gender only",
   format: FORMAT,
   rate: RATE || "default",
   outDir: "audio/book1/u" + uu + "/",
   counts: items.reduce(function(a, it){ a[it.type] = (a[it.type] || 0) + 1; return a; }, {}),
   utterances: items.length,
-  files: items.length * voiceKeys.length,
+  files: totalFiles,
   arabicChars: totalChars,
-  billedChars: totalChars * voiceKeys.length,
+  billedChars: billedChars,
   items: items.map(function(it){
     var files = {};
-    voiceKeys.forEach(function(k){ files[k] = "audio/book1/u" + uu + "/" + it.id + "-" + k + ".mp3"; });
-    return { id: it.id, type: it.type, lesson: it.lesson, text: it.text, chars: it.chars, files: files };
+    it.voices.forEach(function(k){ files[k] = "audio/book1/u" + uu + "/" + it.id + "-" + k + ".mp3"; });
+    var o = { id: it.id, type: it.type, lesson: it.lesson, text: it.text, chars: it.chars, files: files };
+    if(it.who) o.who = it.who;
+    return o;
   })
 };
 var manifestPath = path.join(__dirname, "manifest-u" + uu + ".json");
@@ -128,7 +166,10 @@ console.log("Unit " + UNIT + " manifest -> " + path.relative(ROOT, manifestPath)
 console.log("  utterances: " + items.length + "  " + JSON.stringify(manifest.counts));
 console.log("  voices: " + voiceKeys.map(function(k){ return VOICES[k]; }).join(", "));
 console.log("  files to create: " + manifest.files + "  (in " + manifest.outDir + ")");
-console.log("  Arabic characters: " + totalChars + "  | billed with " + voiceKeys.length + " voice(s): " + manifest.billedChars);
+var vc = { m: 0, f: 0 };
+manifest.items.forEach(function(it){ Object.keys(it.files).forEach(function(k){ vc[k]++; }); });
+console.log("  per voice: Hamed (m) " + vc.m + " files, Zariyah (f) " + vc.f + " files");
+console.log("  Arabic characters: " + totalChars + "  | billed under voice policy: " + manifest.billedChars);
 console.log("  Azure F0 free tier: 500,000 neural chars/month -> this run uses " + (manifest.billedChars / 5000).toFixed(1) + "% of it");
 
 if(!RUN){
@@ -186,7 +227,7 @@ function synth(voiceName, text, file, cb){
 fs.mkdirSync(outDir, { recursive: true });
 var queue = [];
 manifest.items.forEach(function(it){
-  voiceKeys.forEach(function(k){
+  Object.keys(it.files).forEach(function(k){
     queue.push({ voice: VOICES[k], text: it.text, file: path.join(outDir, it.id + "-" + k + ".mp3") });
   });
 });

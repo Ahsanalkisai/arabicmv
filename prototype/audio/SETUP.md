@@ -9,12 +9,20 @@ account at all.
 - **125 utterances** from `data/book1/unit01.json`, byte-exact, nothing invented:
   42 vocabulary words, 11 plural forms, 48 dialogue lines,
   18 speaking Q/A utterances, 6 grammar examples.
-- **250 MP3 files** (each utterance in both voices) into `audio/book1/u01/`.
+- **202 MP3 files** into `audio/book1/u01/` under the approved voice policy:
+  - vocabulary, plural forms, speaking exercises, grammar examples:
+    **both voices**;
+  - dialogue lines: **only the speaker's voice**, by the speaker's gender
+    (every male speaker = Hamed, every female speaker = Zariyah — no
+    artificial voice variations or pitch changes). Unit 1 happens to split
+    evenly: 24 lines Hamed, 24 lines Zariyah.
 - Voices: **ar-SA-HamedNeural** (male, file suffix `-m`) and
-  **ar-SA-ZariyahNeural** (female, suffix `-f`).
+  **ar-SA-ZariyahNeural** (female, suffix `-f`). The speaker→gender map is
+  in `generate.js` (`SPEAKERS`); an unmapped speaker stops the script rather
+  than guessing.
 - Format: 24 kHz / 48 kbps mono MP3 (≈ 6 KB per second of speech;
-  the whole pilot should be roughly 3–5 MB).
-- Cost: **4,946 billed characters ≈ 1% of the Azure free tier's monthly
+  the whole pilot should be roughly 3–4 MB).
+- Cost: **3,566 billed characters ≈ 0.7% of the Azure free tier's monthly
   500,000 neural characters. $0.**
 - The exact text of every file is listed in `manifest-u01.json` (regenerated
   by every dry run) — review it before approving generation.

@@ -6,6 +6,7 @@
     "m": "ar-SA-HamedNeural",
     "f": "ar-SA-ZariyahNeural"
   },
+  "voicePolicy": "vocab/forms/speak/grammar: both voices; dialogue lines: speaker's gender only",
   "format": "audio-24khz-48kbitrate-mono-mp3",
   "rate": "default",
   "outDir": "audio/book1/u01/",
@@ -18,9 +19,9 @@
     "grammar": 6
   },
   "utterances": 125,
-  "files": 250,
+  "files": 202,
   "arabicChars": 2473,
-  "billedChars": 4946,
+  "billedChars": 3566,
   "items": [
     {
       "id": "u01-v001",
@@ -612,9 +613,9 @@
       "text": "السَّلَامُ عَلَيْكُمْ.",
       "chars": 22,
       "files": {
-        "m": "audio/book1/u01/u01-d01-l01-m.mp3",
-        "f": "audio/book1/u01/u01-d01-l01-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d01-l01-m.mp3"
+      },
+      "who": "أَحْمَدُ"
     },
     {
       "id": "u01-d01-l02",
@@ -623,9 +624,9 @@
       "text": "وَعَلَيْكُمُ السَّلَامُ وَرَحْمَةُ اللهِ.",
       "chars": 41,
       "files": {
-        "m": "audio/book1/u01/u01-d01-l02-m.mp3",
-        "f": "audio/book1/u01/u01-d01-l02-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d01-l02-m.mp3"
+      },
+      "who": "عَلِيٌّ"
     },
     {
       "id": "u01-d01-l03",
@@ -634,9 +635,9 @@
       "text": "اِسْمِي أَحْمَدُ. مَا اسْمُكَ؟",
       "chars": 30,
       "files": {
-        "m": "audio/book1/u01/u01-d01-l03-m.mp3",
-        "f": "audio/book1/u01/u01-d01-l03-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d01-l03-m.mp3"
+      },
+      "who": "أَحْمَدُ"
     },
     {
       "id": "u01-d01-l04",
@@ -645,9 +646,9 @@
       "text": "اِسْمِي عَلِيٌّ.",
       "chars": 16,
       "files": {
-        "m": "audio/book1/u01/u01-d01-l04-m.mp3",
-        "f": "audio/book1/u01/u01-d01-l04-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d01-l04-m.mp3"
+      },
+      "who": "عَلِيٌّ"
     },
     {
       "id": "u01-d01-l05",
@@ -656,9 +657,9 @@
       "text": "كَيْفَ حَالُكَ يَا عَلِيُّ؟",
       "chars": 27,
       "files": {
-        "m": "audio/book1/u01/u01-d01-l05-m.mp3",
-        "f": "audio/book1/u01/u01-d01-l05-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d01-l05-m.mp3"
+      },
+      "who": "أَحْمَدُ"
     },
     {
       "id": "u01-d01-l06",
@@ -667,9 +668,9 @@
       "text": "بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ. وَكَيْفَ حَالُكَ أَنْتَ؟",
       "chars": 55,
       "files": {
-        "m": "audio/book1/u01/u01-d01-l06-m.mp3",
-        "f": "audio/book1/u01/u01-d01-l06-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d01-l06-m.mp3"
+      },
+      "who": "عَلِيٌّ"
     },
     {
       "id": "u01-d01-l07",
@@ -678,9 +679,9 @@
       "text": "بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ.",
       "chars": 30,
       "files": {
-        "m": "audio/book1/u01/u01-d01-l07-m.mp3",
-        "f": "audio/book1/u01/u01-d01-l07-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d01-l07-m.mp3"
+      },
+      "who": "أَحْمَدُ"
     },
     {
       "id": "u01-d02-l01",
@@ -689,9 +690,9 @@
       "text": "السَّلَامُ عَلَيْكُمْ.",
       "chars": 22,
       "files": {
-        "m": "audio/book1/u01/u01-d02-l01-m.mp3",
         "f": "audio/book1/u01/u01-d02-l01-f.mp3"
-      }
+      },
+      "who": "عَائِشَةُ"
     },
     {
       "id": "u01-d02-l02",
@@ -700,9 +701,9 @@
       "text": "وَعَلَيْكُمُ السَّلَامُ.",
       "chars": 24,
       "files": {
-        "m": "audio/book1/u01/u01-d02-l02-m.mp3",
         "f": "audio/book1/u01/u01-d02-l02-f.mp3"
-      }
+      },
+      "who": "مَرْيَمُ"
     },
     {
       "id": "u01-d02-l03",
@@ -711,9 +712,9 @@
       "text": "اِسْمِي عَائِشَةُ. مَا اسْمُكِ؟",
       "chars": 31,
       "files": {
-        "m": "audio/book1/u01/u01-d02-l03-m.mp3",
         "f": "audio/book1/u01/u01-d02-l03-f.mp3"
-      }
+      },
+      "who": "عَائِشَةُ"
     },
     {
       "id": "u01-d02-l04",
@@ -722,9 +723,9 @@
       "text": "اِسْمِي مَرْيَمُ.",
       "chars": 17,
       "files": {
-        "m": "audio/book1/u01/u01-d02-l04-m.mp3",
         "f": "audio/book1/u01/u01-d02-l04-f.mp3"
-      }
+      },
+      "who": "مَرْيَمُ"
     },
     {
       "id": "u01-d02-l05",
@@ -733,9 +734,9 @@
       "text": "كَيْفَ حَالُكِ يَا مَرْيَمُ؟",
       "chars": 28,
       "files": {
-        "m": "audio/book1/u01/u01-d02-l05-m.mp3",
         "f": "audio/book1/u01/u01-d02-l05-f.mp3"
-      }
+      },
+      "who": "عَائِشَةُ"
     },
     {
       "id": "u01-d02-l06",
@@ -744,9 +745,9 @@
       "text": "بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ. وَكَيْفَ حَالُكِ أَنْتِ؟",
       "chars": 55,
       "files": {
-        "m": "audio/book1/u01/u01-d02-l06-m.mp3",
         "f": "audio/book1/u01/u01-d02-l06-f.mp3"
-      }
+      },
+      "who": "مَرْيَمُ"
     },
     {
       "id": "u01-d02-l07",
@@ -755,9 +756,9 @@
       "text": "بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ.",
       "chars": 30,
       "files": {
-        "m": "audio/book1/u01/u01-d02-l07-m.mp3",
         "f": "audio/book1/u01/u01-d02-l07-f.mp3"
-      }
+      },
+      "who": "عَائِشَةُ"
     },
     {
       "id": "u01-d03-l01",
@@ -766,9 +767,9 @@
       "text": "السَّلَامُ عَلَيْكُمْ.",
       "chars": 22,
       "files": {
-        "m": "audio/book1/u01/u01-d03-l01-m.mp3",
-        "f": "audio/book1/u01/u01-d03-l01-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d03-l01-m.mp3"
+      },
+      "who": "حَسَنٌ"
     },
     {
       "id": "u01-d03-l02",
@@ -777,9 +778,9 @@
       "text": "وَعَلَيْكُمُ السَّلَامُ.",
       "chars": 24,
       "files": {
-        "m": "audio/book1/u01/u01-d03-l02-m.mp3",
-        "f": "audio/book1/u01/u01-d03-l02-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d03-l02-m.mp3"
+      },
+      "who": "يُوسُفُ"
     },
     {
       "id": "u01-d03-l03",
@@ -788,9 +789,9 @@
       "text": "مِنْ أَيْنَ أَنْتَ؟",
       "chars": 19,
       "files": {
-        "m": "audio/book1/u01/u01-d03-l03-m.mp3",
-        "f": "audio/book1/u01/u01-d03-l03-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d03-l03-m.mp3"
+      },
+      "who": "حَسَنٌ"
     },
     {
       "id": "u01-d03-l04",
@@ -799,9 +800,9 @@
       "text": "أَنَا مِنَ الْمَالْدِيفِ. وَأَنْتَ؟",
       "chars": 35,
       "files": {
-        "m": "audio/book1/u01/u01-d03-l04-m.mp3",
-        "f": "audio/book1/u01/u01-d03-l04-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d03-l04-m.mp3"
+      },
+      "who": "يُوسُفُ"
     },
     {
       "id": "u01-d03-l05",
@@ -810,9 +811,9 @@
       "text": "أَنَا مِنْ مِصْرَ.",
       "chars": 18,
       "files": {
-        "m": "audio/book1/u01/u01-d03-l05-m.mp3",
-        "f": "audio/book1/u01/u01-d03-l05-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d03-l05-m.mp3"
+      },
+      "who": "حَسَنٌ"
     },
     {
       "id": "u01-d03-l06",
@@ -821,9 +822,9 @@
       "text": "هَلْ أَنْتَ مِصْرِيٌّ؟",
       "chars": 22,
       "files": {
-        "m": "audio/book1/u01/u01-d03-l06-m.mp3",
-        "f": "audio/book1/u01/u01-d03-l06-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d03-l06-m.mp3"
+      },
+      "who": "يُوسُفُ"
     },
     {
       "id": "u01-d03-l07",
@@ -832,9 +833,9 @@
       "text": "نَعَمْ، أَنَا مِصْرِيٌّ. وَمَا جِنْسِيَّتُكَ أَنْتَ؟",
       "chars": 52,
       "files": {
-        "m": "audio/book1/u01/u01-d03-l07-m.mp3",
-        "f": "audio/book1/u01/u01-d03-l07-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d03-l07-m.mp3"
+      },
+      "who": "حَسَنٌ"
     },
     {
       "id": "u01-d03-l08",
@@ -843,9 +844,9 @@
       "text": "أَنَا مَالْدِيفِيٌّ.",
       "chars": 20,
       "files": {
-        "m": "audio/book1/u01/u01-d03-l08-m.mp3",
-        "f": "audio/book1/u01/u01-d03-l08-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d03-l08-m.mp3"
+      },
+      "who": "يُوسُفُ"
     },
     {
       "id": "u01-d03-l09",
@@ -854,9 +855,9 @@
       "text": "أَهْلًا وَسَهْلًا.",
       "chars": 18,
       "files": {
-        "m": "audio/book1/u01/u01-d03-l09-m.mp3",
-        "f": "audio/book1/u01/u01-d03-l09-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d03-l09-m.mp3"
+      },
+      "who": "حَسَنٌ"
     },
     {
       "id": "u01-d04-l01",
@@ -865,9 +866,9 @@
       "text": "السَّلَامُ عَلَيْكُمْ.",
       "chars": 22,
       "files": {
-        "m": "audio/book1/u01/u01-d04-l01-m.mp3",
         "f": "audio/book1/u01/u01-d04-l01-f.mp3"
-      }
+      },
+      "who": "خَدِيجَةُ"
     },
     {
       "id": "u01-d04-l02",
@@ -876,9 +877,9 @@
       "text": "وَعَلَيْكُمُ السَّلَامُ.",
       "chars": 24,
       "files": {
-        "m": "audio/book1/u01/u01-d04-l02-m.mp3",
         "f": "audio/book1/u01/u01-d04-l02-f.mp3"
-      }
+      },
+      "who": "فَاطِمَةُ"
     },
     {
       "id": "u01-d04-l03",
@@ -887,9 +888,9 @@
       "text": "مِنْ أَيْنَ أَنْتِ؟",
       "chars": 19,
       "files": {
-        "m": "audio/book1/u01/u01-d04-l03-m.mp3",
         "f": "audio/book1/u01/u01-d04-l03-f.mp3"
-      }
+      },
+      "who": "خَدِيجَةُ"
     },
     {
       "id": "u01-d04-l04",
@@ -898,9 +899,9 @@
       "text": "أَنَا مِنْ تُرْكِيَا. وَأَنْتِ؟",
       "chars": 31,
       "files": {
-        "m": "audio/book1/u01/u01-d04-l04-m.mp3",
         "f": "audio/book1/u01/u01-d04-l04-f.mp3"
-      }
+      },
+      "who": "فَاطِمَةُ"
     },
     {
       "id": "u01-d04-l05",
@@ -909,9 +910,9 @@
       "text": "أَنَا مِنَ الْمَالْدِيفِ.",
       "chars": 25,
       "files": {
-        "m": "audio/book1/u01/u01-d04-l05-m.mp3",
         "f": "audio/book1/u01/u01-d04-l05-f.mp3"
-      }
+      },
+      "who": "خَدِيجَةُ"
     },
     {
       "id": "u01-d04-l06",
@@ -920,9 +921,9 @@
       "text": "هَلْ أَنْتِ مَالْدِيفِيَّةٌ؟",
       "chars": 28,
       "files": {
-        "m": "audio/book1/u01/u01-d04-l06-m.mp3",
         "f": "audio/book1/u01/u01-d04-l06-f.mp3"
-      }
+      },
+      "who": "فَاطِمَةُ"
     },
     {
       "id": "u01-d04-l07",
@@ -931,9 +932,9 @@
       "text": "نَعَمْ، أَنَا مَالْدِيفِيَّةٌ. وَمَا جِنْسِيَّتُكِ أَنْتِ؟",
       "chars": 58,
       "files": {
-        "m": "audio/book1/u01/u01-d04-l07-m.mp3",
         "f": "audio/book1/u01/u01-d04-l07-f.mp3"
-      }
+      },
+      "who": "خَدِيجَةُ"
     },
     {
       "id": "u01-d04-l08",
@@ -942,9 +943,9 @@
       "text": "أَنَا تُرْكِيَّةٌ.",
       "chars": 18,
       "files": {
-        "m": "audio/book1/u01/u01-d04-l08-m.mp3",
         "f": "audio/book1/u01/u01-d04-l08-f.mp3"
-      }
+      },
+      "who": "فَاطِمَةُ"
     },
     {
       "id": "u01-d04-l09",
@@ -953,9 +954,9 @@
       "text": "أَهْلًا وَسَهْلًا.",
       "chars": 18,
       "files": {
-        "m": "audio/book1/u01/u01-d04-l09-m.mp3",
         "f": "audio/book1/u01/u01-d04-l09-f.mp3"
-      }
+      },
+      "who": "خَدِيجَةُ"
     },
     {
       "id": "u01-d05-l01",
@@ -964,9 +965,9 @@
       "text": "السَّلَامُ عَلَيْكُمْ.",
       "chars": 22,
       "files": {
-        "m": "audio/book1/u01/u01-d05-l01-m.mp3",
-        "f": "audio/book1/u01/u01-d05-l01-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d05-l01-m.mp3"
+      },
+      "who": "إِبْرَاهِيمُ"
     },
     {
       "id": "u01-d05-l02",
@@ -975,9 +976,9 @@
       "text": "وَعَلَيْكُمُ السَّلَامُ.",
       "chars": 24,
       "files": {
-        "m": "audio/book1/u01/u01-d05-l02-m.mp3",
-        "f": "audio/book1/u01/u01-d05-l02-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d05-l02-m.mp3"
+      },
+      "who": "خَالِدٌ"
     },
     {
       "id": "u01-d05-l03",
@@ -986,9 +987,9 @@
       "text": "هَذَا أَخِي حَسَنٌ، هُوَ طَبِيبٌ.",
       "chars": 33,
       "files": {
-        "m": "audio/book1/u01/u01-d05-l03-m.mp3",
-        "f": "audio/book1/u01/u01-d05-l03-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d05-l03-m.mp3"
+      },
+      "who": "إِبْرَاهِيمُ"
     },
     {
       "id": "u01-d05-l04",
@@ -997,9 +998,9 @@
       "text": "أَهْلًا وَسَهْلًا.",
       "chars": 18,
       "files": {
-        "m": "audio/book1/u01/u01-d05-l04-m.mp3",
-        "f": "audio/book1/u01/u01-d05-l04-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d05-l04-m.mp3"
+      },
+      "who": "خَالِدٌ"
     },
     {
       "id": "u01-d05-l05",
@@ -1008,9 +1009,9 @@
       "text": "وَهَذَا صَدِيقِي عُمَرُ، هُوَ مُدَرِّسٌ.",
       "chars": 40,
       "files": {
-        "m": "audio/book1/u01/u01-d05-l05-m.mp3",
-        "f": "audio/book1/u01/u01-d05-l05-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d05-l05-m.mp3"
+      },
+      "who": "إِبْرَاهِيمُ"
     },
     {
       "id": "u01-d05-l06",
@@ -1019,9 +1020,9 @@
       "text": "أَهْلًا وَسَهْلًا. أَنَا خَالِدٌ، أَنَا مُهَنْدِسٌ.",
       "chars": 51,
       "files": {
-        "m": "audio/book1/u01/u01-d05-l06-m.mp3",
-        "f": "audio/book1/u01/u01-d05-l06-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d05-l06-m.mp3"
+      },
+      "who": "خَالِدٌ"
     },
     {
       "id": "u01-d05-l07",
@@ -1030,9 +1031,9 @@
       "text": "مَعَ السَّلَامَةِ يَا خَالِدُ.",
       "chars": 30,
       "files": {
-        "m": "audio/book1/u01/u01-d05-l07-m.mp3",
-        "f": "audio/book1/u01/u01-d05-l07-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d05-l07-m.mp3"
+      },
+      "who": "إِبْرَاهِيمُ"
     },
     {
       "id": "u01-d05-l08",
@@ -1041,9 +1042,9 @@
       "text": "مَعَ السَّلَامَةِ.",
       "chars": 18,
       "files": {
-        "m": "audio/book1/u01/u01-d05-l08-m.mp3",
-        "f": "audio/book1/u01/u01-d05-l08-f.mp3"
-      }
+        "m": "audio/book1/u01/u01-d05-l08-m.mp3"
+      },
+      "who": "خَالِدٌ"
     },
     {
       "id": "u01-d06-l01",
@@ -1052,9 +1053,9 @@
       "text": "السَّلَامُ عَلَيْكُمْ.",
       "chars": 22,
       "files": {
-        "m": "audio/book1/u01/u01-d06-l01-m.mp3",
         "f": "audio/book1/u01/u01-d06-l01-f.mp3"
-      }
+      },
+      "who": "زَيْنَبُ"
     },
     {
       "id": "u01-d06-l02",
@@ -1063,9 +1064,9 @@
       "text": "وَعَلَيْكُمُ السَّلَامُ.",
       "chars": 24,
       "files": {
-        "m": "audio/book1/u01/u01-d06-l02-m.mp3",
         "f": "audio/book1/u01/u01-d06-l02-f.mp3"
-      }
+      },
+      "who": "هُدَى"
     },
     {
       "id": "u01-d06-l03",
@@ -1074,9 +1075,9 @@
       "text": "هَذِهِ أُخْتِي آمِنَةُ، هِيَ طَالِبَةٌ.",
       "chars": 39,
       "files": {
-        "m": "audio/book1/u01/u01-d06-l03-m.mp3",
         "f": "audio/book1/u01/u01-d06-l03-f.mp3"
-      }
+      },
+      "who": "زَيْنَبُ"
     },
     {
       "id": "u01-d06-l04",
@@ -1085,9 +1086,9 @@
       "text": "أَهْلًا وَسَهْلًا.",
       "chars": 18,
       "files": {
-        "m": "audio/book1/u01/u01-d06-l04-m.mp3",
         "f": "audio/book1/u01/u01-d06-l04-f.mp3"
-      }
+      },
+      "who": "هُدَى"
     },
     {
       "id": "u01-d06-l05",
@@ -1096,9 +1097,9 @@
       "text": "وَهَذِهِ صَدِيقَتِي سَارَةُ، هِيَ مُعَلِّمَةٌ.",
       "chars": 46,
       "files": {
-        "m": "audio/book1/u01/u01-d06-l05-m.mp3",
         "f": "audio/book1/u01/u01-d06-l05-f.mp3"
-      }
+      },
+      "who": "زَيْنَبُ"
     },
     {
       "id": "u01-d06-l06",
@@ -1107,9 +1108,9 @@
       "text": "أَهْلًا وَسَهْلًا. أَنَا هُدَى، أَنَا طَبِيبَةٌ.",
       "chars": 48,
       "files": {
-        "m": "audio/book1/u01/u01-d06-l06-m.mp3",
         "f": "audio/book1/u01/u01-d06-l06-f.mp3"
-      }
+      },
+      "who": "هُدَى"
     },
     {
       "id": "u01-d06-l07",
@@ -1118,9 +1119,9 @@
       "text": "مَعَ السَّلَامَةِ يَا هُدَى.",
       "chars": 28,
       "files": {
-        "m": "audio/book1/u01/u01-d06-l07-m.mp3",
         "f": "audio/book1/u01/u01-d06-l07-f.mp3"
-      }
+      },
+      "who": "زَيْنَبُ"
     },
     {
       "id": "u01-d06-l08",
@@ -1129,9 +1130,9 @@
       "text": "مَعَ السَّلَامَةِ.",
       "chars": 18,
       "files": {
-        "m": "audio/book1/u01/u01-d06-l08-m.mp3",
         "f": "audio/book1/u01/u01-d06-l08-f.mp3"
-      }
+      },
+      "who": "هُدَى"
     },
     {
       "id": "u01-s01-q",
