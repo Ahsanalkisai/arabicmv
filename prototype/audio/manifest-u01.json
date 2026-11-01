@@ -1,0 +1,1401 @@
+{
+  "generated": "2026-11-01",
+  "unit": 1,
+  "source": "data/book1/unit01.json",
+  "voices": {
+    "m": "ar-SA-HamedNeural",
+    "f": "ar-SA-ZariyahNeural"
+  },
+  "format": "audio-24khz-48kbitrate-mono-mp3",
+  "rate": "default",
+  "outDir": "audio/book1/u01/",
+  "counts": {
+    "vocab": 42,
+    "vocab-plural": 11,
+    "dialogue": 48,
+    "speak-q": 9,
+    "speak-a": 9,
+    "grammar": 6
+  },
+  "utterances": 125,
+  "files": 250,
+  "arabicChars": 2473,
+  "billedChars": 4946,
+  "items": [
+    {
+      "id": "u01-v001",
+      "type": "vocab",
+      "lesson": 1,
+      "text": "السَّلَامُ عَلَيْكُمْ",
+      "chars": 21,
+      "files": {
+        "m": "audio/book1/u01/u01-v001-m.mp3",
+        "f": "audio/book1/u01/u01-v001-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v002",
+      "type": "vocab",
+      "lesson": 1,
+      "text": "وَعَلَيْكُمُ السَّلَامُ",
+      "chars": 23,
+      "files": {
+        "m": "audio/book1/u01/u01-v002-m.mp3",
+        "f": "audio/book1/u01/u01-v002-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v003",
+      "type": "vocab",
+      "lesson": 1,
+      "text": "اِسْمٌ",
+      "chars": 6,
+      "files": {
+        "m": "audio/book1/u01/u01-v003-m.mp3",
+        "f": "audio/book1/u01/u01-v003-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v003-pl",
+      "type": "vocab-plural",
+      "lesson": 1,
+      "text": "أَسْمَاءٌ",
+      "chars": 9,
+      "files": {
+        "m": "audio/book1/u01/u01-v003-pl-m.mp3",
+        "f": "audio/book1/u01/u01-v003-pl-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v004",
+      "type": "vocab",
+      "lesson": 1,
+      "text": "مَا اسْمُكَ؟",
+      "chars": 12,
+      "files": {
+        "m": "audio/book1/u01/u01-v004-m.mp3",
+        "f": "audio/book1/u01/u01-v004-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v005",
+      "type": "vocab",
+      "lesson": 1,
+      "text": "كَيْفَ حَالُكَ؟",
+      "chars": 15,
+      "files": {
+        "m": "audio/book1/u01/u01-v005-m.mp3",
+        "f": "audio/book1/u01/u01-v005-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v006",
+      "type": "vocab",
+      "lesson": 1,
+      "text": "بِخَيْرٍ",
+      "chars": 8,
+      "files": {
+        "m": "audio/book1/u01/u01-v006-m.mp3",
+        "f": "audio/book1/u01/u01-v006-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v007",
+      "type": "vocab",
+      "lesson": 1,
+      "text": "الْحَمْدُ لِلّٰهِ",
+      "chars": 17,
+      "files": {
+        "m": "audio/book1/u01/u01-v007-m.mp3",
+        "f": "audio/book1/u01/u01-v007-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v008",
+      "type": "vocab",
+      "lesson": 1,
+      "text": "أَنَا",
+      "chars": 5,
+      "files": {
+        "m": "audio/book1/u01/u01-v008-m.mp3",
+        "f": "audio/book1/u01/u01-v008-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v009",
+      "type": "vocab",
+      "lesson": 1,
+      "text": "أَنْتَ",
+      "chars": 6,
+      "files": {
+        "m": "audio/book1/u01/u01-v009-m.mp3",
+        "f": "audio/book1/u01/u01-v009-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v010",
+      "type": "vocab",
+      "lesson": 1,
+      "text": "أَنْتِ",
+      "chars": 6,
+      "files": {
+        "m": "audio/book1/u01/u01-v010-m.mp3",
+        "f": "audio/book1/u01/u01-v010-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v011",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "مِنْ أَيْنَ؟",
+      "chars": 12,
+      "files": {
+        "m": "audio/book1/u01/u01-v011-m.mp3",
+        "f": "audio/book1/u01/u01-v011-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v012",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "جِنْسِيَّةٌ",
+      "chars": 11,
+      "files": {
+        "m": "audio/book1/u01/u01-v012-m.mp3",
+        "f": "audio/book1/u01/u01-v012-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v013",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "مَا جِنْسِيَّتُكَ؟",
+      "chars": 18,
+      "files": {
+        "m": "audio/book1/u01/u01-v013-m.mp3",
+        "f": "audio/book1/u01/u01-v013-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v014",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "الْمَالْدِيفُ",
+      "chars": 13,
+      "files": {
+        "m": "audio/book1/u01/u01-v014-m.mp3",
+        "f": "audio/book1/u01/u01-v014-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v015",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "مَالْدِيفِيٌّ",
+      "chars": 13,
+      "files": {
+        "m": "audio/book1/u01/u01-v015-m.mp3",
+        "f": "audio/book1/u01/u01-v015-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v016",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "مَالْدِيفِيَّةٌ",
+      "chars": 15,
+      "files": {
+        "m": "audio/book1/u01/u01-v016-m.mp3",
+        "f": "audio/book1/u01/u01-v016-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v017",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "مِصْرُ",
+      "chars": 6,
+      "files": {
+        "m": "audio/book1/u01/u01-v017-m.mp3",
+        "f": "audio/book1/u01/u01-v017-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v018",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "مِصْرِيٌّ",
+      "chars": 9,
+      "files": {
+        "m": "audio/book1/u01/u01-v018-m.mp3",
+        "f": "audio/book1/u01/u01-v018-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v019",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "تُرْكِيَا",
+      "chars": 9,
+      "files": {
+        "m": "audio/book1/u01/u01-v019-m.mp3",
+        "f": "audio/book1/u01/u01-v019-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v020",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "تُرْكِيٌّ",
+      "chars": 9,
+      "files": {
+        "m": "audio/book1/u01/u01-v020-m.mp3",
+        "f": "audio/book1/u01/u01-v020-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v021",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "بَاكِسْتَانُ",
+      "chars": 12,
+      "files": {
+        "m": "audio/book1/u01/u01-v021-m.mp3",
+        "f": "audio/book1/u01/u01-v021-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v022",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "بَاكِسْتَانِيٌّ",
+      "chars": 15,
+      "files": {
+        "m": "audio/book1/u01/u01-v022-m.mp3",
+        "f": "audio/book1/u01/u01-v022-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v023",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "سُورِيَا",
+      "chars": 8,
+      "files": {
+        "m": "audio/book1/u01/u01-v023-m.mp3",
+        "f": "audio/book1/u01/u01-v023-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v024",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "سُورِيٌّ",
+      "chars": 8,
+      "files": {
+        "m": "audio/book1/u01/u01-v024-m.mp3",
+        "f": "audio/book1/u01/u01-v024-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v025",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "هَلْ",
+      "chars": 4,
+      "files": {
+        "m": "audio/book1/u01/u01-v025-m.mp3",
+        "f": "audio/book1/u01/u01-v025-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v026",
+      "type": "vocab",
+      "lesson": 2,
+      "text": "نَعَمْ",
+      "chars": 6,
+      "files": {
+        "m": "audio/book1/u01/u01-v026-m.mp3",
+        "f": "audio/book1/u01/u01-v026-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v027",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "هَذَا",
+      "chars": 5,
+      "files": {
+        "m": "audio/book1/u01/u01-v027-m.mp3",
+        "f": "audio/book1/u01/u01-v027-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v028",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "هَذِهِ",
+      "chars": 6,
+      "files": {
+        "m": "audio/book1/u01/u01-v028-m.mp3",
+        "f": "audio/book1/u01/u01-v028-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v029",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "هُوَ",
+      "chars": 4,
+      "files": {
+        "m": "audio/book1/u01/u01-v029-m.mp3",
+        "f": "audio/book1/u01/u01-v029-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v030",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "هِيَ",
+      "chars": 4,
+      "files": {
+        "m": "audio/book1/u01/u01-v030-m.mp3",
+        "f": "audio/book1/u01/u01-v030-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v031",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "أَخٌ",
+      "chars": 4,
+      "files": {
+        "m": "audio/book1/u01/u01-v031-m.mp3",
+        "f": "audio/book1/u01/u01-v031-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v031-pl",
+      "type": "vocab-plural",
+      "lesson": 3,
+      "text": "إِخْوَةٌ",
+      "chars": 8,
+      "files": {
+        "m": "audio/book1/u01/u01-v031-pl-m.mp3",
+        "f": "audio/book1/u01/u01-v031-pl-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v032",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "أُخْتٌ",
+      "chars": 6,
+      "files": {
+        "m": "audio/book1/u01/u01-v032-m.mp3",
+        "f": "audio/book1/u01/u01-v032-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v032-pl",
+      "type": "vocab-plural",
+      "lesson": 3,
+      "text": "أَخَوَاتٌ",
+      "chars": 9,
+      "files": {
+        "m": "audio/book1/u01/u01-v032-pl-m.mp3",
+        "f": "audio/book1/u01/u01-v032-pl-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v033",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "صَدِيقٌ",
+      "chars": 7,
+      "files": {
+        "m": "audio/book1/u01/u01-v033-m.mp3",
+        "f": "audio/book1/u01/u01-v033-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v033-pl",
+      "type": "vocab-plural",
+      "lesson": 3,
+      "text": "أَصْدِقَاءُ",
+      "chars": 11,
+      "files": {
+        "m": "audio/book1/u01/u01-v033-pl-m.mp3",
+        "f": "audio/book1/u01/u01-v033-pl-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v034",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "صَدِيقَةٌ",
+      "chars": 9,
+      "files": {
+        "m": "audio/book1/u01/u01-v034-m.mp3",
+        "f": "audio/book1/u01/u01-v034-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v034-pl",
+      "type": "vocab-plural",
+      "lesson": 3,
+      "text": "صَدِيقَاتٌ",
+      "chars": 10,
+      "files": {
+        "m": "audio/book1/u01/u01-v034-pl-m.mp3",
+        "f": "audio/book1/u01/u01-v034-pl-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v035",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "مُدَرِّسٌ",
+      "chars": 9,
+      "files": {
+        "m": "audio/book1/u01/u01-v035-m.mp3",
+        "f": "audio/book1/u01/u01-v035-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v035-pl",
+      "type": "vocab-plural",
+      "lesson": 3,
+      "text": "مُدَرِّسُونَ",
+      "chars": 12,
+      "files": {
+        "m": "audio/book1/u01/u01-v035-pl-m.mp3",
+        "f": "audio/book1/u01/u01-v035-pl-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v036",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "طَبِيبٌ",
+      "chars": 7,
+      "files": {
+        "m": "audio/book1/u01/u01-v036-m.mp3",
+        "f": "audio/book1/u01/u01-v036-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v036-pl",
+      "type": "vocab-plural",
+      "lesson": 3,
+      "text": "أَطِبَّاءُ",
+      "chars": 10,
+      "files": {
+        "m": "audio/book1/u01/u01-v036-pl-m.mp3",
+        "f": "audio/book1/u01/u01-v036-pl-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v037",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "طَبِيبَةٌ",
+      "chars": 9,
+      "files": {
+        "m": "audio/book1/u01/u01-v037-m.mp3",
+        "f": "audio/book1/u01/u01-v037-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v037-pl",
+      "type": "vocab-plural",
+      "lesson": 3,
+      "text": "طَبِيبَاتٌ",
+      "chars": 10,
+      "files": {
+        "m": "audio/book1/u01/u01-v037-pl-m.mp3",
+        "f": "audio/book1/u01/u01-v037-pl-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v038",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "مُهَنْدِسٌ",
+      "chars": 10,
+      "files": {
+        "m": "audio/book1/u01/u01-v038-m.mp3",
+        "f": "audio/book1/u01/u01-v038-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v038-pl",
+      "type": "vocab-plural",
+      "lesson": 3,
+      "text": "مُهَنْدِسُونَ",
+      "chars": 13,
+      "files": {
+        "m": "audio/book1/u01/u01-v038-pl-m.mp3",
+        "f": "audio/book1/u01/u01-v038-pl-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v039",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "طَالِبٌ",
+      "chars": 7,
+      "files": {
+        "m": "audio/book1/u01/u01-v039-m.mp3",
+        "f": "audio/book1/u01/u01-v039-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v039-pl",
+      "type": "vocab-plural",
+      "lesson": 3,
+      "text": "طُلَّابٌ",
+      "chars": 8,
+      "files": {
+        "m": "audio/book1/u01/u01-v039-pl-m.mp3",
+        "f": "audio/book1/u01/u01-v039-pl-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v040",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "طَالِبَةٌ",
+      "chars": 9,
+      "files": {
+        "m": "audio/book1/u01/u01-v040-m.mp3",
+        "f": "audio/book1/u01/u01-v040-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v040-pl",
+      "type": "vocab-plural",
+      "lesson": 3,
+      "text": "طَالِبَاتٌ",
+      "chars": 10,
+      "files": {
+        "m": "audio/book1/u01/u01-v040-pl-m.mp3",
+        "f": "audio/book1/u01/u01-v040-pl-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v041",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "أَهْلًا وَسَهْلًا",
+      "chars": 17,
+      "files": {
+        "m": "audio/book1/u01/u01-v041-m.mp3",
+        "f": "audio/book1/u01/u01-v041-f.mp3"
+      }
+    },
+    {
+      "id": "u01-v042",
+      "type": "vocab",
+      "lesson": 3,
+      "text": "مَعَ السَّلَامَةِ",
+      "chars": 17,
+      "files": {
+        "m": "audio/book1/u01/u01-v042-m.mp3",
+        "f": "audio/book1/u01/u01-v042-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d01-l01",
+      "type": "dialogue",
+      "lesson": 1,
+      "text": "السَّلَامُ عَلَيْكُمْ.",
+      "chars": 22,
+      "files": {
+        "m": "audio/book1/u01/u01-d01-l01-m.mp3",
+        "f": "audio/book1/u01/u01-d01-l01-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d01-l02",
+      "type": "dialogue",
+      "lesson": 1,
+      "text": "وَعَلَيْكُمُ السَّلَامُ وَرَحْمَةُ اللهِ.",
+      "chars": 41,
+      "files": {
+        "m": "audio/book1/u01/u01-d01-l02-m.mp3",
+        "f": "audio/book1/u01/u01-d01-l02-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d01-l03",
+      "type": "dialogue",
+      "lesson": 1,
+      "text": "اِسْمِي أَحْمَدُ. مَا اسْمُكَ؟",
+      "chars": 30,
+      "files": {
+        "m": "audio/book1/u01/u01-d01-l03-m.mp3",
+        "f": "audio/book1/u01/u01-d01-l03-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d01-l04",
+      "type": "dialogue",
+      "lesson": 1,
+      "text": "اِسْمِي عَلِيٌّ.",
+      "chars": 16,
+      "files": {
+        "m": "audio/book1/u01/u01-d01-l04-m.mp3",
+        "f": "audio/book1/u01/u01-d01-l04-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d01-l05",
+      "type": "dialogue",
+      "lesson": 1,
+      "text": "كَيْفَ حَالُكَ يَا عَلِيُّ؟",
+      "chars": 27,
+      "files": {
+        "m": "audio/book1/u01/u01-d01-l05-m.mp3",
+        "f": "audio/book1/u01/u01-d01-l05-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d01-l06",
+      "type": "dialogue",
+      "lesson": 1,
+      "text": "بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ. وَكَيْفَ حَالُكَ أَنْتَ؟",
+      "chars": 55,
+      "files": {
+        "m": "audio/book1/u01/u01-d01-l06-m.mp3",
+        "f": "audio/book1/u01/u01-d01-l06-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d01-l07",
+      "type": "dialogue",
+      "lesson": 1,
+      "text": "بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ.",
+      "chars": 30,
+      "files": {
+        "m": "audio/book1/u01/u01-d01-l07-m.mp3",
+        "f": "audio/book1/u01/u01-d01-l07-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d02-l01",
+      "type": "dialogue",
+      "lesson": 1,
+      "text": "السَّلَامُ عَلَيْكُمْ.",
+      "chars": 22,
+      "files": {
+        "m": "audio/book1/u01/u01-d02-l01-m.mp3",
+        "f": "audio/book1/u01/u01-d02-l01-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d02-l02",
+      "type": "dialogue",
+      "lesson": 1,
+      "text": "وَعَلَيْكُمُ السَّلَامُ.",
+      "chars": 24,
+      "files": {
+        "m": "audio/book1/u01/u01-d02-l02-m.mp3",
+        "f": "audio/book1/u01/u01-d02-l02-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d02-l03",
+      "type": "dialogue",
+      "lesson": 1,
+      "text": "اِسْمِي عَائِشَةُ. مَا اسْمُكِ؟",
+      "chars": 31,
+      "files": {
+        "m": "audio/book1/u01/u01-d02-l03-m.mp3",
+        "f": "audio/book1/u01/u01-d02-l03-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d02-l04",
+      "type": "dialogue",
+      "lesson": 1,
+      "text": "اِسْمِي مَرْيَمُ.",
+      "chars": 17,
+      "files": {
+        "m": "audio/book1/u01/u01-d02-l04-m.mp3",
+        "f": "audio/book1/u01/u01-d02-l04-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d02-l05",
+      "type": "dialogue",
+      "lesson": 1,
+      "text": "كَيْفَ حَالُكِ يَا مَرْيَمُ؟",
+      "chars": 28,
+      "files": {
+        "m": "audio/book1/u01/u01-d02-l05-m.mp3",
+        "f": "audio/book1/u01/u01-d02-l05-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d02-l06",
+      "type": "dialogue",
+      "lesson": 1,
+      "text": "بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ. وَكَيْفَ حَالُكِ أَنْتِ؟",
+      "chars": 55,
+      "files": {
+        "m": "audio/book1/u01/u01-d02-l06-m.mp3",
+        "f": "audio/book1/u01/u01-d02-l06-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d02-l07",
+      "type": "dialogue",
+      "lesson": 1,
+      "text": "بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ.",
+      "chars": 30,
+      "files": {
+        "m": "audio/book1/u01/u01-d02-l07-m.mp3",
+        "f": "audio/book1/u01/u01-d02-l07-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d03-l01",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "السَّلَامُ عَلَيْكُمْ.",
+      "chars": 22,
+      "files": {
+        "m": "audio/book1/u01/u01-d03-l01-m.mp3",
+        "f": "audio/book1/u01/u01-d03-l01-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d03-l02",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "وَعَلَيْكُمُ السَّلَامُ.",
+      "chars": 24,
+      "files": {
+        "m": "audio/book1/u01/u01-d03-l02-m.mp3",
+        "f": "audio/book1/u01/u01-d03-l02-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d03-l03",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "مِنْ أَيْنَ أَنْتَ؟",
+      "chars": 19,
+      "files": {
+        "m": "audio/book1/u01/u01-d03-l03-m.mp3",
+        "f": "audio/book1/u01/u01-d03-l03-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d03-l04",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "أَنَا مِنَ الْمَالْدِيفِ. وَأَنْتَ؟",
+      "chars": 35,
+      "files": {
+        "m": "audio/book1/u01/u01-d03-l04-m.mp3",
+        "f": "audio/book1/u01/u01-d03-l04-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d03-l05",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "أَنَا مِنْ مِصْرَ.",
+      "chars": 18,
+      "files": {
+        "m": "audio/book1/u01/u01-d03-l05-m.mp3",
+        "f": "audio/book1/u01/u01-d03-l05-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d03-l06",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "هَلْ أَنْتَ مِصْرِيٌّ؟",
+      "chars": 22,
+      "files": {
+        "m": "audio/book1/u01/u01-d03-l06-m.mp3",
+        "f": "audio/book1/u01/u01-d03-l06-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d03-l07",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "نَعَمْ، أَنَا مِصْرِيٌّ. وَمَا جِنْسِيَّتُكَ أَنْتَ؟",
+      "chars": 52,
+      "files": {
+        "m": "audio/book1/u01/u01-d03-l07-m.mp3",
+        "f": "audio/book1/u01/u01-d03-l07-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d03-l08",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "أَنَا مَالْدِيفِيٌّ.",
+      "chars": 20,
+      "files": {
+        "m": "audio/book1/u01/u01-d03-l08-m.mp3",
+        "f": "audio/book1/u01/u01-d03-l08-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d03-l09",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "أَهْلًا وَسَهْلًا.",
+      "chars": 18,
+      "files": {
+        "m": "audio/book1/u01/u01-d03-l09-m.mp3",
+        "f": "audio/book1/u01/u01-d03-l09-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d04-l01",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "السَّلَامُ عَلَيْكُمْ.",
+      "chars": 22,
+      "files": {
+        "m": "audio/book1/u01/u01-d04-l01-m.mp3",
+        "f": "audio/book1/u01/u01-d04-l01-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d04-l02",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "وَعَلَيْكُمُ السَّلَامُ.",
+      "chars": 24,
+      "files": {
+        "m": "audio/book1/u01/u01-d04-l02-m.mp3",
+        "f": "audio/book1/u01/u01-d04-l02-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d04-l03",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "مِنْ أَيْنَ أَنْتِ؟",
+      "chars": 19,
+      "files": {
+        "m": "audio/book1/u01/u01-d04-l03-m.mp3",
+        "f": "audio/book1/u01/u01-d04-l03-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d04-l04",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "أَنَا مِنْ تُرْكِيَا. وَأَنْتِ؟",
+      "chars": 31,
+      "files": {
+        "m": "audio/book1/u01/u01-d04-l04-m.mp3",
+        "f": "audio/book1/u01/u01-d04-l04-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d04-l05",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "أَنَا مِنَ الْمَالْدِيفِ.",
+      "chars": 25,
+      "files": {
+        "m": "audio/book1/u01/u01-d04-l05-m.mp3",
+        "f": "audio/book1/u01/u01-d04-l05-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d04-l06",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "هَلْ أَنْتِ مَالْدِيفِيَّةٌ؟",
+      "chars": 28,
+      "files": {
+        "m": "audio/book1/u01/u01-d04-l06-m.mp3",
+        "f": "audio/book1/u01/u01-d04-l06-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d04-l07",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "نَعَمْ، أَنَا مَالْدِيفِيَّةٌ. وَمَا جِنْسِيَّتُكِ أَنْتِ؟",
+      "chars": 58,
+      "files": {
+        "m": "audio/book1/u01/u01-d04-l07-m.mp3",
+        "f": "audio/book1/u01/u01-d04-l07-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d04-l08",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "أَنَا تُرْكِيَّةٌ.",
+      "chars": 18,
+      "files": {
+        "m": "audio/book1/u01/u01-d04-l08-m.mp3",
+        "f": "audio/book1/u01/u01-d04-l08-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d04-l09",
+      "type": "dialogue",
+      "lesson": 2,
+      "text": "أَهْلًا وَسَهْلًا.",
+      "chars": 18,
+      "files": {
+        "m": "audio/book1/u01/u01-d04-l09-m.mp3",
+        "f": "audio/book1/u01/u01-d04-l09-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d05-l01",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "السَّلَامُ عَلَيْكُمْ.",
+      "chars": 22,
+      "files": {
+        "m": "audio/book1/u01/u01-d05-l01-m.mp3",
+        "f": "audio/book1/u01/u01-d05-l01-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d05-l02",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "وَعَلَيْكُمُ السَّلَامُ.",
+      "chars": 24,
+      "files": {
+        "m": "audio/book1/u01/u01-d05-l02-m.mp3",
+        "f": "audio/book1/u01/u01-d05-l02-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d05-l03",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "هَذَا أَخِي حَسَنٌ، هُوَ طَبِيبٌ.",
+      "chars": 33,
+      "files": {
+        "m": "audio/book1/u01/u01-d05-l03-m.mp3",
+        "f": "audio/book1/u01/u01-d05-l03-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d05-l04",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "أَهْلًا وَسَهْلًا.",
+      "chars": 18,
+      "files": {
+        "m": "audio/book1/u01/u01-d05-l04-m.mp3",
+        "f": "audio/book1/u01/u01-d05-l04-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d05-l05",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "وَهَذَا صَدِيقِي عُمَرُ، هُوَ مُدَرِّسٌ.",
+      "chars": 40,
+      "files": {
+        "m": "audio/book1/u01/u01-d05-l05-m.mp3",
+        "f": "audio/book1/u01/u01-d05-l05-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d05-l06",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "أَهْلًا وَسَهْلًا. أَنَا خَالِدٌ، أَنَا مُهَنْدِسٌ.",
+      "chars": 51,
+      "files": {
+        "m": "audio/book1/u01/u01-d05-l06-m.mp3",
+        "f": "audio/book1/u01/u01-d05-l06-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d05-l07",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "مَعَ السَّلَامَةِ يَا خَالِدُ.",
+      "chars": 30,
+      "files": {
+        "m": "audio/book1/u01/u01-d05-l07-m.mp3",
+        "f": "audio/book1/u01/u01-d05-l07-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d05-l08",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "مَعَ السَّلَامَةِ.",
+      "chars": 18,
+      "files": {
+        "m": "audio/book1/u01/u01-d05-l08-m.mp3",
+        "f": "audio/book1/u01/u01-d05-l08-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d06-l01",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "السَّلَامُ عَلَيْكُمْ.",
+      "chars": 22,
+      "files": {
+        "m": "audio/book1/u01/u01-d06-l01-m.mp3",
+        "f": "audio/book1/u01/u01-d06-l01-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d06-l02",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "وَعَلَيْكُمُ السَّلَامُ.",
+      "chars": 24,
+      "files": {
+        "m": "audio/book1/u01/u01-d06-l02-m.mp3",
+        "f": "audio/book1/u01/u01-d06-l02-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d06-l03",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "هَذِهِ أُخْتِي آمِنَةُ، هِيَ طَالِبَةٌ.",
+      "chars": 39,
+      "files": {
+        "m": "audio/book1/u01/u01-d06-l03-m.mp3",
+        "f": "audio/book1/u01/u01-d06-l03-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d06-l04",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "أَهْلًا وَسَهْلًا.",
+      "chars": 18,
+      "files": {
+        "m": "audio/book1/u01/u01-d06-l04-m.mp3",
+        "f": "audio/book1/u01/u01-d06-l04-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d06-l05",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "وَهَذِهِ صَدِيقَتِي سَارَةُ، هِيَ مُعَلِّمَةٌ.",
+      "chars": 46,
+      "files": {
+        "m": "audio/book1/u01/u01-d06-l05-m.mp3",
+        "f": "audio/book1/u01/u01-d06-l05-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d06-l06",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "أَهْلًا وَسَهْلًا. أَنَا هُدَى، أَنَا طَبِيبَةٌ.",
+      "chars": 48,
+      "files": {
+        "m": "audio/book1/u01/u01-d06-l06-m.mp3",
+        "f": "audio/book1/u01/u01-d06-l06-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d06-l07",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "مَعَ السَّلَامَةِ يَا هُدَى.",
+      "chars": 28,
+      "files": {
+        "m": "audio/book1/u01/u01-d06-l07-m.mp3",
+        "f": "audio/book1/u01/u01-d06-l07-f.mp3"
+      }
+    },
+    {
+      "id": "u01-d06-l08",
+      "type": "dialogue",
+      "lesson": 3,
+      "text": "مَعَ السَّلَامَةِ.",
+      "chars": 18,
+      "files": {
+        "m": "audio/book1/u01/u01-d06-l08-m.mp3",
+        "f": "audio/book1/u01/u01-d06-l08-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s01-q",
+      "type": "speak-q",
+      "lesson": 1,
+      "text": "السَّلَامُ عَلَيْكُمْ.",
+      "chars": 22,
+      "files": {
+        "m": "audio/book1/u01/u01-s01-q-m.mp3",
+        "f": "audio/book1/u01/u01-s01-q-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s01-a",
+      "type": "speak-a",
+      "lesson": 1,
+      "text": "وَعَلَيْكُمُ السَّلَامُ.",
+      "chars": 24,
+      "files": {
+        "m": "audio/book1/u01/u01-s01-a-m.mp3",
+        "f": "audio/book1/u01/u01-s01-a-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s02-q",
+      "type": "speak-q",
+      "lesson": 1,
+      "text": "مَا اسْمُكَ؟",
+      "chars": 12,
+      "files": {
+        "m": "audio/book1/u01/u01-s02-q-m.mp3",
+        "f": "audio/book1/u01/u01-s02-q-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s02-a",
+      "type": "speak-a",
+      "lesson": 1,
+      "text": "اِسْمِي أَحْمَدُ.",
+      "chars": 17,
+      "files": {
+        "m": "audio/book1/u01/u01-s02-a-m.mp3",
+        "f": "audio/book1/u01/u01-s02-a-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s03-q",
+      "type": "speak-q",
+      "lesson": 1,
+      "text": "كَيْفَ حَالُكَ؟",
+      "chars": 15,
+      "files": {
+        "m": "audio/book1/u01/u01-s03-q-m.mp3",
+        "f": "audio/book1/u01/u01-s03-q-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s03-a",
+      "type": "speak-a",
+      "lesson": 1,
+      "text": "بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ.",
+      "chars": 30,
+      "files": {
+        "m": "audio/book1/u01/u01-s03-a-m.mp3",
+        "f": "audio/book1/u01/u01-s03-a-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s04-q",
+      "type": "speak-q",
+      "lesson": 2,
+      "text": "مِنْ أَيْنَ أَنْتَ؟",
+      "chars": 19,
+      "files": {
+        "m": "audio/book1/u01/u01-s04-q-m.mp3",
+        "f": "audio/book1/u01/u01-s04-q-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s04-a",
+      "type": "speak-a",
+      "lesson": 2,
+      "text": "أَنَا مِنَ الْمَالْدِيفِ.",
+      "chars": 25,
+      "files": {
+        "m": "audio/book1/u01/u01-s04-a-m.mp3",
+        "f": "audio/book1/u01/u01-s04-a-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s05-q",
+      "type": "speak-q",
+      "lesson": 2,
+      "text": "مَا جِنْسِيَّتُكَ؟",
+      "chars": 18,
+      "files": {
+        "m": "audio/book1/u01/u01-s05-q-m.mp3",
+        "f": "audio/book1/u01/u01-s05-q-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s05-a",
+      "type": "speak-a",
+      "lesson": 2,
+      "text": "أَنَا مَالْدِيفِيٌّ.",
+      "chars": 20,
+      "files": {
+        "m": "audio/book1/u01/u01-s05-a-m.mp3",
+        "f": "audio/book1/u01/u01-s05-a-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s06-q",
+      "type": "speak-q",
+      "lesson": 2,
+      "text": "هَلْ أَنْتَ مَالْدِيفِيٌّ؟",
+      "chars": 26,
+      "files": {
+        "m": "audio/book1/u01/u01-s06-q-m.mp3",
+        "f": "audio/book1/u01/u01-s06-q-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s06-a",
+      "type": "speak-a",
+      "lesson": 2,
+      "text": "نَعَمْ، أَنَا مَالْدِيفِيٌّ.",
+      "chars": 28,
+      "files": {
+        "m": "audio/book1/u01/u01-s06-a-m.mp3",
+        "f": "audio/book1/u01/u01-s06-a-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s07-q",
+      "type": "speak-q",
+      "lesson": 3,
+      "text": "مَنْ هَذَا؟",
+      "chars": 11,
+      "files": {
+        "m": "audio/book1/u01/u01-s07-q-m.mp3",
+        "f": "audio/book1/u01/u01-s07-q-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s07-a",
+      "type": "speak-a",
+      "lesson": 3,
+      "text": "هَذَا أَخِي، هُوَ طَالِبٌ.",
+      "chars": 26,
+      "files": {
+        "m": "audio/book1/u01/u01-s07-a-m.mp3",
+        "f": "audio/book1/u01/u01-s07-a-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s08-q",
+      "type": "speak-q",
+      "lesson": 3,
+      "text": "مَنْ هَذِهِ؟",
+      "chars": 12,
+      "files": {
+        "m": "audio/book1/u01/u01-s08-q-m.mp3",
+        "f": "audio/book1/u01/u01-s08-q-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s08-a",
+      "type": "speak-a",
+      "lesson": 3,
+      "text": "هَذِهِ أُخْتِي، هِيَ طَبِيبَةٌ.",
+      "chars": 31,
+      "files": {
+        "m": "audio/book1/u01/u01-s08-a-m.mp3",
+        "f": "audio/book1/u01/u01-s08-a-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s09-q",
+      "type": "speak-q",
+      "lesson": 3,
+      "text": "هَلْ هُوَ مُدَرِّسٌ؟",
+      "chars": 20,
+      "files": {
+        "m": "audio/book1/u01/u01-s09-q-m.mp3",
+        "f": "audio/book1/u01/u01-s09-q-f.mp3"
+      }
+    },
+    {
+      "id": "u01-s09-a",
+      "type": "speak-a",
+      "lesson": 3,
+      "text": "نَعَمْ، هُوَ مُدَرِّسٌ.",
+      "chars": 23,
+      "files": {
+        "m": "audio/book1/u01/u01-s09-a-m.mp3",
+        "f": "audio/book1/u01/u01-s09-a-f.mp3"
+      }
+    },
+    {
+      "id": "u01-g01-e01",
+      "type": "grammar",
+      "lesson": 1,
+      "text": "مَا اسْمُكَ؟ — مَا اسْمُكِ؟",
+      "chars": 27,
+      "files": {
+        "m": "audio/book1/u01/u01-g01-e01-m.mp3",
+        "f": "audio/book1/u01/u01-g01-e01-f.mp3"
+      }
+    },
+    {
+      "id": "u01-g01-e02",
+      "type": "grammar",
+      "lesson": 1,
+      "text": "كَيْفَ حَالُكَ؟ — كَيْفَ حَالُكِ؟",
+      "chars": 33,
+      "files": {
+        "m": "audio/book1/u01/u01-g01-e02-m.mp3",
+        "f": "audio/book1/u01/u01-g01-e02-f.mp3"
+      }
+    },
+    {
+      "id": "u01-g02-e01",
+      "type": "grammar",
+      "lesson": 2,
+      "text": "مِصْرُ — مِصْرِيٌّ — مِصْرِيَّةٌ",
+      "chars": 32,
+      "files": {
+        "m": "audio/book1/u01/u01-g02-e01-m.mp3",
+        "f": "audio/book1/u01/u01-g02-e01-f.mp3"
+      }
+    },
+    {
+      "id": "u01-g02-e02",
+      "type": "grammar",
+      "lesson": 2,
+      "text": "هَلْ أَنْتَ مَالْدِيفِيٌّ؟ نَعَمْ.",
+      "chars": 34,
+      "files": {
+        "m": "audio/book1/u01/u01-g02-e02-m.mp3",
+        "f": "audio/book1/u01/u01-g02-e02-f.mp3"
+      }
+    },
+    {
+      "id": "u01-g03-e01",
+      "type": "grammar",
+      "lesson": 3,
+      "text": "هَذَا أَخِي، هُوَ مُدَرِّسٌ.",
+      "chars": 28,
+      "files": {
+        "m": "audio/book1/u01/u01-g03-e01-m.mp3",
+        "f": "audio/book1/u01/u01-g03-e01-f.mp3"
+      }
+    },
+    {
+      "id": "u01-g03-e02",
+      "type": "grammar",
+      "lesson": 3,
+      "text": "هَذِهِ أُخْتِي، هِيَ مُدَرِّسَةٌ.",
+      "chars": 33,
+      "files": {
+        "m": "audio/book1/u01/u01-g03-e02-m.mp3",
+        "f": "audio/book1/u01/u01-g03-e02-f.mp3"
+      }
+    }
+  ]
+}
