@@ -4,26 +4,34 @@ How to prepare Azure and run the Unit 1 pilot generation. Nothing here is
 required until audio generation is approved; the dry run works today with no
 account at all.
 
+## Scope (final policy, 2026-11-01)
+
+**Audio is permitted ONLY in Listening and Speaking activities.** In the
+current app the only such content is the Speaking tab's `speak[]` Q/A drills
+(which also feed its "Say it" mode). Vocabulary cards, flashcards/revision,
+textbook dialogues, reading sections, grammar explanations and quizzes get
+**no audio**, and the script can no longer generate them.
+
 ## What will be generated (Unit 1 pilot)
 
-- **125 utterances** from `data/book1/unit01.json`, byte-exact, nothing invented:
-  42 vocabulary words, 11 plural forms, 48 dialogue lines,
-  18 speaking Q/A utterances, 6 grammar examples.
-- **202 MP3 files** into `audio/book1/u01/` under the approved voice policy:
-  - vocabulary, plural forms, speaking exercises, grammar examples:
-    **both voices**;
-  - dialogue lines: **only the speaker's voice**, by the speaker's gender
-    (every male speaker = Hamed, every female speaker = Zariyah — no
-    artificial voice variations or pitch changes). Unit 1 happens to split
-    evenly: 24 lines Hamed, 24 lines Zariyah.
-- Voices: **ar-SA-HamedNeural** (male, file suffix `-m`) and
-  **ar-SA-ZariyahNeural** (female, suffix `-f`). The speaker→gender map is
-  in `generate.js` (`SPEAKERS`); an unmapped speaker stops the script rather
-  than guessing.
+- **18 utterances** from `data/book1/unit01.json` `speak[]` (9 questions +
+  9 answers), byte-exact, nothing invented.
+- **18 MP3 files** into `audio/book1/u01/` — **one recording per utterance,
+  no duplicate voices, no pitch changes**:
+  - **Answers → Hamed** (many contain masculine self-reference,
+    e.g. أَنَا مَالْدِيفِيٌّ);
+  - **Questions → Zariyah** for natural two-voice Q/A contrast (the asker is
+    grammatically unmarked in every question), **except** where an answer
+    genders the asker as male: `u05-s04` (مِنْ فَضْلِكَ) and `u06-s09`
+    (اِنْتَظِرْ ... مَعَكَ) — those two questions use Hamed. Neither is in
+    the Unit 1 pilot.
+- Voices: **ar-SA-HamedNeural** (suffix `-m`) and **ar-SA-ZariyahNeural**
+  (suffix `-f`).
 - Format: 24 kHz / 48 kbps mono MP3 (≈ 6 KB per second of speech;
-  the whole pilot should be roughly 3–4 MB).
-- Cost: **3,566 billed characters ≈ 0.7% of the Azure free tier's monthly
-  500,000 neural characters. $0.**
+  the pilot ≈ 0.5 MB, all eight units together ≈ 3–4 MB).
+- Cost: pilot **379 billed characters ≈ 0.1%** of the Azure free tier's
+  monthly 500,000 neural characters; **all units 1–8: 144 files,
+  3,987 characters ≈ 0.8% — $0.**
 - The exact text of every file is listed in `manifest-u01.json` (regenerated
   by every dry run) — review it before approving generation.
 
@@ -70,10 +78,7 @@ node prototype/audio/generate.js --unit 1 --run
 - Files are created one at a time with a 250 ms pause between requests.
 - Re-running **skips files that already exist** (safe to resume after an
   interruption); add `--force` to regenerate everything.
-- `--voice m` or `--voice f` generates one voice only.
-- `--only vocab` (or `dialogues,speak,grammar` in any combination) limits
-  the content types — useful for a first small listening batch, e.g.:
-  `node prototype/audio/generate.js --unit 1 --only vocab --voice m --run`
+- `--voice m` or `--voice f` generates only that voice's share of the files.
 - `--rate -10%` slows delivery slightly if normal speed sounds fast for
   learners (decide after listening to the defaults).
 
@@ -82,33 +87,30 @@ forgets the key.
 
 ## 4. Listening QA checklist (after generation)
 
-Play a sample of files from `audio/book1/u01/` and check, in both voices:
+Play the files from `audio/book1/u01/` and check:
 
-- [ ] Fatha / damma / kasra all audibly correct (e.g. `u01-v001` السَّلَامُ عَلَيْكُمْ)
-- [ ] Shadda doubled correctly (السَّلَام، عَلِيٌّ)
-- [ ] Tanween pronounced (اِسْمٌ in `u01-v003`)
-- [ ] Question intonation on مَا اسْمُكَ؟ / كَيْفَ حَالُكَ؟
-- [ ] Dialogue lines sound conversational, not robotic
-- [ ] Consistent loudness between the male and female voice
+- [ ] Fatha / damma / kasra all audibly correct (`u01-s01-q` السَّلَامُ عَلَيْكُمْ)
+- [ ] Shadda doubled correctly (السَّلَامُ)
+- [ ] Tanween pronounced (بِخَيْرٍ in `u01-s03-a`, جِدًّا later)
+- [ ] Question intonation on مَا اسْمُكَ؟ / كَيْفَ حَالُكَ؟ (Zariyah files)
+- [ ] Answers sound conversational, not robotic (Hamed files)
+- [ ] Consistent loudness between the Zariyah questions and Hamed answers
 - [ ] Modern Standard Arabic throughout — no dialect drift
 
-If both voices pass, approve Phase 4C (player integration). If delivery is too
-fast, regenerate with `--rate -10%` and `--force`.
+If both voices pass, approve Phase 4C (player integration in the Speaking
+tab). If delivery is too fast, regenerate with `--rate -10%` and `--force`.
 
 ## File naming convention (the app will derive paths from this — JSON unchanged)
 
 | Content | Pattern | Example |
 |---|---|---|
-| Vocabulary word | `uNN-vIII-<voice>.mp3` | `u01-v001-m.mp3` |
-| Plural form | `uNN-vIII-pl-<voice>.mp3` | `u01-v003-pl-f.mp3` |
-| Imperative form | `uNN-vIII-cm-<voice>.mp3` | (none in unit 1) |
-| Dialogue line | `uNN-dDD-lLL-<voice>.mp3` | `u01-d01-l02-m.mp3` |
-| Speak question / answer | `uNN-sSS-q/a-<voice>.mp3` | `u01-s01-q-f.mp3` |
-| Grammar example | `uNN-gGG-eEE-<voice>.mp3` | `u01-g01-e01-m.mp3` |
+| Speak question | `uNN-sSS-q-<voice>.mp3` | `u01-s01-q-f.mp3` |
+| Speak answer | `uNN-sSS-a-<voice>.mp3` | `u01-s01-a-m.mp3` |
 
-Indices are 1-based positions in the unit JSON arrays, so the mapping is fully
-deterministic and `data/book1/*.json` never needs an audio field.
+`SS` is the 1-based position in the unit's `speak` array, so the mapping is
+fully deterministic and `data/book1/*.json` never needs an audio field.
+The voice suffix is `-f` (Zariyah) for questions and `-m` (Hamed) for answers,
+except the two male-asker questions `u05-s04-q-m.mp3` and `u06-s09-q-m.mp3`.
 **Consequence to be aware of:** if an item is ever inserted into or removed
-from the middle of a JSON array, later indices shift and those files must be
-regenerated (cheap: pennies even for a full unit). Appending at the end is
-always safe.
+from the middle of a `speak` array, later indices shift and that unit's files
+must be regenerated (negligible cost). Appending at the end is always safe.

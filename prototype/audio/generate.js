@@ -1,5 +1,10 @@
 /* ArabicMV Phase 4B — Azure TTS generation script.
  *
+ * SCOPE (policy approved 2026-11-01): audio is permitted ONLY in Listening
+ * and Speaking activities. The sole such content is data/book1 `speak[]`
+ * (the Speaking tab's Q/A drills, which also feed its "Say it" mode).
+ * Vocabulary, flashcards, dialogues, reading and grammar get NO audio.
+ *
  * DRY RUN (default, no network):   node generate.js --unit 1
  *   Reads data/book1/unitNN.json, builds the utterance manifest
  *   (manifest-uNN.json next to this script) and prints a summary.
@@ -14,44 +19,32 @@
  *   use --force to regenerate.
  *
  * Other flags:
- *   --voice m|f|both   (default both)
- *   --only vocab,dialogues,speak,grammar   (default all)
+ *   --voice m|f|both   (default both; filters which of the assigned files to make)
  *   --rate -10%        optional SSML prosody rate, e.g. "-10%" for slower speech
  *
- * File naming convention (JSON stays untouched; the app derives these paths):
- *   vocab word     uNN-vIII-<voice>.mp3          III = 1-based index in unit vocab array
- *   vocab plural   uNN-vIII-pl-<voice>.mp3
- *   vocab command  uNN-vIII-cm-<voice>.mp3
- *   dialogue line  uNN-dDD-lLL-<voice>.mp3       DD = dialogue block, LL = line
- *   speak Q / A    uNN-sSS-q-<voice>.mp3 / uNN-sSS-a-<voice>.mp3
- *   grammar ex.    uNN-gGG-eEE-<voice>.mp3       GG = grammar note, EE = example
+ * File naming (JSON stays untouched; the app derives these paths):
+ *   speak question  uNN-sSS-q-<voice>.mp3     SS = 1-based index in unit speak array
+ *   speak answer    uNN-sSS-a-<voice>.mp3
  *   <voice> is m (ar-SA-HamedNeural) or f (ar-SA-ZariyahNeural).
+ *   One recording per utterance — no duplicate voices.
  */
 "use strict";
 var fs = require("fs"), path = require("path"), https = require("https");
 
 var VOICES = { m: "ar-SA-HamedNeural", f: "ar-SA-ZariyahNeural" };
 
-/* Voice policy (approved 2026-11-01):
- *  - vocabulary + word forms: both voices
- *  - dialogue lines: ONLY the speaker's voice, by the speaker's gender
- *    (all male speakers = Hamed, all female speakers = Zariyah; no pitch tricks)
- *  - speaking exercises + grammar examples: both voices (pilot)
- * Speaker genders below are taken from the names/roles in data/book1 units 1-8.
- * نُورُ is verified female from her own lines in unit 7 (أَنَا مِصْرِيَّةٌ، طَالِبَةٌ).
- * A dialogue speaker missing from this map stops the script — nothing is guessed. */
-var SPEAKERS = {
-  /* male names */
-  "أَحْمَدُ":"m", "عَلِيٌّ":"m", "حَسَنٌ":"m", "يُوسُفُ":"m", "إِبْرَاهِيمُ":"m",
-  "خَالِدٌ":"m", "سَعِيدٌ":"m", "مُحَمَّدٌ":"m", "عُمَرُ":"m", "عَبْدُ اللهِ":"m",
-  /* male roles (masculine forms) */
-  "الْأَبُ":"m", "الِابْنُ":"m", "الْبَائِعُ":"m", "الْمُشْتَرِي":"m",
-  "الْمُسَافِرُ":"m", "الزَّوْجُ":"m",
-  /* female names */
-  "عَائِشَةُ":"f", "مَرْيَمُ":"f", "خَدِيجَةُ":"f", "فَاطِمَةُ":"f", "زَيْنَبُ":"f",
-  "هُدَى":"f", "نُورُ":"f", "لَيْلَى":"f", "آمِنَةُ":"f", "سَلْمَى":"f",
-  /* female roles (feminine forms) */
-  "الْأُمُّ":"f", "الِابْنَةُ":"f", "الْمُضِيفَةُ":"f", "الزَّوْجَةُ":"f"
+/* Voice assignment for speak[] Q/A drills, from a full read of all 72 pairs
+ * in units 1-8 (2026-11-01). Every gender-marked utterance is masculine
+ * (اسْمُكَ، أَنْتَ، أَنَا مَالْدِيفِيٌّ، سَأَكُونُ مُدَرِّسًا...); there are no
+ * feminine addressees or self-references anywhere in speak[].
+ *  - Answers: always Hamed (male) — many contain masculine self-reference.
+ *  - Questions: Zariyah (female) for conversational two-voice contrast —
+ *    the asker is grammatically unmarked in every question — EXCEPT where an
+ *    answer genders the asker as male, listed below with the evidence.
+ * One recording per utterance; no duplicate voices, no pitch tricks. */
+var MALE_ASKER = {
+  "u05-s04": "answer says مِنْ فَضْلِكَ (masc.) to the asker",
+  "u06-s09": "answer says اِنْتَظِرْ ... مَعَكَ (masc.) to the asker"
 };
 var FORMAT = "audio-24khz-48kbitrate-mono-mp3"; /* good speech quality, ~6 KB/s */
 var DELAY_MS = 250; /* pause between requests — gentle on the free tier */
@@ -72,7 +65,6 @@ var UNIT = parseInt(flag("unit", "1"), 10);
 var RUN = args.indexOf("--run") >= 0;
 var FORCE = args.indexOf("--force") >= 0;
 var VOICE_SEL = String(flag("voice", "both"));
-var ONLY = String(flag("only", "vocab,dialogues,speak,grammar")).split(",");
 var RATE = flag("rate", null); /* e.g. "-10%" */
 
 if(!(UNIT >= 1 && UNIT <= 8)){ console.error("Unit must be 1-8 (units 9-16 have no data)."); process.exit(1); }
@@ -84,53 +76,19 @@ var unitFile = path.join(DATA, "unit" + uu + ".json");
 var d = JSON.parse(fs.readFileSync(unitFile, "utf8"));
 
 /* ---- build the utterance list (exact JSON strings, nothing invented) ---- */
-function pad3(n){ return ("00" + n).slice(-3); }
 function pad2(n){ return ("0" + n).slice(-2); }
 var items = [];
-function add(id, type, lesson, text, voices, who){
+function add(id, type, lesson, text, voice){
   if(!text) return;
-  var vs = voices.filter(function(k){ return voiceKeys.indexOf(k) >= 0; });
-  if(!vs.length) return; /* excluded by --voice filter */
-  var it = { id: id, type: type, lesson: lesson, text: text, chars: text.length, voices: vs };
-  if(who) it.who = who;
-  items.push(it);
+  if(voiceKeys.indexOf(voice) < 0) return; /* excluded by --voice filter */
+  items.push({ id: id, type: type, lesson: lesson, text: text, chars: text.length, voices: [voice] });
 }
-var BOTH = ["m", "f"];
-if(ONLY.indexOf("vocab") >= 0){
-  (d.vocab || []).forEach(function(v, i){
-    var base = "u" + uu + "-v" + pad3(i + 1);
-    add(base, "vocab", v.lesson, v.ar, BOTH);
-    add(base + "-pl", "vocab-plural", v.lesson, v.pl, BOTH);
-    add(base + "-cm", "vocab-command", v.lesson, v.command, BOTH);
-  });
-}
-if(ONLY.indexOf("dialogues") >= 0){
-  (d.dialogues || []).forEach(function(c, ci){
-    (c.lines || []).forEach(function(ln, li){
-      var g = SPEAKERS[ln.who];
-      if(!g){
-        console.error("Unknown dialogue speaker \"" + ln.who + "\" (unit " + UNIT + ", dialogue " +
-          (ci + 1) + ", line " + (li + 1) + "). Add them to SPEAKERS — genders are never guessed.");
-        process.exit(1);
-      }
-      add("u" + uu + "-d" + pad2(ci + 1) + "-l" + pad2(li + 1), "dialogue", c.lesson, ln.ar, [g], ln.who);
-    });
-  });
-}
-if(ONLY.indexOf("speak") >= 0){
-  (d.speak || []).forEach(function(s, si){
-    var base = "u" + uu + "-s" + pad2(si + 1);
-    add(base + "-q", "speak-q", s.lesson, s.q && s.q.ar, BOTH);
-    add(base + "-a", "speak-a", s.lesson, s.a && s.a.ar, BOTH);
-  });
-}
-if(ONLY.indexOf("grammar") >= 0){
-  (d.grammar || []).forEach(function(g, gi){
-    (g.examples || []).forEach(function(e, ei){
-      add("u" + uu + "-g" + pad2(gi + 1) + "-e" + pad2(ei + 1), "grammar", g.lesson, e.ar, BOTH);
-    });
-  });
-}
+(d.speak || []).forEach(function(s, si){
+  var base = "u" + uu + "-s" + pad2(si + 1);
+  var qVoice = MALE_ASKER[base] ? "m" : "f";
+  add(base + "-q", "speak-q", s.lesson, s.q && s.q.ar, qVoice);
+  add(base + "-a", "speak-a", s.lesson, s.a && s.a.ar, "m");
+});
 
 /* ---- manifest ---- */
 var outDir = path.join(AUDIO_ROOT, "u" + uu);
@@ -142,7 +100,7 @@ var manifest = {
   unit: UNIT,
   source: "data/book1/unit" + uu + ".json",
   voices: VOICES,
-  voicePolicy: "vocab/forms/speak/grammar: both voices; dialogue lines: speaker's gender only",
+  voicePolicy: "speak[] only (Listening/Speaking scope); answers Hamed, questions Zariyah except male-marked askers (u05-s04, u06-s09); one voice per utterance",
   format: FORMAT,
   rate: RATE || "default",
   outDir: "audio/book1/u" + uu + "/",
