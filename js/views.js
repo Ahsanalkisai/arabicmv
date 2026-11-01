@@ -2,7 +2,7 @@
 /* ---------- views ---------- */
 function SECTIONS(){ return [["dash",T("secDash"),"dash",T("navDash")],["book",T("secBook"),"read",T("navBook")],["practice",T("secPractice"),"practice",T("navPractice")],["talk",T("secTalk"),"speak",T("navTalk")],["ref",T("secRef"),"ref",T("navRef")],["progress",T("secProgress"),"progress",T("navProgress")]]; }
 /* the last tab shows grammar; its storage key stays "help" for saved progress */
-function LESSON_TABS(){ return [["read",T("read")],["practice",T("doo")],["speak",T("speak")],["help",T("grammar")]]; }
+function LESSON_TABS(){ return [["read",T("read")],["practice",T("doo")],["listen",T("listening")],["speak",T("speak")],["help",T("grammar")]]; }
 function TYPESL(){ return TYPES.map(function(t){ return [t[0], T(t[0])]; }); }
 function bar(back, small, title, isAr){
   return '<div class="hdr">'+(back ? '<button class="ib" data-a="'+back+'" aria-label="'+T("back")+'">'+ic("back")+'</button>' : '<span class="ib"></span>')+'<div class="hc">'+
@@ -44,7 +44,8 @@ function flowHTML(){
   var d = UNIT_DATA[S.unit];
   function btn(action, extra, label){ return '<button class="flow" data-a="'+action+'"'+extra+'><span>'+label+'</span>'+ic("chev")+'</button>'; }
   if(S.tab === "read") return btn("tab", ' data-t="practice"', T("next")+': '+T("doo"));
-  if(S.tab === "practice") return btn("tab", ' data-t="speak"', T("next")+': '+T("speak"));
+  if(S.tab === "practice") return btn("tab", ' data-t="listen"', T("next")+': '+T("listening"));
+  if(S.tab === "listen") return btn("tab", ' data-t="speak"', T("next")+': '+T("speak"));
   if(S.tab === "speak") return btn("tab", ' data-t="help"', T("next")+': '+T("grammar"));
   if(S.review) return btn("lessons", '', T("allLessons"));
   return btn("nextLesson", '', S.lesson < d.lessons.length ? T("nextLessonL") : T("reviewUnit"));
@@ -65,10 +66,13 @@ function lessonsDoneIn(u){
   d.lessons.forEach(function(_,i){ var dk = done[u+"-"+(i+1)]; if(dk && dk.read && dk.practice && dk.speak && dk.help) n++; });
   return n;
 }
-/* four section-progress dots (read, practice, speak, help) for one lesson */
+/* five section-progress dots (read, practice, listen, speak, help) for one lesson.
+   Lesson completion (the tick and unit progress) stays defined by the original
+   four flags so progress earned before the listening tab existed is not lost;
+   the listen dot tracks the new activity on its own. */
 function sdots(u, l){
   var dk = done[u+"-"+l] || {};
-  return '<span class="sdots" aria-hidden="true">'+["read","practice","speak","help"].map(function(s){ return '<i class="'+(dk[s]?"on":"")+'"></i>'; }).join("")+'</span>';
+  return '<span class="sdots" aria-hidden="true">'+["read","practice","listen","speak","help"].map(function(s){ return '<i class="'+(dk[s]?"on":"")+'"></i>'; }).join("")+'</span>';
 }
 function startHTML(){
   return '<ul class="ulist">'+UNITS.map(function(u,i){
@@ -143,6 +147,63 @@ function practiceHTML(){
   return tabs+
     (S.pracTab==="fc" ? fcHTML() : S.pracTab==="quiz" ? quizHTML() : S.pracTab==="match" ? matchHTML() : S.pracTab==="speed" ? speedHTML() : arrHTML());
 }
+/* ---------- listening (comprehension over the existing speak[] Q/A pairs) ---------- */
+/* questions of the current lesson (or whole unit in review), with their
+   absolute index in the unit's speak array */
+function liList(){
+  var d = UNIT_DATA[S.unit], out = [];
+  if(!d) return out;
+  d.speak.forEach(function(s, i){ if(S.review || s.lesson === S.lesson) out.push({s:s, i:i}); });
+  return out;
+}
+/* Distractors come only from the same unit's existing answers, by default from
+   other lessons ((i+3) and (i+6) mod 9). Six questions were audited as ambiguous
+   under that default — a distractor could genuinely answer them — and use these
+   hand-checked replacements instead (absolute speak[] indices):
+     3:5 هل تريد مشاهدة الشقة   — "لا، شكرا" is also a valid answer
+     3:8 هل تريد شيئا آخر       — the "أريد..." answers are also valid
+     4:1 هل تنام بعد الصلاة     — the other "لا..." answer reads as valid
+     4:6 ماذا تفعل في الصباح    — "أستيقظ عند الفجر" is also a valid answer
+     8:0 ماذا تعمل              — "أنا مدرس" is also a valid answer
+     8:6 ما مهنتك               — "أعمل مدرسا" is also a valid answer */
+var LI_DX = {"3:5":[1,2], "3:8":[2,4], "4:1":[4,6], "4:6":[5,7], "8:0":[5,7], "8:6":[5,7]};
+/* three stable answer options (absolute indices): the real answer plus two
+   distractors, rotated by question index so the correct position varies but
+   never moves between re-renders */
+function liOpts(qi){
+  var pool = UNIT_DATA[S.unit].speak, n = pool.length;
+  var dx = LI_DX[S.unit + ":" + qi] || [(qi + 3) % n, (qi + 6) % n];
+  var opts = [qi], seen = {}; seen[qi] = 1;
+  dx.forEach(function(i){ if(!seen[i] && pool[i]){ seen[i] = 1; opts.push(i); } });
+  for(var r = 0; r < (qi % opts.length); r++) opts.push(opts.shift());
+  return opts;
+}
+function listenHTML(){
+  var list = liList(), n = list.length;
+  if(!n) return '<div class="empty">'+T("noQuestions")+'</div>';
+  S.li = ((S.li % n) + n) % n;
+  var it = list[S.li], st = S.liA[S.unit + ":" + it.i] || 0, opts = liOpts(it.i);
+  var pool = UNIT_DATA[S.unit].speak;
+  var h = '<div class="card"><div class="clabel"><span>'+T("listening")+'</span><span class="count">'+num(S.li+1, n)+'</span></div>'+
+    /* placeholder for the recording mapped at audioSrc(S.unit, it.i+1, "q"); until
+       the file exists this is honestly a coming-soon notice, not a fake player */
+    '<div class="audioStub"><span class="asBtn" aria-hidden="true">'+ic("ear")+'</span><span>'+T("audioSoon")+'</span></div>'+
+    '<div class="prompt" style="margin:6px 0 10px"><span class="ar">'+esc(it.s.q.ar)+'</span></div>'+
+    (st ? '' : '<p class="sub" style="text-align:center;margin:0 0 10px">'+T("chooseAnswer")+'</p>')+
+    '<div class="opts">'+opts.map(function(o){
+      var cls = st && o === it.i ? " right" : (!st && S.liWrong === o ? " wrong" : "");
+      return '<button class="opt ar'+cls+'" data-a="liPick" data-i="'+o+'"><span class="radio"></span><span class="otext">'+esc(pool[o].a.ar)+'</span></button>';
+    }).join("")+'</div>'+
+    (st === 1 ? '<p class="fb ok">'+T("correct")+'</p>' : '')+
+    (!st && S.liWrong !== null ? '<p class="fb no">'+T("wrongTry")+'</p>' : '')+
+    (st ? '' : '<button class="btn wide reveal ghost" data-a="liReveal">'+ic("eye")+'<span>'+T("showAnswer")+'</span></button>')+
+    '</div>'+
+    (st ? '<div class="model"><div class="count">'+T("modelAnswer")+'</div><span class="ar">'+esc(it.s.a.ar)+'</span><span class="tr">'+meaning(it.s.a)+'</span></div>' : '')+
+    '<div class="ctrl"><button class="rb" data-a="liPrev" aria-label="'+T("prev")+'">'+ic("fwd")+'</button><button class="rb'+(st?" go":"")+'" data-a="liNext" aria-label="'+T("next")+'">'+ic("chev")+'</button></div>';
+  if(list.every(function(x){ return S.liA[S.unit + ":" + x.i]; }))
+    h += '<p class="fb ok" style="margin-top:12px">'+T("listenDone")+'</p>';
+  return h;
+}
 function sayList(d){ var out = []; ofLesson(d.speak).forEach(function(x){ out.push(x.q); out.push(x.a); }); return out; }
 function spCount(){ var d = UNIT_DATA[S.unit]; return S.spTab==="say" ? sayList(d).length : ofLesson(d.speak).length; }
 function speakHTML(){
@@ -163,6 +224,7 @@ function helpHTML(){
     '<h2>'+T("howTo")+'</h2><div class="card tips">'+
     '<p><strong>'+T("read")+':</strong> '+T("howRead")+'</p>'+
     '<p><strong>'+T("doo")+':</strong> '+T("howDo")+'</p>'+
+    '<p><strong>'+T("listening")+':</strong> '+T("howListen")+'</p>'+
     '<p><strong>'+T("speak")+':</strong> '+T("howSpeak")+'</p></div>'+
     '<h2>'+T("tips")+'</h2><div class="card tips"><p>'+T("tip1")+'</p><p>'+T("tip2")+'</p><p>'+T("tip3")+'</p></div>';
 }
@@ -239,9 +301,12 @@ function dashHTML(){
   h += '<h2>'+T("dailyActivity")+'</h2><div class="daily card">'+
     '<div class="dstreak"><b>'+sk+'</b><span>'+T("streakN")+'</span></div>'+
     '<div class="dtoday"><span class="drow"><span class="dot'+(today ? " on" : "")+'"></span><span>'+T(today ? "doneToday" : "notToday")+'</span></span><span class="sub2">'+T("dailyGoalHint")+'</span></div></div>';
-  /* E. today's practice — shortcuts into the existing engines */
+  /* E. today's practice — shortcuts into the existing engines, plus the two
+     lesson activities (listening and speaking) resumed at the last lesson */
   h += '<h2>'+T("todaysPractice")+'</h2><div class="pgrid">'+[["fc","cards","cardsI"],["quiz","quiz","help"],["match","match","matchI"],["arr","arrange","arrangeI"],["speed","speed","speedI"]].map(function(p){
-    return '<button class="pbtn" data-a="dashPractice" data-t="'+p[0]+'">'+ic(p[2])+'<span>'+T(p[1])+'</span></button>'; }).join("")+'</div>';
+    return '<button class="pbtn" data-a="dashPractice" data-t="'+p[0]+'">'+ic(p[2])+'<span>'+T(p[1])+'</span></button>'; }).join("")+
+    [["listen","listening","ear"],["speak","speak","speak"]].map(function(p){
+    return '<button class="pbtn" data-a="dashLesson" data-t="'+p[0]+'">'+ic(p[2])+'<span>'+T(p[1])+'</span></button>'; }).join("")+'</div>';
   /* F. recent lessons (recorded in aby-recent from first use on) */
   var rec = recent.filter(function(r){ return UNIT_DATA[r.u]; });
   if(rec.length)
@@ -378,7 +443,7 @@ function render(){
     default:
       if(!S.unit) app.innerHTML = startHTML();
       else if(!S.lesson) app.innerHTML = lessonsHTML();
-      else app.innerHTML = lessonTabs()+(S.tab === "practice" ? practiceHTML() : S.tab === "speak" ? speakHTML() : S.tab === "help" ? helpHTML() : readHTML())+flowHTML();
+      else app.innerHTML = lessonTabs()+(S.tab === "practice" ? practiceHTML() : S.tab === "listen" ? listenHTML() : S.tab === "speak" ? speakHTML() : S.tab === "help" ? helpHTML() : readHTML())+flowHTML();
   }
 }
 function menuModal(){

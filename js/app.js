@@ -30,7 +30,8 @@ var ICONS = {
   matchI:'<path d="M10.5 13.5a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1.2 1.2"/><path d="M13.5 10.5a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1.2-1.2"/>',
   arrangeI:'<path d="M4 7h16M4 12h11M4 17h6"/>',
   speedI:'<path d="M13 2L5 13.5h6L11 22l8-11.5h-6z"/>',
-  bookmark:'<path d="M7 3h10a1 1 0 011 1v17l-6-4.2L6 21V4a1 1 0 011-1z"/>'
+  bookmark:'<path d="M7 3h10a1 1 0 011 1v17l-6-4.2L6 21V4a1 1 0 011-1z"/>',
+  ear:'<path d="M4 18v-5a8 8 0 0116 0v5"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>'
 };
 var DIR_ICONS = {back:1, chev:1, fwd:1};
 function ic(n){ return '<svg class="ic'+(DIR_ICONS[n]?" d":"")+'" viewBox="0 0 24 24" aria-hidden="true">'+ICONS[n]+'</svg>'; }
@@ -74,6 +75,7 @@ function uid(){ return Date.now().toString(36) + Math.random().toString(36).slic
 
 /* ---------- state ---------- */
 var S = {mode:null, ui:"dv", sec:"dash", pUnit:1, pLesson:0, dlg:0, review:false, unit:null, lesson:null, last:{}, tab:"read", readTab:"conv", pracTab:"fc", scope:"lesson", spTab:"qa", sp:0, spShown:false, open:{},
+         li:0, liWrong:null, liA:{},
          cls:false, classId:null, type:"phrase", practice:null, teacher:false,
          libTab:"book", libQ:"", libU:0, libL:0, libSt:"all", libReview:false};
 try{
@@ -111,6 +113,25 @@ function checkReadDone(){
   d.conv.forEach(function(c){ if(S.review || c.lesson === S.lesson) total += c.lines.length; });
   d.vocab.forEach(function(v){ if(S.review || v.lesson === S.lesson) total++; });
   if(total && n >= Math.min(5, total)) markDone("read");
+}
+/* listening is done once every question in the lesson has been answered
+   (correctly or by revealing); unit review never marks a lesson flag */
+function liCheckDone(){
+  if(S.review || !S.unit || !S.lesson) return;
+  var list = liList();
+  if(list.length && list.every(function(x){ return S.liA[S.unit + ":" + x.i]; })) markDone("listen");
+}
+
+/* ---------- audio asset mapping (Phase 4C wires playback; no files exist yet) ----------
+   Recordings live at audio/book1/uNN/uNN-sSS-{q|a}-{voice}.mp3, derived from the
+   1-based position in the unit's speak[] array, so the data JSON needs no audio
+   field. Voice policy: answers Hamed (m); questions Zariyah (f) except the two
+   whose answers gender the asker as male. */
+var AUDIO_MALE_ASKER = {"5-4":1, "6-9":1}; /* "unit-sIndex": answer says مِنْ فَضْلِكَ / اِنْتَظِرْ...مَعَكَ */
+function audioSrc(u, si, part){ /* si = 1-based speak index, part = "q" | "a" */
+  var uu = (u < 10 ? "0" : "") + u, ss = (si < 10 ? "0" : "") + si;
+  var voice = part === "a" ? "m" : (AUDIO_MALE_ASKER[u + "-" + si] ? "m" : "f");
+  return "audio/book1/u" + uu + "/u" + uu + "-s" + ss + "-" + part + "-" + voice + ".mp3";
 }
 
 /* ---------- daily activity + recent lessons (new keys; existing keys untouched) ---------- */
@@ -213,7 +234,7 @@ var A = {
   unit:function(d){ S.unit=+d.n; S.lesson=null; try{ localStorage.setItem("aby-unit", String(S.unit)); }catch(e){} window.scrollTo(0,0); },
   lessons:function(){ S.lesson=null; S.review=false; window.scrollTo(0,0); },
   lesson:function(d){
-    S.review = d.n==="r"; S.lesson = S.review ? 1 : +d.n; S.dlg=0; S.tab="read"; S.readTab="conv"; S.scope="lesson"; S.open={}; S.sp=0; S.spShown=false; S.last[S.unit]=S.review ? "r" : S.lesson;
+    S.review = d.n==="r"; S.lesson = S.review ? 1 : +d.n; S.dlg=0; S.tab="read"; S.readTab="conv"; S.scope="lesson"; S.open={}; S.sp=0; S.spShown=false; S.li=0; S.liWrong=null; S.last[S.unit]=S.review ? "r" : S.lesson;
     try{ localStorage.setItem("aby-last", JSON.stringify(S.last)); }catch(e){}
     recordRecent(S.unit, S.review ? "r" : S.lesson);
     window.scrollTo(0,0);
@@ -223,6 +244,7 @@ var A = {
     if(d.t==="read" && S.readTab==="turn") S.readTab="conv";
     if(d.t==="practice") initPractice();
     if(d.t==="speak"){ S.sp=0; S.spShown=false; }
+    if(d.t==="listen"){ S.li=0; S.liWrong=null; }
     window.scrollTo(0,0);
   },
   clsOpen:function(){ closeModal(); S.cls=true; S.classId=null; S.practice=null; window.scrollTo(0,0); },
@@ -246,6 +268,29 @@ var A = {
     if(S.open[d.k] && d.k.charAt(0)==="g" && S.tab==="help") markDone("help");
     /* reading counts once enough dialogue lines or words have been revealed */
     if(S.open[d.k] && S.tab==="read" && (d.k.charAt(0)==="c" || d.k.charAt(0)==="v")) checkReadDone();
+  },
+  /* listening: answered = picked the right answer or revealed it; the lesson's
+     listen flag is set only when every question in scope has been answered */
+  liPick:function(d){
+    var list = liList(), it = list[S.li]; if(!it) return false;
+    var k = S.unit + ":" + it.i;
+    if(S.liA[k]) return false;
+    if(+d.i === it.i){ S.liA[k] = 1; S.liWrong = null; liCheckDone(); }
+    else S.liWrong = +d.i;
+  },
+  liReveal:function(){
+    var list = liList(), it = list[S.li]; if(!it) return false;
+    var k = S.unit + ":" + it.i;
+    if(S.liA[k]) return false;
+    S.liA[k] = 2; S.liWrong = null; liCheckDone();
+  },
+  liNext:function(){ var n = liList().length; if(n){ S.li = (S.li + 1) % n; } S.liWrong = null; },
+  liPrev:function(){ var n = liList().length; if(n){ S.li = (S.li - 1 + n) % n; } S.liWrong = null; },
+  dashLesson:function(d){
+    S.sec = "book"; S.cls = false;
+    if(!S.unit || !UNIT_DATA[S.unit]){ S.unit = 1; try{ localStorage.setItem("aby-unit", "1"); }catch(e){} }
+    A.lesson({n:String(S.last[S.unit] || "1")});
+    S.tab = d.t;
   },
   spShow:function(){ S.spShown=true; if(S.sp===spCount()-1) markDone("speak"); },
   spNext:function(){ S.sp=(S.sp+1)%spCount(); S.spShown=false; },
