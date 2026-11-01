@@ -186,9 +186,13 @@ function listenHTML(){
   var pool = UNIT_DATA[S.unit].speak;
   var h = '<div class="card"><div class="clabel"><span>'+T("listening")+'</span><span class="count">'+num(S.li+1, n)+'</span></div>'+
     /* placeholder for the recording mapped at audioSrc(S.unit, it.i+1, "q"); until
-       the file exists this is honestly a coming-soon notice, not a fake player */
+       the file exists this is honestly a coming-soon notice, not a fake player.
+       Once AUDIO_READY, the question is audio-first: text hidden until the
+       student asks for it or has answered. */
     '<div class="audioStub"><span class="asBtn" aria-hidden="true">'+ic("ear")+'</span><span>'+T("audioSoon")+'</span></div>'+
-    '<div class="prompt" style="margin:6px 0 10px"><span class="ar">'+esc(it.s.q.ar)+'</span></div>'+
+    (!AUDIO_READY || S.liText || st
+      ? '<div class="prompt" style="margin:6px 0 10px"><span class="ar">'+esc(it.s.q.ar)+'</span></div>'
+      : '<div class="row" style="justify-content:center;margin:6px 0 10px"><button class="btn ghost small" data-a="liText">'+ic("eye")+'<span>'+T("showQuestion")+'</span></button></div>')+
     (st ? '' : '<p class="sub" style="text-align:center;margin:0 0 10px">'+T("chooseAnswer")+'</p>')+
     '<div class="opts">'+opts.map(function(o){
       var cls = st && o === it.i ? " right" : (!st && S.liWrong === o ? " wrong" : "");

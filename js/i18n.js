@@ -32,6 +32,7 @@ var L = {
   listening:["Listening","އަޑުއެހުން"], chooseAnswer:["Choose the matching answer","ގުޅޭ ޖަވާބު ހޮވާ"],
   wrongTry:["Not quite — try again or show the answer","ރަނގަޅެއް ނޫން — އަލުން މަސައްކަތްކުރޭ ނުވަތަ ޖަވާބު ބަލާ"],
   audioSoon:["Audio coming soon","އަޑު ވަރަށް އަވަހަށް އިތުރުކުރެވޭނެ"],
+  showQuestion:["Show question text","ސުވާލުގެ ލިޔުން ދައްކާ"],
   listenDone:["Listening complete for this lesson","މި ފިލާވަޅުގެ އަޑުއެހުން ފުރިހަމަވެއްޖެ"],
   howListen:["Read the question (audio is coming), then choose the matching answer.","ސުވާލު ކިޔާފައި (އަޑު ފަހުން އަންނާނެ) އެއާ ގުޅޭ ޖަވާބު ހޮވާ."],
   sayPrompt:["Say this in Arabic","ޢަރަބި ބަހުން ބުނެލާ"], showAnswer:["Show answer","ޖަވާބު ދައްކާ"], modelAnswer:["Model answer","ނަމޫނާ ޖަވާބު"],

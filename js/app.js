@@ -75,7 +75,7 @@ function uid(){ return Date.now().toString(36) + Math.random().toString(36).slic
 
 /* ---------- state ---------- */
 var S = {mode:null, ui:"dv", sec:"dash", pUnit:1, pLesson:0, dlg:0, review:false, unit:null, lesson:null, last:{}, tab:"read", readTab:"conv", pracTab:"fc", scope:"lesson", spTab:"qa", sp:0, spShown:false, open:{},
-         li:0, liWrong:null, liA:{},
+         li:0, liWrong:null, liA:{}, liText:false,
          cls:false, classId:null, type:"phrase", practice:null, teacher:false,
          libTab:"book", libQ:"", libU:0, libL:0, libSt:"all", libReview:false};
 try{
@@ -127,6 +127,11 @@ function liCheckDone(){
    1-based position in the unit's speak[] array, so the data JSON needs no audio
    field. Voice policy: answers Hamed (m); questions Zariyah (f) except the two
    whose answers gender the asker as male. */
+/* Flip to true in Phase 4C once the MP3s exist. While false, Listening shows
+   the Arabic question text (there is nothing to listen to yet); once true, the
+   question is audio-first: its text stays hidden until the student taps
+   "Show question text" or has answered. */
+var AUDIO_READY = false;
 var AUDIO_MALE_ASKER = {"5-4":1, "6-9":1}; /* "unit-sIndex": answer says مِنْ فَضْلِكَ / اِنْتَظِرْ...مَعَكَ */
 function audioSrc(u, si, part){ /* si = 1-based speak index, part = "q" | "a" */
   var uu = (u < 10 ? "0" : "") + u, ss = (si < 10 ? "0" : "") + si;
@@ -234,7 +239,7 @@ var A = {
   unit:function(d){ S.unit=+d.n; S.lesson=null; try{ localStorage.setItem("aby-unit", String(S.unit)); }catch(e){} window.scrollTo(0,0); },
   lessons:function(){ S.lesson=null; S.review=false; window.scrollTo(0,0); },
   lesson:function(d){
-    S.review = d.n==="r"; S.lesson = S.review ? 1 : +d.n; S.dlg=0; S.tab="read"; S.readTab="conv"; S.scope="lesson"; S.open={}; S.sp=0; S.spShown=false; S.li=0; S.liWrong=null; S.last[S.unit]=S.review ? "r" : S.lesson;
+    S.review = d.n==="r"; S.lesson = S.review ? 1 : +d.n; S.dlg=0; S.tab="read"; S.readTab="conv"; S.scope="lesson"; S.open={}; S.sp=0; S.spShown=false; S.li=0; S.liWrong=null; S.liText=false; S.last[S.unit]=S.review ? "r" : S.lesson;
     try{ localStorage.setItem("aby-last", JSON.stringify(S.last)); }catch(e){}
     recordRecent(S.unit, S.review ? "r" : S.lesson);
     window.scrollTo(0,0);
@@ -244,7 +249,7 @@ var A = {
     if(d.t==="read" && S.readTab==="turn") S.readTab="conv";
     if(d.t==="practice") initPractice();
     if(d.t==="speak"){ S.sp=0; S.spShown=false; }
-    if(d.t==="listen"){ S.li=0; S.liWrong=null; }
+    if(d.t==="listen"){ S.li=0; S.liWrong=null; S.liText=false; }
     window.scrollTo(0,0);
   },
   clsOpen:function(){ closeModal(); S.cls=true; S.classId=null; S.practice=null; window.scrollTo(0,0); },
@@ -284,8 +289,9 @@ var A = {
     if(S.liA[k]) return false;
     S.liA[k] = 2; S.liWrong = null; liCheckDone();
   },
-  liNext:function(){ var n = liList().length; if(n){ S.li = (S.li + 1) % n; } S.liWrong = null; },
-  liPrev:function(){ var n = liList().length; if(n){ S.li = (S.li - 1 + n) % n; } S.liWrong = null; },
+  liNext:function(){ var n = liList().length; if(n){ S.li = (S.li + 1) % n; } S.liWrong = null; S.liText = false; },
+  liPrev:function(){ var n = liList().length; if(n){ S.li = (S.li - 1 + n) % n; } S.liWrong = null; S.liText = false; },
+  liText:function(){ S.liText = true; },
   dashLesson:function(d){
     S.sec = "book"; S.cls = false;
     if(!S.unit || !UNIT_DATA[S.unit]){ S.unit = 1; try{ localStorage.setItem("aby-unit", "1"); }catch(e){} }
