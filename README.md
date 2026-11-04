@@ -28,6 +28,10 @@ fonts/                Faruma (Dhivehi)
   file, speakers, language, recorded_at), `lines[] {who, ar, en, dv}`
 - `speak[]`: `lesson`, `q {ar,en,dv}`, `a {ar,en,dv}`
 - `grammar[]`: `lesson`, `title_dv`, `body_dv`, `title_en`, `body_en`, `examples[] {ar,en,dv}`
+- `letters[]` (optional; Bonus Lesson 17 only for now): `lesson`, `ar` (a whole word, fully
+  vowelled, copied from a vocabulary item), `src` (that vocabulary item's `ar`). Drives the
+  Practice tab "Letters" (تَرْتِيبُ الْحُرُوفِ), which appears only in units that have this list;
+  the meaning shown is the source item's `en`/`dv`.
 
 ## Progress
 

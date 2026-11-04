@@ -100,6 +100,17 @@ var L = {
   modeEnSub:["English interface and translations","English interface and translations"],
   modeDvSub:["Dhivehi interface and translations","ދިވެހި އިންޓަރފޭސް އަދި ތަރުޖަމާ"],
   modeBothSub:["Dhivehi interface, English and Dhivehi translations","ދިވެހި އިންޓަރފޭސް، އިނގިރޭސި އަދި ދިވެހި ތަރުޖަމާ"],
-  canChange:["You can change this later from the menu","ފަހުން މެނޫއިން މިކަން ބަދަލުކުރެވޭނެ"]
+  canChange:["You can change this later from the menu","ފަހުން މެނޫއިން މިކަން ބަދަލުކުރެވޭނެ"],
+  letters:["Letters","އަކުރު"], lettersSub:["Arrange the letters to make a word.","އަކުރުތައް ތަރުތީބުކޮށް ލަފުޒެއް ހަދާ."],
+  letNone:["No words to arrange in this lesson","މި ފިލާވަޅުގައި ތަރުތީބުކުރާނެ ލަފުޒެއް ނެތް"],
+  letTap:["Tap the letters in order, or drag them into the boxes","އަކުރުތަކުގައި ތަރުތީބުން ފިއްތާލާ، ނުވަތަ ގޮޅިތަކަށް ދަމާލާ"],
+  letFill:["Fill every box first","ފުރަތަމަ ހުރިހާ ގޮޅިއެއް ފުރާ"],
+  letGood:["Well done! That's the word.","ވަރަށް ރަނގަޅު! އެއީ ރަނގަޅު ލަފުޒު."],
+  letWrong:["Not quite — try again. Tap a box to take its letter back.","ރަނގަޅެއް ނޫން — އަލުން މަސައްކަތްކުރޭ. ގޮޅިއެއްގައި ފިއްތައިގެން އަކުރު އަނބުރާ ނަގާ."],
+  letHint:["Hint","އިޝާރާތެއް"], letReset:["Reset","ފޮހެލާ"], letNext:["Next Question","ދެން އޮތް ސުވާލު"],
+  letScore:["Score","ޕޮއިންޓު"], letAttempted:["Attempted","މަސައްކަތްކުރި"], letWrongN:["Wrong tries","ރަނގަޅުނުވި"],
+  letDone:["All words done","ހުރިހާ ލަފުޒެއް ނިމިއްޖެ"], letRetry:["Retry missed words","ރަނގަޅުނުވި ލަފުޒުތައް އަލުން"],
+  letScrambled:["Scrambled letters","އޮޅުވާލެވިފައިވާ އަކުރުތައް"], letAnswer:["Your answer","ތިބާގެ ޖަވާބު"], letTiles:["Letters to choose","ހޮވާނެ އަކުރުތައް"],
+  letBox:["Empty box","ހުސް ގޮޅި"], letRemove:["Take back","އަނބުރާ ނަގާ"]
 };
 function T(k){ var v = L[k]; return v ? v[S.ui === "en" ? 0 : 1] : k; }

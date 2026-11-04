@@ -307,6 +307,35 @@ html[data-ui="en"] .line.on>.ic.d,html[data-ui="en"] .nhead[aria-expanded="true"
 .slot.good{border-bottom-color:var(--good)} .slot.bad{border-bottom-color:var(--bad)}
 .bank{display:flex; flex-wrap:wrap; gap:6px; justify-content:center; min-height:50px}
 .word{background:var(--surface); border:0; border-radius:10px; padding:0 12px; font-size:1.45rem}
+/* arrange the letters */
+.ltcard{border:1px solid var(--accent)}
+.lthead{text-align:center; margin-bottom:8px}
+.lthead h3{margin:0; font-size:1.7rem; color:var(--primary); font-weight:700; line-height:1.6}
+.ltsub{margin:0; display:flex; flex-direction:column; gap:2px; color:var(--muted); font-size:.95rem}
+.ltsub .en,.ltsub .dv{color:var(--muted)}
+.ltbar{display:flex; justify-content:space-between; align-items:center; gap:10px; margin:4px 0 6px}
+.ltcard>.prog{flex:none; margin-bottom:12px}
+.ltq{text-align:center; display:flex; flex-direction:column; align-items:center; gap:4px; margin-bottom:10px}
+.ltq .en{font-size:1.1rem; font-weight:600; color:var(--ink)} .ltq .dv{font-size:1.1rem}
+.ltsrc{font-size:1.6rem; color:var(--ink)}
+.ltsrc b{color:var(--primary)}
+.ltgap{display:inline-block; width:3.2em; height:.9em; border-bottom:2px dashed var(--primary); vertical-align:baseline; margin:0 2px}
+.ltscr{display:flex; justify-content:center; flex-wrap:wrap; gap:14px; font-size:2rem; color:var(--muted); background:var(--surface); border-radius:14px; padding:2px 12px; margin:0 auto 14px; width:fit-content; max-width:100%}
+.ltslots{display:flex; justify-content:center; flex-wrap:wrap; gap:8px; margin-bottom:14px}
+.ltslot{width:56px; height:64px; border-radius:14px; border:2px dashed var(--line); background:var(--bg); font-family:"Amiri","Traditional Arabic",serif; font-size:2rem; line-height:1; color:var(--primary); display:grid; place-items:center; padding:0}
+.ltslot.on{border:2px solid var(--primary); background:var(--card); box-shadow:var(--shadow)}
+.ltslots.ok .ltslot{border-color:var(--good); background:var(--good-bg); color:var(--good)}
+.ltslots.no .ltslot.on{border-color:var(--bad)}
+.lttiles{display:flex; justify-content:center; flex-wrap:wrap; gap:10px; min-height:60px; padding:10px; border-radius:16px; background:var(--surface)}
+.lttile{width:56px; height:56px; border-radius:14px; border:1px solid var(--accent); background:var(--card); color:var(--primary); font-family:"Amiri","Traditional Arabic",serif; font-size:2rem; line-height:1; display:grid; place-items:center; padding:0; box-shadow:var(--shadow); cursor:grab; touch-action:manipulation}
+.lttile:hover:not(:disabled){border-color:var(--primary)}
+.lttile.used{opacity:.25; box-shadow:none; cursor:default}
+.ltans{font-size:2.6rem; color:var(--good); text-align:center; font-weight:700; line-height:1.7}
+.ltcard>.tr{align-items:center; text-align:center}
+.ltctl{display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:12px}
+.ltctl .btn{min-height:44px}
+.ltstats{display:flex; justify-content:center; gap:18px; margin:12px 0 0; font-size:.85rem; color:var(--muted)}
+.ltstats div{text-align:center} .ltstats dt{margin:0} .ltstats dd{margin:0; font-weight:700; color:var(--primary); font-size:1.05rem}
 
 /* class */
 .chips{display:grid; gap:8px; margin:6px 0}
@@ -412,6 +441,8 @@ input.en{text-align:left; font-size:1rem; color:var(--ink)}
   @keyframes rise{from{opacity:0; transform:translateY(-4px)}to{opacity:1; transform:none}}
   .abtn.loading{animation:apulse 1s ease-in-out infinite}
   @keyframes apulse{50%{opacity:.35}}
+  .ltslots.no{animation:ltshake .3s ease-in-out}
+  @keyframes ltshake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
 }
 
 /* tablet + desktop: side rail instead of a stretched phone layout */

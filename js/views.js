@@ -141,12 +141,15 @@ function readHTML(){
 }
 function practiceHTML(){
   if(S.sec === "practice" && !UNIT_DATA[S.pUnit]) return "";
-  var tabs = seg([["fc",T("cards")],["quiz",T("quiz")],["match",T("match")],["arr",T("arrange")],["speed",T("speed")]], S.pracTab, "pracTab");
+  var tl = [["fc",T("cards")],["quiz",T("quiz")],["match",T("match")],["arr",T("arrange")],["speed",T("speed")]];
+  if(hasLetters(practiceUnit())) tl.push(["letters",T("letters")]);
+  if(S.pracTab === "letters" && !hasLetters(practiceUnit())) initPractice();
+  var tabs = seg(tl, S.pracTab, "pracTab");
   var cnt = (S.pracTab==="quiz" && quiz && quiz.qs && quiz.i < quiz.qs.length) ? '<span class="count tcount">'+T("question")+' '+num(quiz.i+1, quiz.qs.length)+'</span>' : '';
   tabs = tabs.replace('</div>', cnt+'</div>');
   if(!S.review && S.sec !== "practice") tabs = '<div class="segrow">'+tabs+'<button class="fbtn'+(S.scope==="unit"?" on":"")+'" data-a="scopeToggle" aria-pressed="'+(S.scope==="unit")+'" aria-label="'+T("scope")+'" title="'+(S.scope==="unit" ? T("wholeUnit") : T("thisLesson"))+'">'+ic("filter")+'</button></div>';
   return tabs+
-    (S.pracTab==="fc" ? fcHTML() : S.pracTab==="quiz" ? quizHTML() : S.pracTab==="match" ? matchHTML() : S.pracTab==="speed" ? speedHTML() : arrHTML());
+    (S.pracTab==="fc" ? fcHTML() : S.pracTab==="quiz" ? quizHTML() : S.pracTab==="match" ? matchHTML() : S.pracTab==="speed" ? speedHTML() : S.pracTab==="letters" ? ltHTML() : arrHTML());
 }
 /* ---------- listening (comprehension over the existing speak[] Q/A pairs) ---------- */
 /* questions of the current lesson (or whole unit in review), with their
@@ -466,6 +469,16 @@ function render(){
       else app.innerHTML = lessonTabs()+(S.tab === "practice" ? practiceHTML() : S.tab === "listen" ? listenHTML() : S.tab === "speak" ? speakHTML() : S.tab === "help" ? helpHTML() : readHTML())+flowHTML();
   }
   audAfterRender();
+  pracTabKeep();
+}
+/* every render rebuilds the scrolling practice-tab row at its start; on a phone the last
+   tabs (Speed, Letters) would slide out of view again, so bring the chosen one back —
+   sideways only, the page itself does not move */
+function pracTabKeep(){
+  var b = document.querySelector('.seg button.on[data-a="pracTab"]'); if(!b) return;
+  var s = b.parentNode, br = b.getBoundingClientRect(), sr = s.getBoundingClientRect();
+  if(br.right > sr.right) s.scrollLeft += br.right - sr.right + 8;
+  else if(br.left < sr.left) s.scrollLeft -= sr.left - br.left + 8;
 }
 function menuModal(){
   openModal('<div class="menu"><button data-a="clsOpen">'+T("yourClass")+'</button>'+

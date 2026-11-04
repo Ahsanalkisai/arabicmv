@@ -57,6 +57,7 @@ function adoptUnit(j){
     vocab: j.vocab,
     conv: j.dialogues.map(function(c){ return {lesson:c.lesson, audio:c.audio, lines:c.lines}; }),
     speak: j.speak,
+    letters: j.letters || [],
     grammar: j.grammar.map(function(g){ return {lesson:g.lesson, title:g.title_dv, body:g.body_dv, titleEn:g.title_en, bodyEn:g.body_en, ex:g.examples}; })
   };
 }
@@ -96,7 +97,7 @@ function applyMode(){
   root.setAttribute("data-ui", S.ui);
 }
 applyMode();
-var fc = null, quiz = null, match = null, arr = null;
+var fc = null, quiz = null, match = null, arr = null, lt = null;
 var rv = null; /* vocabulary review session, separate from the lesson flashcards */
 function rvAdvance(){ rv.i++; rv.flipped = false; }
 var done = {}; try{ done = JSON.parse(localStorage.getItem("aby-done") || "{}") || {}; }catch(e){}
@@ -393,6 +394,48 @@ var A = {
   arrBack:function(d){ arr.picked = arr.picked.filter(function(x){ return x !== +d.id; }); },
   arrReset:function(){ arr.picked = []; },
   arrNext:function(){ arr.i = (arr.i+1) % arr.list.length; loadArr(); },
+  /* arrange the letters: a tile fills the first empty box; a filled box gives its letter back */
+  ltPick:function(d){ if(lt.status === "ok") return; var p = lt.slots.indexOf(null); if(p >= 0 && lt.slots.indexOf(+d.id) < 0){ lt.slots[p] = +d.id; lt.status = null; } },
+  ltSlot:function(d){ if(lt.status === "ok") return; lt.slots[+d.i] = null; lt.status = null; },
+  ltReset:function(){ if(lt.status === "ok") return; lt.slots = lt.slots.map(function(){ return null; }); lt.status = null; },
+  /* drag: "t<id>" is a tile, "s<box>" a filled box; dropping on a box swaps with what is there,
+     dropping on the tile area gives the letter back */
+  ltDrop:function(from, to){
+    if(!lt || lt.done || lt.status === "ok") return;
+    var id = from.charAt(0) === "s" ? lt.slots[+from.slice(1)] : +from.slice(1), was = lt.slots.indexOf(id);
+    if(id === null || isNaN(id)) return;
+    if(to === "bank"){ if(was >= 0) lt.slots[was] = null; }
+    else { var p = +to, other = lt.slots[p]; lt.slots[p] = id; if(was >= 0 && was !== p) lt.slots[was] = other; }
+    lt.status = null;
+  },
+  /* hint: put the right letter in the first box that is empty or wrong */
+  ltHint:function(){
+    if(lt.status === "ok") return;
+    var q = lt.list[lt.i];
+    function good(at){ var k = lt.slots[at]; return k !== null && q.segs[k].b === q.segs[at].b; }
+    for(var p = 0; p < q.segs.length; p++){
+      if(good(p)) continue;
+      /* a tile with the needed letter that is not already sitting in a right box always exists */
+      var pick = lt.order.filter(function(id){ var at = lt.slots.indexOf(id); return q.segs[id].b === q.segs[p].b && (at < 0 || !good(at)); })[0];
+      if(pick === undefined) return;
+      var from = lt.slots.indexOf(pick); if(from >= 0) lt.slots[from] = null;
+      lt.slots[p] = pick; lt.hints++; lt.status = null; return;
+    }
+  },
+  ltCheck:function(){
+    if(lt.status === "ok") return;
+    if(!ltFull()){ lt.status = "fill"; return; }
+    var q = lt.list[lt.i]; lt.att[q.ar] = 1;
+    if(ltRight()){ lt.status = "ok"; lt.ok[q.ar] = 1; } else { lt.status = "no"; lt.wrong++; lt.miss[q.ar] = 1; }
+  },
+  ltNext:function(){
+    lt.i++;
+    if(lt.i >= lt.list.length){ lt.done = true; if(S.tab==="practice" || S.readTab==="turn") markDone("practice"); }
+    else ltLoad();
+    window.scrollTo(0,0);
+  },
+  ltRetry:function(){ var keep = lt; ltRound(lt.list.filter(function(q){ return !keep.ok[q.ar] || keep.miss[q.ar]; })); },
+  ltRestart:function(){ startLt(lt.all); },
   dashStart:function(){ S.sec="book"; S.cls=false; return A.unit({n:"1"}); },
   dashPractice:function(d){
     closeModal(); clearInterval(speedTimer); S.sec="practice"; S.cls=false; S.pracTab=d.t;
@@ -489,6 +532,18 @@ document.addEventListener("click", function(ev){
   var t = ev.target.closest("[data-a]"); if(!t) return;
   var fn = A[t.dataset.a]; if(!fn) return;
   if(fn(t.dataset, ev) !== false) render();
+});
+/* drag and drop for arrange-the-letters (mouse and pen; on touch screens tapping does the same) */
+document.addEventListener("dragstart", function(ev){
+  var t = ev.target.closest && ev.target.closest("[data-drag]"); if(!t) return;
+  try{ ev.dataTransfer.setData("text/plain", t.dataset.drag); ev.dataTransfer.effectAllowed = "move"; }catch(e){}
+});
+document.addEventListener("dragover", function(ev){ if(ev.target.closest && ev.target.closest("[data-slot]")) ev.preventDefault(); });
+document.addEventListener("drop", function(ev){
+  var z = ev.target.closest && ev.target.closest("[data-slot]"); if(!z) return;
+  ev.preventDefault();
+  var from = ""; try{ from = ev.dataTransfer.getData("text/plain"); }catch(e){}
+  if(/^[st]\d+$/.test(from)){ A.ltDrop(from, z.dataset.slot); render(); }
 });
 document.addEventListener("change", function(ev){
   if(ev.target.id === "pUnitSel"){ A.pUnit({n:ev.target.value}); render(); }
