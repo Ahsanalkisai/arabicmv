@@ -1,203 +1,277 @@
 {
-  "generated": "2026-11-01",
-  "unit": 1,
-  "source": "data/book1/unit01.json",
-  "voices": {
-    "m": "ar-SA-HamedNeural",
-    "f": "ar-SA-ZariyahNeural"
-  },
-  "voicePolicy": "speak[] only (Listening/Speaking scope); answers Hamed, questions Zariyah except male-marked askers (u05-s04, u06-s09); one voice per utterance",
-  "format": "audio-24khz-48kbitrate-mono-mp3",
-  "rate": "default",
-  "outDir": "audio/book1/u01/",
-  "counts": {
-    "speak-q": 9,
-    "speak-a": 9
-  },
+ "unit": 1,
+ "bonus": false,
+ "title": "Greetings and introductions",
+ "source": "data/book1/unit01.json",
+ "scope": "Listening/Speaking only: speak[] questions and answers",
+ "voices": {
+  "m": "ar-SA-HamedNeural",
+  "f": "ar-SA-ZariyahNeural"
+ },
+ "format": "audio-24khz-48kbitrate-mono-mp3",
+ "rate": "default",
+ "outDir": "audio/book1/u01/",
+ "voicePolicy": "questions Zariyah except male-addressed askers (5-4, 6-9); answers Hamed",
+ "counts": {
   "utterances": 18,
   "files": 18,
-  "arabicChars": 379,
-  "billedChars": 379,
-  "items": [
-    {
-      "id": "u01-s01-q",
-      "type": "speak-q",
-      "lesson": 1,
-      "text": "السَّلَامُ عَلَيْكُمْ.",
-      "chars": 22,
-      "files": {
-        "f": "audio/book1/u01/u01-s01-q-f.mp3"
-      }
-    },
-    {
-      "id": "u01-s01-a",
-      "type": "speak-a",
-      "lesson": 1,
-      "text": "وَعَلَيْكُمُ السَّلَامُ.",
-      "chars": 24,
-      "files": {
-        "m": "audio/book1/u01/u01-s01-a-m.mp3"
-      }
-    },
-    {
-      "id": "u01-s02-q",
-      "type": "speak-q",
-      "lesson": 1,
-      "text": "مَا اسْمُكَ؟",
-      "chars": 12,
-      "files": {
-        "f": "audio/book1/u01/u01-s02-q-f.mp3"
-      }
-    },
-    {
-      "id": "u01-s02-a",
-      "type": "speak-a",
-      "lesson": 1,
-      "text": "اِسْمِي أَحْمَدُ.",
-      "chars": 17,
-      "files": {
-        "m": "audio/book1/u01/u01-s02-a-m.mp3"
-      }
-    },
-    {
-      "id": "u01-s03-q",
-      "type": "speak-q",
-      "lesson": 1,
-      "text": "كَيْفَ حَالُكَ؟",
-      "chars": 15,
-      "files": {
-        "f": "audio/book1/u01/u01-s03-q-f.mp3"
-      }
-    },
-    {
-      "id": "u01-s03-a",
-      "type": "speak-a",
-      "lesson": 1,
-      "text": "بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ.",
-      "chars": 30,
-      "files": {
-        "m": "audio/book1/u01/u01-s03-a-m.mp3"
-      }
-    },
-    {
-      "id": "u01-s04-q",
-      "type": "speak-q",
-      "lesson": 2,
-      "text": "مِنْ أَيْنَ أَنْتَ؟",
-      "chars": 19,
-      "files": {
-        "f": "audio/book1/u01/u01-s04-q-f.mp3"
-      }
-    },
-    {
-      "id": "u01-s04-a",
-      "type": "speak-a",
-      "lesson": 2,
-      "text": "أَنَا مِنَ الْمَالْدِيفِ.",
-      "chars": 25,
-      "files": {
-        "m": "audio/book1/u01/u01-s04-a-m.mp3"
-      }
-    },
-    {
-      "id": "u01-s05-q",
-      "type": "speak-q",
-      "lesson": 2,
-      "text": "مَا جِنْسِيَّتُكَ؟",
-      "chars": 18,
-      "files": {
-        "f": "audio/book1/u01/u01-s05-q-f.mp3"
-      }
-    },
-    {
-      "id": "u01-s05-a",
-      "type": "speak-a",
-      "lesson": 2,
-      "text": "أَنَا مَالْدِيفِيٌّ.",
-      "chars": 20,
-      "files": {
-        "m": "audio/book1/u01/u01-s05-a-m.mp3"
-      }
-    },
-    {
-      "id": "u01-s06-q",
-      "type": "speak-q",
-      "lesson": 2,
-      "text": "هَلْ أَنْتَ مَالْدِيفِيٌّ؟",
-      "chars": 26,
-      "files": {
-        "f": "audio/book1/u01/u01-s06-q-f.mp3"
-      }
-    },
-    {
-      "id": "u01-s06-a",
-      "type": "speak-a",
-      "lesson": 2,
-      "text": "نَعَمْ، أَنَا مَالْدِيفِيٌّ.",
-      "chars": 28,
-      "files": {
-        "m": "audio/book1/u01/u01-s06-a-m.mp3"
-      }
-    },
-    {
-      "id": "u01-s07-q",
-      "type": "speak-q",
-      "lesson": 3,
-      "text": "مَنْ هَذَا؟",
-      "chars": 11,
-      "files": {
-        "f": "audio/book1/u01/u01-s07-q-f.mp3"
-      }
-    },
-    {
-      "id": "u01-s07-a",
-      "type": "speak-a",
-      "lesson": 3,
-      "text": "هَذَا أَخِي، هُوَ طَالِبٌ.",
-      "chars": 26,
-      "files": {
-        "m": "audio/book1/u01/u01-s07-a-m.mp3"
-      }
-    },
-    {
-      "id": "u01-s08-q",
-      "type": "speak-q",
-      "lesson": 3,
-      "text": "مَنْ هَذِهِ؟",
-      "chars": 12,
-      "files": {
-        "f": "audio/book1/u01/u01-s08-q-f.mp3"
-      }
-    },
-    {
-      "id": "u01-s08-a",
-      "type": "speak-a",
-      "lesson": 3,
-      "text": "هَذِهِ أُخْتِي، هِيَ طَبِيبَةٌ.",
-      "chars": 31,
-      "files": {
-        "m": "audio/book1/u01/u01-s08-a-m.mp3"
-      }
-    },
-    {
-      "id": "u01-s09-q",
-      "type": "speak-q",
-      "lesson": 3,
-      "text": "هَلْ هُوَ مُدَرِّسٌ؟",
-      "chars": 20,
-      "files": {
-        "f": "audio/book1/u01/u01-s09-q-f.mp3"
-      }
-    },
-    {
-      "id": "u01-s09-a",
-      "type": "speak-a",
-      "lesson": 3,
-      "text": "نَعَمْ، هُوَ مُدَرِّسٌ.",
-      "chars": 23,
-      "files": {
-        "m": "audio/book1/u01/u01-s09-a-m.mp3"
-      }
-    }
-  ]
+  "reused": 0,
+  "Hamed": 9,
+  "Zariyah": 9
+ },
+ "arabicChars": 379,
+ "items": [
+  {
+   "id": "u01-s01-q",
+   "key": "1q",
+   "type": "speak-q",
+   "lesson": 1,
+   "voice": "f",
+   "voiceName": "ar-SA-ZariyahNeural",
+   "reason": "default question voice",
+   "text": "السَّلَامُ عَلَيْكُمْ.",
+   "chars": 22,
+   "fingerprint": "86c32b79be3f8963",
+   "textHash": "25c3b61b",
+   "file": "u01/u01-s01-q-f.mp3"
+  },
+  {
+   "id": "u01-s01-a",
+   "key": "1a",
+   "type": "speak-a",
+   "lesson": 1,
+   "voice": "m",
+   "voiceName": "ar-SA-HamedNeural",
+   "reason": "default answer voice",
+   "text": "وَعَلَيْكُمُ السَّلَامُ.",
+   "chars": 24,
+   "fingerprint": "c3e3078374724164",
+   "textHash": "5bb8f98a",
+   "file": "u01/u01-s01-a-m.mp3"
+  },
+  {
+   "id": "u01-s02-q",
+   "key": "2q",
+   "type": "speak-q",
+   "lesson": 1,
+   "voice": "f",
+   "voiceName": "ar-SA-ZariyahNeural",
+   "reason": "default question voice",
+   "text": "مَا اسْمُكَ؟",
+   "chars": 12,
+   "fingerprint": "af7bc730060b88e2",
+   "textHash": "8ce5ec77",
+   "file": "u01/u01-s02-q-f.mp3"
+  },
+  {
+   "id": "u01-s02-a",
+   "key": "2a",
+   "type": "speak-a",
+   "lesson": 1,
+   "voice": "m",
+   "voiceName": "ar-SA-HamedNeural",
+   "reason": "default answer voice",
+   "text": "اِسْمِي أَحْمَدُ.",
+   "chars": 17,
+   "fingerprint": "bdfccab154215c15",
+   "textHash": "12ced9bb",
+   "file": "u01/u01-s02-a-m.mp3"
+  },
+  {
+   "id": "u01-s03-q",
+   "key": "3q",
+   "type": "speak-q",
+   "lesson": 1,
+   "voice": "f",
+   "voiceName": "ar-SA-ZariyahNeural",
+   "reason": "default question voice",
+   "text": "كَيْفَ حَالُكَ؟",
+   "chars": 15,
+   "fingerprint": "4f5b46af73583163",
+   "textHash": "bac9b828",
+   "file": "u01/u01-s03-q-f.mp3"
+  },
+  {
+   "id": "u01-s03-a",
+   "key": "3a",
+   "type": "speak-a",
+   "lesson": 1,
+   "voice": "m",
+   "voiceName": "ar-SA-HamedNeural",
+   "reason": "default answer voice",
+   "text": "بِخَيْرٍ، وَالْحَمْدُ لِلّٰهِ.",
+   "chars": 30,
+   "fingerprint": "84227efe637cffcb",
+   "textHash": "77699d82",
+   "file": "u01/u01-s03-a-m.mp3"
+  },
+  {
+   "id": "u01-s04-q",
+   "key": "4q",
+   "type": "speak-q",
+   "lesson": 2,
+   "voice": "f",
+   "voiceName": "ar-SA-ZariyahNeural",
+   "reason": "default question voice",
+   "text": "مِنْ أَيْنَ أَنْتَ؟",
+   "chars": 19,
+   "fingerprint": "4aec260131d1f4a9",
+   "textHash": "020113e3",
+   "file": "u01/u01-s04-q-f.mp3"
+  },
+  {
+   "id": "u01-s04-a",
+   "key": "4a",
+   "type": "speak-a",
+   "lesson": 2,
+   "voice": "m",
+   "voiceName": "ar-SA-HamedNeural",
+   "reason": "default answer voice",
+   "text": "أَنَا مِنَ الْمَالْدِيفِ.",
+   "chars": 25,
+   "fingerprint": "914c8316363c27e4",
+   "textHash": "7b4eb2bd",
+   "file": "u01/u01-s04-a-m.mp3"
+  },
+  {
+   "id": "u01-s05-q",
+   "key": "5q",
+   "type": "speak-q",
+   "lesson": 2,
+   "voice": "f",
+   "voiceName": "ar-SA-ZariyahNeural",
+   "reason": "default question voice",
+   "text": "مَا جِنْسِيَّتُكَ؟",
+   "chars": 18,
+   "fingerprint": "8375bad802394de9",
+   "textHash": "1f9ce55c",
+   "file": "u01/u01-s05-q-f.mp3"
+  },
+  {
+   "id": "u01-s05-a",
+   "key": "5a",
+   "type": "speak-a",
+   "lesson": 2,
+   "voice": "m",
+   "voiceName": "ar-SA-HamedNeural",
+   "reason": "default answer voice",
+   "text": "أَنَا مَالْدِيفِيٌّ.",
+   "chars": 20,
+   "fingerprint": "9c418caa7afaddbe",
+   "textHash": "717388c6",
+   "file": "u01/u01-s05-a-m.mp3"
+  },
+  {
+   "id": "u01-s06-q",
+   "key": "6q",
+   "type": "speak-q",
+   "lesson": 2,
+   "voice": "f",
+   "voiceName": "ar-SA-ZariyahNeural",
+   "reason": "default question voice",
+   "text": "هَلْ أَنْتَ مَالْدِيفِيٌّ؟",
+   "chars": 26,
+   "fingerprint": "d49a75cea3d6eda0",
+   "textHash": "c132d1af",
+   "file": "u01/u01-s06-q-f.mp3"
+  },
+  {
+   "id": "u01-s06-a",
+   "key": "6a",
+   "type": "speak-a",
+   "lesson": 2,
+   "voice": "m",
+   "voiceName": "ar-SA-HamedNeural",
+   "reason": "default answer voice",
+   "text": "نَعَمْ، أَنَا مَالْدِيفِيٌّ.",
+   "chars": 28,
+   "fingerprint": "c6efeb9b1a241b6b",
+   "textHash": "c54faa6e",
+   "file": "u01/u01-s06-a-m.mp3"
+  },
+  {
+   "id": "u01-s07-q",
+   "key": "7q",
+   "type": "speak-q",
+   "lesson": 3,
+   "voice": "f",
+   "voiceName": "ar-SA-ZariyahNeural",
+   "reason": "default question voice",
+   "text": "مَنْ هَذَا؟",
+   "chars": 11,
+   "fingerprint": "1c8660ccf3b4cc4e",
+   "textHash": "adc40e97",
+   "file": "u01/u01-s07-q-f.mp3"
+  },
+  {
+   "id": "u01-s07-a",
+   "key": "7a",
+   "type": "speak-a",
+   "lesson": 3,
+   "voice": "m",
+   "voiceName": "ar-SA-HamedNeural",
+   "reason": "default answer voice",
+   "text": "هَذَا أَخِي، هُوَ طَالِبٌ.",
+   "chars": 26,
+   "fingerprint": "72295ed785f6b80d",
+   "textHash": "cd46d964",
+   "file": "u01/u01-s07-a-m.mp3"
+  },
+  {
+   "id": "u01-s08-q",
+   "key": "8q",
+   "type": "speak-q",
+   "lesson": 3,
+   "voice": "f",
+   "voiceName": "ar-SA-ZariyahNeural",
+   "reason": "default question voice",
+   "text": "مَنْ هَذِهِ؟",
+   "chars": 12,
+   "fingerprint": "4848b0b16a610426",
+   "textHash": "5c824dd5",
+   "file": "u01/u01-s08-q-f.mp3"
+  },
+  {
+   "id": "u01-s08-a",
+   "key": "8a",
+   "type": "speak-a",
+   "lesson": 3,
+   "voice": "m",
+   "voiceName": "ar-SA-HamedNeural",
+   "reason": "default answer voice",
+   "text": "هَذِهِ أُخْتِي، هِيَ طَبِيبَةٌ.",
+   "chars": 31,
+   "fingerprint": "a4a882fd16db6cb3",
+   "textHash": "b84ebd56",
+   "file": "u01/u01-s08-a-m.mp3"
+  },
+  {
+   "id": "u01-s09-q",
+   "key": "9q",
+   "type": "speak-q",
+   "lesson": 3,
+   "voice": "f",
+   "voiceName": "ar-SA-ZariyahNeural",
+   "reason": "default question voice",
+   "text": "هَلْ هُوَ مُدَرِّسٌ؟",
+   "chars": 20,
+   "fingerprint": "bd31b79638463415",
+   "textHash": "52795527",
+   "file": "u01/u01-s09-q-f.mp3"
+  },
+  {
+   "id": "u01-s09-a",
+   "key": "9a",
+   "type": "speak-a",
+   "lesson": 3,
+   "voice": "m",
+   "voiceName": "ar-SA-HamedNeural",
+   "reason": "default answer voice",
+   "text": "نَعَمْ، هُوَ مُدَرِّسٌ.",
+   "chars": 23,
+   "fingerprint": "914b61bad151a5a6",
+   "textHash": "7b416b31",
+   "file": "u01/u01-s09-a-m.mp3"
+  }
+ ]
 }

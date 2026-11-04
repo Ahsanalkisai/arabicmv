@@ -41,8 +41,12 @@ function ic(n){ return '<svg class="ic'+(DIR_ICONS[n]?" d":"")+'" viewBox="0 0 2
    The interface language follows the mode: English for "en", Dhivehi for "dv" and "both". */
 
 /* ---------- content loaded from data/book1/*.json ---------- */
-var UNITS = [], UNITS_EN = [], UNIT_DATA = {};
+var UNITS = [], UNITS_EN = [], UNIT_DATA = {}, UNIT_BONUS = {};
 function unitSub(i){ return S.ui === "en" ? UNITS_EN[i] : UNITS[i][1]; }
+/* supplementary entries ("bonus": true in index.json) are labelled as a bonus lesson, not a textbook unit */
+function isBonus(n){ return !!UNIT_BONUS[n]; }
+function unitKind(n){ return isBonus(n) ? "دَرْسٌ إِضَافِيٌّ" : "الوحدة"; }
+function unitName(n){ return (isBonus(n) ? T("bonus") : T("unit"))+' '+n; }
 function gTitle(g){ return S.ui === "en" && g.titleEn ? g.titleEn : g.title; }
 function gBody(g){ return S.ui === "en" && g.bodyEn ? g.bodyEn : g.body; }
 function lTask(l){ return S.ui === "en" ? (l.taskEn || "") : (l.task || ""); }
@@ -60,6 +64,7 @@ function loadBook(){
   return fetch("data/book1/index.json").then(function(r){ return r.json(); }).then(function(ix){
     UNITS = ix.units.map(function(u){ return [u.title_ar, u.title_dv]; });
     UNITS_EN = ix.units.map(function(u){ return u.title_en; });
+    UNIT_BONUS = {}; ix.units.forEach(function(u){ if(u.bonus) UNIT_BONUS[u.unit] = true; });
     return Promise.all(ix.units.filter(function(u){ return u.file; }).map(function(u){
       return fetch("data/book1/"+u.file).then(function(r){ return r.json(); }).then(adoptUnit);
     }));
@@ -80,7 +85,7 @@ var S = {mode:null, ui:"dv", sec:"dash", pUnit:1, pLesson:0, dlg:0, review:false
          libTab:"book", libQ:"", libU:0, libL:0, libSt:"all", libReview:false};
 try{
   var m = localStorage.getItem("aby-mode"); if(MODES.indexOf(m) >= 0) S.mode = m;
-  var lastUnit = +localStorage.getItem("aby-unit"); if(lastUnit >= 1 && lastUnit <= 16) S.unit = lastUnit;
+  var lastUnit = +localStorage.getItem("aby-unit"); if(lastUnit >= 1) S.unit = lastUnit; /* a unit without data is cleared after loadBook */
   S.last = JSON.parse(localStorage.getItem("aby-last") || "{}") || {};
 }catch(e){}
 function applyMode(){
@@ -122,21 +127,70 @@ function liCheckDone(){
   if(list.length && list.every(function(x){ return S.liA[S.unit + ":" + x.i]; })) markDone("listen");
 }
 
-/* ---------- audio asset mapping (Phase 4C wires playback; no files exist yet) ----------
-   Recordings live at audio/book1/uNN/uNN-sSS-{q|a}-{voice}.mp3, derived from the
-   1-based position in the unit's speak[] array, so the data JSON needs no audio
-   field. Voice policy: answers Hamed (m); questions Zariyah (f) except the two
-   whose answers gender the asker as male. */
-/* Flip to true in Phase 4C once the MP3s exist. While false, Listening shows
-   the Arabic question text (there is nothing to listen to yet); once true, the
-   question is audio-first: its text stays hidden until the student taps
-   "Show question text" or has answered. */
+/* ---------- Listening/Speaking audio (speak[] questions and answers only) ----------
+   prototype/audio/generate.js writes audio/book1/ready.json, listing only recordings
+   that were generated successfully from the current text:
+     {"units":{"<unit>":{"<si><q|a>":{"f":"u01/u01-s01-q-f.mp3","t":"<fnv of the text>"}}}}
+   An item has audio only if it is listed AND its "t" matches the Arabic text shown
+   now, so a recording of older wording is never played. Everything else falls back
+   to the text-only exercises. AUDIO_READY is the master switch: while false nothing
+   is fetched and Listening/Speaking behave exactly as they did before audio. */
 var AUDIO_READY = false;
-var AUDIO_MALE_ASKER = {"5-4":1, "6-9":1}; /* "unit-sIndex": answer says مِنْ فَضْلِكَ / اِنْتَظِرْ...مَعَكَ */
-function audioSrc(u, si, part){ /* si = 1-based speak index, part = "q" | "a" */
-  var uu = (u < 10 ? "0" : "") + u, ss = (si < 10 ? "0" : "") + si;
-  var voice = part === "a" ? "m" : (AUDIO_MALE_ASKER[u + "-" + si] ? "m" : "f");
-  return "audio/book1/u" + uu + "/u" + uu + "-s" + ss + "-" + part + "-" + voice + ".mp3";
+var AUD = {map:null, el:null, key:null, st:"", bad:{}};
+function fnv(s){ /* FNV-1a 32-bit over UTF-16 units of the NFC text; generate.js uses the same function */
+  s = String(s); if(s.normalize) s = s.normalize("NFC");
+  var h = 0x811c9dc5;
+  for(var i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = (h + (h<<1) + (h<<4) + (h<<7) + (h<<8) + (h<<24)) >>> 0; }
+  return ("0000000" + h.toString(16)).slice(-8);
+}
+function loadAudioIndex(){
+  if(!AUDIO_READY) return Promise.resolve();
+  return fetch("audio/book1/ready.json", {cache:"no-cache"}).then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(j){ AUD.map = j && j.units ? j.units : {}; }, function(){ AUD.map = {}; });
+}
+function audioKey(u, si, part){ return u + "-" + si + "-" + part; } /* si = 0-based index in speak[] */
+function audioUrl(u, si, part){
+  if(!AUDIO_READY || !AUD.map || AUD.bad[audioKey(u, si, part)]) return null;
+  var e = AUD.map[u] && AUD.map[u][(si + 1) + part], s = UNIT_DATA[u] && UNIT_DATA[u].speak[si];
+  if(!e || !s || !s[part] || e.t !== fnv(s[part].ar)) return null;
+  return "audio/book1/" + e.f;
+}
+/* one shared player; files load only when a play button is tapped */
+function audPlayer(){
+  if(AUD.el) return AUD.el;
+  var a = AUD.el = new Audio(); a.preload = "none";
+  function st(v){ return function(){ if(AUD.key){ AUD.st = v; audSync(); } }; }
+  a.addEventListener("loadstart", st("loading")); a.addEventListener("waiting", st("loading"));
+  a.addEventListener("playing", st("playing"));
+  a.addEventListener("pause", st("")); a.addEventListener("ended", function(){ AUD.key = null; AUD.st = ""; audSync(); });
+  a.addEventListener("error", function(){ audFail(AUD.key); });
+  return a;
+}
+function audFail(k){ if(!k) return; AUD.bad[k] = 1; if(AUD.key === k){ AUD.key = null; AUD.st = ""; } render(); }
+function audStop(){ if(AUD.el && AUD.key){ AUD.el.pause(); AUD.el.removeAttribute("src"); try{ AUD.el.load(); }catch(e){} } AUD.key = null; AUD.st = ""; }
+function audToggle(k){
+  var p = k.split("-"), url = audioUrl(+p[0], +p[1], p[2]); if(!url) return;
+  if(AUD.key === k){ audStop(); audSync(); return; }
+  audStop();
+  var a = audPlayer(); AUD.key = k; AUD.st = "loading"; audSync();
+  a.src = url;
+  var pr = a.play(); if(pr && pr.catch) pr.catch(function(e){ if(e && e.name !== "AbortError") audFail(k); });
+}
+/* reflect the player state on the visible buttons without a full re-render */
+function audSync(){
+  Array.prototype.forEach.call(document.querySelectorAll(".abtn"), function(b){
+    var on = b.getAttribute("data-k") === AUD.key, s = on ? AUD.st : "";
+    b.className = "abtn" + (s ? " " + s : ""); b.setAttribute("aria-pressed", s === "playing" ? "true" : "false");
+    b.setAttribute("aria-busy", s === "loading" ? "true" : "false");
+    b.setAttribute("aria-label", s === "loading" ? T("loading") : s === "playing" ? T("pause") : T("audPlay"));
+    b.innerHTML = s === "playing" ? ICON_PAUSE : ICON_PLAY;
+    var st = b.parentNode && b.parentNode.querySelector(".ast"); if(st) st.textContent = s === "loading" ? T("loading") : "";
+  });
+}
+/* after every render: stop audio whose button is no longer on screen */
+function audAfterRender(){
+  if(AUD.key && !document.querySelector('.abtn[data-k="' + AUD.key + '"]')) audStop();
+  if(AUD.key) audSync();
 }
 
 /* ---------- daily activity + recent lessons (new keys; existing keys untouched) ---------- */
@@ -292,6 +346,7 @@ var A = {
   liNext:function(){ var n = liList().length; if(n){ S.li = (S.li + 1) % n; } S.liWrong = null; S.liText = false; },
   liPrev:function(){ var n = liList().length; if(n){ S.li = (S.li - 1 + n) % n; } S.liWrong = null; S.liText = false; },
   liText:function(){ S.liText = true; },
+  aud:function(d){ audToggle(d.k); return false; },
   dashLesson:function(d){
     S.sec = "book"; S.cls = false;
     if(!S.unit || !UNIT_DATA[S.unit]){ S.unit = 1; try{ localStorage.setItem("aby-unit", "1"); }catch(e){} }
@@ -449,5 +504,5 @@ document.addEventListener("input", function(ev){
   }
 });
 app.innerHTML = '<div class="empty">'+T("loading")+'</div>';
-loadBook().then(function(){ if(S.unit && !UNIT_DATA[S.unit]) S.unit = null; render(); })
+loadBook().then(loadAudioIndex).then(function(){ if(S.unit && !UNIT_DATA[S.unit]) S.unit = null; render(); })
   .catch(function(){ app.innerHTML = '<div class="empty">'+T("loadFail")+'</div>'; });

@@ -19,7 +19,7 @@ function renderChrome(){
   }
   else if(S.sec === "book" && S.unit && !S.lesson) h = bar("units", "", T("lessons"), false);
   else if(inLessonView()) h = '<div class="hdr"><button class="ib" data-a="'+(S.tab==="read" && S.readTab==="turn" ? "turnBack" : "lessons")+'" aria-label="'+T("back")+'">'+ic("back")+'</button>'+
-    '<div class="hc"><div class="hl" dir="rtl">الوحدة ('+arNum(S.unit)+')<span class="hmid"> - '+UNITS[S.unit-1][0]+'</span> - '+(S.review ? "مراجعة" : "الدرس ("+arNum(UNIT_DATA[S.unit].lessons[S.lesson-1].num || S.lesson)+")")+'</div></div>'+
+    '<div class="hc"><div class="hl" dir="rtl">'+unitKind(S.unit)+' ('+arNum(S.unit)+')<span class="hmid"> - '+UNITS[S.unit-1][0]+'</span> - '+(S.review ? "مراجعة" : "الدرس ("+arNum(UNIT_DATA[S.unit].lessons[S.lesson-1].num || S.lesson)+")")+'</div></div>'+
     '<button class="ib" data-a="menu" aria-label="'+T("menu")+'">'+ic("more")+'</button></div>';
   else { var sec = SECTIONS().filter(function(x){ return x[0] === S.sec; })[0]; h = bar("", "", sec ? sec[1] : "", false); }
   document.getElementById("hdr").innerHTML = h;
@@ -82,13 +82,13 @@ function startHTML(){
     var total = d.lessons.length, dn = lessonsDoneIn(n);
     var sub = total+' '+T("lessonsN")+' · '+d.vocab.length+' '+T("wordsN");
     return '<li><button class="ucard" data-a="unit" data-n="'+n+'">'+
-      '<span class="thumb ar">'+arNum(n)+'</span><span class="ut"><span class="uk ar">الوحدة '+arNum(n)+'</span><span class="un ar">'+u[0]+'</span><span class="ud">'+esc(unitSub(i))+' · '+sub+'</span><span class="pbar upbar"><i style="width:'+(total ? Math.round(dn/total*100) : 0)+'%"></i></span></span>'+
+      '<span class="thumb ar">'+arNum(n)+'</span><span class="ut"><span class="uk ar">'+unitKind(n)+' '+arNum(n)+'</span><span class="un ar">'+u[0]+'</span><span class="ud">'+(isBonus(n) ? esc(T("bonusTag"))+' · ' : '')+esc(unitSub(i))+' · '+sub+'</span><span class="pbar upbar"><i style="width:'+(total ? Math.round(dn/total*100) : 0)+'%"></i></span></span>'+
       '<span class="uend">'+ic("chev")+'</span></button></li>';
   }).join("")+'</ul>';
 }
 function lessonsHTML(){
   var d = UNIT_DATA[S.unit], u = UNITS[S.unit-1];
-  var hero = '<div class="hero"><div class="hk ar">الوحدة ('+arNum(S.unit)+')</div><div class="hn ar">'+u[0]+'</div></div>';
+  var hero = '<div class="hero"><div class="hk ar">'+unitKind(S.unit)+' ('+arNum(S.unit)+')</div><div class="hn ar">'+u[0]+'</div>'+(isBonus(S.unit) ? '<div class="sub">'+esc(T("bonusTag"))+'</div>' : '')+'</div>';
   if(!d) return hero+notReady();
   function meta(words, dl){ return '<span class="ud">'+words+' '+T("wordsN")+' · '+dl+' '+T("dialoguesN")+' · '+T("approx")+' '+(8 + Math.round(words/3))+' '+T("min")+'</span>'; }
   var review = '<button class="lcard'+(S.last[S.unit]==="r"?" cur":"")+'" data-a="lesson" data-n="r"><span class="lk ar">'+ic("redo")+'</span>'+
@@ -115,6 +115,7 @@ function wordForms(v){
   if(v.pl) f.push('<span>'+T("plural")+': <span class="ar">'+esc(v.pl)+'</span></span>');
   if(v.present) f.push('<span>'+T("present")+': <span class="ar">'+esc(v.present)+'</span></span>');
   if(v.command) f.push('<span>'+T("command")+': <span class="ar">'+esc(v.command)+'</span></span>');
+  if(v.fem) f.push('<span>'+T("toWoman")+': <span class="ar">'+esc(v.fem)+'</span></span>');
   return f.length ? '<span class="forms">'+f.join("")+'</span>' : "";
 }
 function noteHTML(g, k){
@@ -183,14 +184,15 @@ function listenHTML(){
   if(!n) return '<div class="empty">'+T("noQuestions")+'</div>';
   S.li = ((S.li % n) + n) % n;
   var it = list[S.li], st = S.liA[S.unit + ":" + it.i] || 0, opts = liOpts(it.i);
-  var pool = UNIT_DATA[S.unit].speak;
+  var pool = UNIT_DATA[S.unit].speak, hasQ = !!audioUrl(S.unit, it.i, "q");
   var h = '<div class="card"><div class="clabel"><span>'+T("listening")+'</span><span class="count">'+num(S.li+1, n)+'</span></div>'+
-    /* placeholder for the recording mapped at audioSrc(S.unit, it.i+1, "q"); until
-       the file exists this is honestly a coming-soon notice, not a fake player.
-       Once AUDIO_READY, the question is audio-first: text hidden until the
-       student asks for it or has answered. */
-    '<div class="audioStub"><span class="asBtn" aria-hidden="true">'+ic("ear")+'</span><span>'+T("audioSoon")+'</span></div>'+
-    (!AUDIO_READY || S.liText || st
+    /* with a current recording the question is audio-first (text hidden until the
+       student asks for it or has answered); without one — audio off, not generated
+       yet, or failed to play — this stays the honest coming-soon notice and the
+       question text is shown */
+    (hasQ ? '<div class="audioRow">'+audBtn(S.unit, it.i, "q")+'<span class="ast" aria-live="polite"></span></div>'
+          : audErrHTML(S.unit, it.i, "q") || '<div class="audioStub"><span class="asBtn" aria-hidden="true">'+ic("ear")+'</span><span>'+T("audioSoon")+'</span></div>')+
+    (!hasQ || S.liText || st
       ? '<div class="prompt" style="margin:6px 0 10px"><span class="ar">'+esc(it.s.q.ar)+'</span></div>'
       : '<div class="row" style="justify-content:center;margin:6px 0 10px"><button class="btn ghost small" data-a="liText">'+ic("eye")+'<span>'+T("showQuestion")+'</span></button></div>')+
     (st ? '' : '<p class="sub" style="text-align:center;margin:0 0 10px">'+T("chooseAnswer")+'</p>')+
@@ -202,12 +204,19 @@ function listenHTML(){
     (!st && S.liWrong !== null ? '<p class="fb no">'+T("wrongTry")+'</p>' : '')+
     (st ? '' : '<button class="btn wide reveal ghost" data-a="liReveal">'+ic("eye")+'<span>'+T("showAnswer")+'</span></button>')+
     '</div>'+
-    (st ? '<div class="model"><div class="count">'+T("modelAnswer")+'</div><span class="ar">'+esc(it.s.a.ar)+'</span><span class="tr">'+meaning(it.s.a)+'</span></div>' : '')+
+    (st ? '<div class="model"><div class="count">'+T("modelAnswer")+'</div><span class="ar">'+esc(it.s.a.ar)+'</span>'+audBtn(S.unit, it.i, "a")+'<span class="tr">'+meaning(it.s.a)+'</span></div>' : '')+
     '<div class="ctrl"><button class="rb" data-a="liPrev" aria-label="'+T("prev")+'">'+ic("fwd")+'</button><button class="rb'+(st?" go":"")+'" data-a="liNext" aria-label="'+T("next")+'">'+ic("chev")+'</button></div>';
   if(list.every(function(x){ return S.liA[S.unit + ":" + x.i]; }))
     h += '<p class="fb ok" style="margin-top:12px">'+T("listenDone")+'</p>';
   return h;
 }
+/* play button for one speak[] question or answer; empty while it has no current recording */
+function audBtn(u, si, part){
+  if(!audioUrl(u, si, part)) return audErrHTML(u, si, part);
+  var k = audioKey(u, si, part);
+  return '<button class="abtn" data-a="aud" data-k="'+k+'" aria-pressed="false" aria-label="'+T("audPlay")+'">'+ICON_PLAY+'</button>';
+}
+function audErrHTML(u, si, part){ return AUDIO_READY && AUD.bad[audioKey(u, si, part)] ? '<p class="aerr" role="status">'+T("audErr")+'</p>' : ''; }
 function sayList(d){ var out = []; ofLesson(d.speak).forEach(function(x){ out.push(x.q); out.push(x.a); }); return out; }
 function spCount(){ var d = UNIT_DATA[S.unit]; return S.spTab==="say" ? sayList(d).length : ofLesson(d.speak).length; }
 function speakHTML(){
@@ -215,10 +224,12 @@ function speakHTML(){
   var h = seg([["qa",T("qa")],["say",T("sayIt")]], S.spTab, "spTab");
   if(!it) return h+'<div class="empty">'+T("noQuestions")+'</div>';
   var task = S.review ? "" : lTask(d.lessons[S.lesson-1]);
+  /* audio reference: Q/A item → its question and answer; say-it prompt → the one utterance it shows */
+  var si = d.speak.indexOf(say ? ofLesson(d.speak)[Math.floor(S.sp/2)] : it), sayPart = S.sp % 2 ? "a" : "q";
   return h+'<div class="card"><div class="clabel"><span>'+(say ? T("sayPrompt") : T("question"))+'</span><span class="count">'+num(S.sp+1, list.length)+'</span></div>'+
-    '<div class="prompt" style="margin:10px 0 14px">'+(say ? meaning(it) : '<span class="ar">'+esc(it.q.ar)+'</span>')+'</div>'+
+    '<div class="prompt" style="margin:10px 0 14px">'+(say ? meaning(it) : '<span class="ar">'+esc(it.q.ar)+'</span>'+audBtn(S.unit, si, "q"))+'</div>'+
     (S.spShown ? '' : '<button class="btn wide reveal" data-a="spShow">'+ic("eye")+'<span>'+T("showAnswer")+'</span></button>')+'</div>'+
-    (S.spShown ? '<div class="model"><div class="count">'+T("modelAnswer")+'</div><span class="ar">'+esc(say ? it.ar : it.a.ar)+'</span></div>' : '')+
+    (S.spShown ? '<div class="model"><div class="count">'+T("modelAnswer")+'</div><span class="ar">'+esc(say ? it.ar : it.a.ar)+'</span>'+audBtn(S.unit, si, say ? sayPart : "a")+'</div>' : '')+
     '<div class="ctrl"><button class="rb" data-a="spPrev" aria-label="'+T("prev")+'">'+ic("fwd")+'</button><button class="rb'+(S.spShown?" go":"")+'" data-a="spNext" aria-label="'+T("next")+'">'+ic("chev")+'</button></div>'+
     (task ? '<h2>'+T("withClassmate")+'</h2><div class="card tips"><p>'+esc(task)+'</p></div>' : '');
 }
@@ -275,9 +286,11 @@ function lessonLabel(u, l){
   return l === "r" ? T("reviewUnit") : T("lesson")+' '+(d && d.lessons[l-1] ? (d.lessons[l-1].num || l) : l);
 }
 function dashStats(){
-  var st = {unitsReady:0, unitsDone:0, lessonsTotal:0, lessonsDone:0, words:0};
+  /* textbook totals only; bonus lessons are counted separately */
+  var st = {unitsReady:0, unitsDone:0, lessonsTotal:0, lessonsDone:0, words:0, bonusTotal:0, bonusDone:0};
   Object.keys(UNIT_DATA).forEach(function(k){
     var dd = UNIT_DATA[k], n = lessonsDoneIn(k);
+    if(isBonus(+k)){ st.bonusTotal += dd.lessons.length; st.bonusDone += n; return; }
     st.unitsReady++; st.lessonsTotal += dd.lessons.length; st.lessonsDone += n; st.words += dd.vocab.length;
     if(n === dd.lessons.length) st.unitsDone++;
   });
@@ -286,7 +299,7 @@ function dashStats(){
 }
 function dashHTML(){
   var st = dashStats(), u = S.unit, l = S.last[u], d = u && UNIT_DATA[u];
-  var started = st.lessonsDone > 0 || !!(d && l);
+  var started = st.lessonsDone + st.bonusDone > 0 || !!(d && l);
   /* A. welcome */
   var h = '<div class="dhead"><h1 class="wh2">'+T(started ? "welcomeBack" : "welcome")+'</h1><p class="dsub">'+T("dashSub")+'</p></div>';
   /* B. continue learning (or a starting recommendation) */
@@ -299,7 +312,8 @@ function dashHTML(){
     '<div class="stat"><b class="num">'+st.lessonsDone+' / '+st.lessonsTotal+'</b><span>'+T("lessonsDone")+'</span></div>'+
     '<div class="stat"><b>'+st.words+'</b><span>'+T("wordsAvail")+'</span></div>'+
     '<div class="stat"><b>'+st.pct+'%</b><span>'+T("overallProgress")+'</span></div></div>'+
-    '<div class="pbar dpbar"><i style="width:'+st.pct+'%"></i></div>';
+    '<div class="pbar dpbar"><i style="width:'+st.pct+'%"></i></div>'+
+    (st.bonusTotal ? '<p class="sub">'+T("bonusTag")+' · '+st.bonusDone+' / '+st.bonusTotal+' '+T("lessonsDone")+'</p>' : '');
   /* D. daily activity — streak counts only days recorded in aby-days */
   var sk = streak(), today = days.indexOf(dayKey()) >= 0;
   h += '<h2>'+T("dailyActivity")+'</h2><div class="daily card">'+
@@ -321,7 +335,7 @@ function dashHTML(){
 }
 function practicePickHTML(){
   var d = UNIT_DATA[S.pUnit] || UNIT_DATA[1];
-  var us = Object.keys(UNIT_DATA).map(function(k){ return '<option value="'+k+'"'+(+k===S.pUnit?" selected":"")+'>'+T("unit")+' '+k+' · '+esc(UNITS[k-1][0])+'</option>'; }).join("");
+  var us = Object.keys(UNIT_DATA).map(function(k){ return '<option value="'+k+'"'+(+k===S.pUnit?" selected":"")+'>'+unitName(+k)+' · '+esc(UNITS[k-1][0])+'</option>'; }).join("");
   var ls = '<option value="0"'+(S.pLesson===0?" selected":"")+'>'+T("allLessons")+'</option>'+d.lessons.map(function(l,i){ return '<option value="'+(i+1)+'"'+(S.pLesson===i+1?" selected":"")+'>'+T("lesson")+' '+(l.num||i+1)+' · '+esc(l.ar)+'</option>'; }).join("");
   return '<div class="pick"><select id="pUnitSel" aria-label="'+T("unit")+'">'+us+'</select><select id="pLessonSel" aria-label="'+T("lesson")+'">'+ls+'</select></div>';
 }
@@ -341,13 +355,14 @@ function libCard(u, v, extra){
   var k = "L"+u+"|"+v.ar, on = !!S.open[k];
   return '<li class="vli"><button class="vcard'+(on?" on":"")+'" data-a="line" data-k="'+esc(k)+'" aria-expanded="'+on+'">'+
     '<span class="ar">'+esc(v.ar)+'</span>'+
-    (on ? '<span class="tr">'+meaning(v)+'</span>'+wordForms(v)+'<span class="vref">'+T("unit")+' '+u+' · '+T("lesson")+' '+v.lesson+'</span>'+vExHTML(u, v) : '<span class="vhint" aria-hidden="true">'+ic("eye")+'</span>')+
+    (on ? '<span class="tr">'+meaning(v)+'</span>'+wordForms(v)+'<span class="vref">'+unitName(+u)+' · '+T("lesson")+' '+v.lesson+'</span>'+vExHTML(u, v) :'<span class="vhint" aria-hidden="true">'+ic("eye")+'</span>')+
     '</button>'+vStarBtn(u, v.lesson, v.ar)+(extra || "")+'</li>';
 }
 function libMatch(v, q, qa, ql){
   return stripTash(v.ar).indexOf(qa) >= 0 ||
     (v.pl && stripTash(v.pl).indexOf(qa) >= 0) ||
     (v.command && stripTash(v.command).indexOf(qa) >= 0) ||
+    (v.fem && stripTash(v.fem).indexOf(qa) >= 0) ||
     v.en.toLowerCase().indexOf(ql) >= 0 || v.dv.indexOf(q) >= 0;
 }
 /* saved words resolved to live entries; unresolvable references are skipped */
@@ -391,7 +406,7 @@ function rvHTML(){
   var head = '<div class="rvhead"><button class="ib" data-a="rvClose" aria-label="'+T("close")+'">'+ic("x")+'</button><span class="count">'+num(rv.i+1, qn)+'</span></div>';
   if(!rv.flipped)
     return head+'<button class="fc" data-a="rvFlip"><span class="ar">'+esc(v.ar)+'</span><span class="hint">'+T("tapMeaning")+'</span></button>';
-  return head+'<div class="fc rvback"><span class="ar">'+esc(v.ar)+'</span><span class="tr">'+meaning(v)+'</span>'+wordForms(v)+vExHTML(u, v)+'<span class="vref">'+T("unit")+' '+u+' · '+T("lesson")+' '+v.lesson+'</span></div>'+
+  return head+'<div class="fc rvback"><span class="ar">'+esc(v.ar)+'</span><span class="tr">'+meaning(v)+'</span>'+wordForms(v)+vExHTML(u, v)+'<span class="vref">'+unitName(+u)+' · '+T("lesson")+' '+v.lesson+'</span></div>'+
     '<div class="row rvbtns"><button class="btn" data-a="rvKnown">'+T("known")+'</button><button class="btn ghost" data-a="rvAgain">'+T("needsPractice")+'</button>'+
     (w && w.st !== "mastered" ? '<button class="btn ghost small" data-a="rvMaster">'+T("markMastered")+'</button>' : '')+'</div>';
 }
@@ -401,7 +416,7 @@ function libHTML(){
     '<input id="libQ" class="search" type="search" placeholder="'+T("searchPh")+'" aria-label="'+T("searchPh")+'" value="'+esc(S.libQ)+'">';
   if(S.libTab === "book"){
     var us = '<option value="0">'+T("allUnits")+'</option>'+Object.keys(UNIT_DATA).map(function(k){
-      return '<option value="'+k+'"'+(+k===S.libU?" selected":"")+'>'+T("unit")+' '+k+' · '+esc(UNITS[k-1][0])+'</option>'; }).join("");
+      return '<option value="'+k+'"'+(+k===S.libU?" selected":"")+'>'+unitName(+k)+' · '+esc(UNITS[k-1][0])+'</option>'; }).join("");
     var d = UNIT_DATA[S.libU];
     var ls = '<option value="0">'+T("allLessons")+'</option>'+(d ? d.lessons.map(function(l,i){
       return '<option value="'+(i+1)+'"'+(S.libL===i+1?" selected":"")+'>'+T("lesson")+' '+(l.num||i+1)+'</option>'; }).join("") : '');
@@ -426,19 +441,20 @@ function placeholderHTML(key){
   return '<div class="card"><p style="margin:0 0 8px">'+T("comingSoon")+'</p><h2 style="margin:8px 0 4px;font-size:1rem">'+T("planned")+'</h2><p class="sub" style="margin:0">'+T(key)+'</p></div>';
 }
 function progressHTML(){
-  var h = '<h2 style="margin-top:0">'+T("textbookProgress")+'</h2><ul class="plist">';
-  Object.keys(UNIT_DATA).forEach(function(k){
+  function rows(bonus){ return Object.keys(UNIT_DATA).filter(function(k){ return isBonus(+k) === bonus; }).map(function(k){
     var dd = UNIT_DATA[k], n = lessonsDoneIn(k);
     var st = n === dd.lessons.length ? T("completed") : n ? T("inProgress") : T("notStarted");
-    h += '<li><span class="ar">'+UNITS[k-1][0]+'</span><span class="pbar"><i style="width:'+(n/dd.lessons.length*100)+'%"></i></span><span class="count">'+num(n, dd.lessons.length)+' · '+st+'</span></li>';
-  });
-  return h+'</ul><p class="sub">'+T("savedOnDevice")+'</p>';
+    return '<li><span class="ar">'+UNITS[k-1][0]+'</span><span class="pbar"><i style="width:'+(n/dd.lessons.length*100)+'%"></i></span><span class="count">'+num(n, dd.lessons.length)+' · '+st+'</span></li>';
+  }).join(""); }
+  var b = rows(true);
+  return '<h2 style="margin-top:0">'+T("textbookProgress")+'</h2><ul class="plist">'+rows(false)+'</ul>'+
+    (b ? '<h2>'+T("bonusTag")+'</h2><ul class="plist">'+b+'</ul>' : '')+'<p class="sub">'+T("savedOnDevice")+'</p>';
 }
 function render(){
   renderChrome();
-  if(!S.mode){ app.innerHTML = welcomeHTML(); return; }
-  if(S.cls){ app.innerHTML = S.classId ? classHTML() : classListHTML(); return; }
-  switch(S.sec){
+  if(!S.mode) app.innerHTML = welcomeHTML();
+  else if(S.cls) app.innerHTML = S.classId ? classHTML() : classListHTML();
+  else switch(S.sec){
     case "dash": app.innerHTML = dashHTML(); break;
     case "practice": app.innerHTML = practicePickHTML()+practiceHTML(); break;
     case "talk": app.innerHTML = placeholderHTML("talkItems"); break;
@@ -449,6 +465,7 @@ function render(){
       else if(!S.lesson) app.innerHTML = lessonsHTML();
       else app.innerHTML = lessonTabs()+(S.tab === "practice" ? practiceHTML() : S.tab === "listen" ? listenHTML() : S.tab === "speak" ? speakHTML() : S.tab === "help" ? helpHTML() : readHTML())+flowHTML();
   }
+  audAfterRender();
 }
 function menuModal(){
   openModal('<div class="menu"><button data-a="clsOpen">'+T("yourClass")+'</button>'+

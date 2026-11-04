@@ -281,6 +281,16 @@ html[data-ui="en"] .line.on>.ic.d,html[data-ui="en"] .nhead[aria-expanded="true"
 .audioStub .asBtn{width:38px; height:38px; border-radius:50%; background:var(--accent); color:var(--primary); display:flex; align-items:center; justify-content:center; flex:none}
 .audioStub .asBtn .ic{width:20px; height:20px}
 .model .tr{display:flex; flex-direction:column; gap:2px; margin-top:6px}
+/* Listening/Speaking play button (shown only for items with a current recording) */
+.audioRow{display:flex; align-items:center; justify-content:center; gap:10px; margin:10px 0 4px; min-height:48px}
+.abtn{width:48px; height:48px; border-radius:50%; border:0; background:var(--accent); color:var(--primary); display:inline-grid; place-items:center; padding:0; flex:none; vertical-align:middle; margin:4px auto 0}
+.abtn svg{width:18px; height:18px; fill:currentColor}
+.abtn.playing{background:var(--primary); color:var(--on-primary)}
+.abtn.loading{opacity:.65; cursor:progress}
+.audioRow .abtn{margin:0}
+.ast{font-size:.82rem; color:var(--muted); min-width:1px}
+.aerr{color:var(--bad); font-size:.85rem; text-align:center; margin:8px 0 4px}
+.prompt .abtn,.model .abtn{display:grid}
 
 /* match + arrange */
 .match{display:grid; grid-template-columns:1fr 1fr; gap:8px}
@@ -400,6 +410,8 @@ input.en{text-align:left; font-size:1rem; color:var(--ink)}
 @media (prefers-reduced-motion: no-preference){
   .tr,.model,.nbody{animation:rise .18s ease-out}
   @keyframes rise{from{opacity:0; transform:translateY(-4px)}to{opacity:1; transform:none}}
+  .abtn.loading{animation:apulse 1s ease-in-out infinite}
+  @keyframes apulse{50%{opacity:.35}}
 }
 
 /* tablet + desktop: side rail instead of a stretched phone layout */
