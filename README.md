@@ -40,5 +40,5 @@ Accounts and Supabase sync are planned for Stage 7.
 
 ## Sections
 
-Dashboard, Textbook, Practice, Communication (placeholder), Reference (placeholder), My progress.
+Home (landing page: Check Your Arabic Level, Choose Your Book, Grammar Lessons), Dashboard, Textbook (Book 1 → all-units overview), Practice, Communication (placeholder), Reference (placeholder), My progress. The level check, Books 2–3 and the grammar lessons are entry pages only for now.
 Audio controls are hidden until recordings exist.

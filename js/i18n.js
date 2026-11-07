@@ -111,6 +111,10 @@ var L = {
   letScore:["Score","ޕޮއިންޓު"], letAttempted:["Attempted","މަސައްކަތްކުރި"], letWrongN:["Wrong tries","ރަނގަޅުނުވި"],
   letDone:["All words done","ހުރިހާ ލަފުޒެއް ނިމިއްޖެ"], letRetry:["Retry missed words","ރަނގަޅުނުވި ލަފުޒުތައް އަލުން"],
   letScrambled:["Scrambled letters","އޮޅުވާލެވިފައިވާ އަކުރުތައް"], letAnswer:["Your answer","ތިބާގެ ޖަވާބު"], letTiles:["Letters to choose","ހޮވާނެ އަކުރުތައް"],
-  letBox:["Empty box","ހުސް ގޮޅި"], letRemove:["Take back","އަނބުރާ ނަގާ"]
+  letBox:["Empty box","ހުސް ގޮޅި"], letRemove:["Take back","އަނބުރާ ނަގާ"],
+  home:["Home","ހޯމް"], homeLevel:["Check Your Arabic Level","ޢަރަބި ފެންވަރު ބަލާ"], homeBooks:["Choose Your Book","ފޮތް ޚިޔާރުކުރޭ"], homeGrammar:["Grammar Lessons","ޤަވާޢިދު ފިލާވަޅުތައް"],
+  bookN:["Book","ފޮތް"], levelN:["Level","ފެންވަރު"], soon:["Coming soon","ވަރަށް އަވަހަށް"],
+  levelSoon:["The level check is being prepared. It will open here when it is ready.","ފެންވަރު ބެލުމުގެ ޓެސްޓު ތައްޔާރުކުރަމުންދަނީ. ތައްޔާރުވުމުން މިތަނުން ހުޅުވޭނެ."],
+  gramSoon:["Grammar lessons are being prepared. They will open here when they are ready.","ޤަވާޢިދު ފިލާވަޅުތައް ތައްޔާރުކުރަމުންދަނީ. ތައްޔާރުވުމުން މިތަނުން ހުޅުވޭނެ."]
 };
 function T(k){ var v = L[k]; return v ? v[S.ui === "en" ? 0 : 1] : k; }

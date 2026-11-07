@@ -31,7 +31,10 @@ var ICONS = {
   arrangeI:'<path d="M4 7h16M4 12h11M4 17h6"/>',
   speedI:'<path d="M13 2L5 13.5h6L11 22l8-11.5h-6z"/>',
   bookmark:'<path d="M7 3h10a1 1 0 011 1v17l-6-4.2L6 21V4a1 1 0 011-1z"/>',
-  ear:'<path d="M4 18v-5a8 8 0 0116 0v5"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>'
+  ear:'<path d="M4 18v-5a8 8 0 0116 0v5"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>',
+  clipboardCheck:'<path d="M9 4H7a2 2 0 00-2 2v13a2 2 0 002 2h10a2 2 0 002-2V6a2 2 0 00-2-2h-2"/><rect x="9" y="2.5" width="6" height="3" rx="1"/><path d="M9 13l2 2 4-4"/>',
+  bookOpen:'<path d="M12 7c-1.6-1.4-4.2-2-8-2v13c3.8 0 6.4.6 8 2 1.6-1.4 4.2-2 8-2V5c-3.8 0-6.4.6-8 2zM12 7v13"/>',
+  gradCap:'<path d="M2 9.5l10-4.5 10 4.5-10 4.5z"/><path d="M6.5 11.5V16c0 1.4 2.6 2.8 5.5 2.8s5.5-1.4 5.5-2.8v-4.5M21 9.5v5.5"/>'
 };
 var DIR_ICONS = {back:1, chev:1, fwd:1};
 function ic(n){ return '<svg class="ic'+(DIR_ICONS[n]?" d":"")+'" viewBox="0 0 24 24" aria-hidden="true">'+ICONS[n]+'</svg>'; }
@@ -80,13 +83,13 @@ function save(){ try{ localStorage.setItem(KEY, JSON.stringify(store)); }catch(e
 function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
 
 /* ---------- state ---------- */
-var S = {mode:null, ui:"dv", sec:"dash", pUnit:1, pLesson:0, dlg:0, review:false, unit:null, lesson:null, last:{}, tab:"read", readTab:"conv", pracTab:"fc", scope:"lesson", spTab:"qa", sp:0, spShown:false, open:{},
+var S = {mode:null, ui:"dv", sec:"home", pUnit:1, pLesson:0, dlg:0, review:false, unit:null, lastUnit:null, lesson:null, last:{}, tab:"read", readTab:"conv", pracTab:"fc", scope:"lesson", spTab:"qa", sp:0, spShown:false, open:{},
          li:0, liWrong:null, liA:{}, liText:false,
          cls:false, classId:null, type:"phrase", practice:null, teacher:false,
          libTab:"book", libQ:"", libU:0, libL:0, libSt:"all", libReview:false};
 try{
   var m = localStorage.getItem("aby-mode"); if(MODES.indexOf(m) >= 0) S.mode = m;
-  var lastUnit = +localStorage.getItem("aby-unit"); if(lastUnit >= 1) S.unit = lastUnit; /* a unit without data is cleared after loadBook */
+  var lastUnit = +localStorage.getItem("aby-unit"); if(lastUnit >= 1) S.unit = S.lastUnit = lastUnit; /* a unit without data is cleared after loadBook */
   S.last = JSON.parse(localStorage.getItem("aby-last") || "{}") || {};
 }catch(e){}
 function applyMode(){
@@ -272,17 +275,27 @@ function notReady(){ return '<div class="empty">'+T("unitNotReady")+'</div>'; }
 /* ---------- actions ---------- */
 var A = {
   setMode:function(d){ S.mode = d.m; try{ localStorage.setItem("aby-mode", S.mode); }catch(e){} applyMode(); window.scrollTo(0,0); },
+  /* homepage cards and header back buttons (the chrome's bar() takes an action name without data) */
+  home:function(){ return A.sec({s:"home"}); },
+  books:function(){ return A.sec({s:"books"}); },
+  /* homepage cards and header back buttons (the chrome's bar() takes an action name without data) */
+  home:function(){ return A.sec({s:"home"}); },
+  books:function(){ return A.sec({s:"books"}); },
+  /* homepage cards and header back buttons (the chrome's bar() takes an action name without data) */
+  home:function(){ return A.sec({s:"home"}); },
+  books:function(){ return A.sec({s:"books"}); },
   sec:function(d){
     closeModal(); clearInterval(speedTimer); S.sec = d.s; S.cls = false;
-    if(d.s === "book"){ S.lesson = null; S.review = false; }
+    /* Textbook always opens the all-units overview; the last unit stays in S.lastUnit for Continue */
+    if(d.s === "book"){ S.unit = null; S.lesson = null; S.review = false; S.practice = null; }
     if(d.s === "practice"){ if(!UNIT_DATA[S.pUnit]) S.pUnit = 1; initPracticeFor(S.pUnit, S.pLesson); }
     if(d.s === "ref") S.libReview = false;
     window.scrollTo(0,0);
   },
   resume:function(){
-    var u = S.unit, l = S.last[u];
+    var u = S.lastUnit, l = S.last[u];
     S.sec = "book";
-    if(u && UNIT_DATA[u] && l){ S.review = l === "r"; S.lesson = S.review ? 1 : +l; S.tab = "read"; S.readTab = "conv"; S.dlg = 0; S.open = {}; }
+    if(u && UNIT_DATA[u] && l){ S.unit = u; S.review = l === "r"; S.lesson = S.review ? 1 : +l; S.tab = "read"; S.readTab = "conv"; S.dlg = 0; S.open = {}; }
     else { S.unit = null; S.lesson = null; }
     window.scrollTo(0,0);
   },
@@ -291,7 +304,7 @@ var A = {
   changeLang:function(){ closeModal(); clearInterval(speedTimer); S.mode = null; try{ localStorage.removeItem("aby-mode"); }catch(e){} window.scrollTo(0,0); },
   menu:function(){ menuModal(); return false; },
   units:function(){ closeModal(); S.sec="book"; S.cls=false; S.unit=null; S.lesson=null; S.practice=null; window.scrollTo(0,0); },
-  unit:function(d){ S.unit=+d.n; S.lesson=null; try{ localStorage.setItem("aby-unit", String(S.unit)); }catch(e){} window.scrollTo(0,0); },
+  unit:function(d){ S.unit=S.lastUnit=+d.n; S.lesson=null; try{ localStorage.setItem("aby-unit", String(S.unit)); }catch(e){} window.scrollTo(0,0); },
   lessons:function(){ S.lesson=null; S.review=false; window.scrollTo(0,0); },
   lesson:function(d){
     S.review = d.n==="r"; S.lesson = S.review ? 1 : +d.n; S.dlg=0; S.tab="read"; S.readTab="conv"; S.scope="lesson"; S.open={}; S.sp=0; S.spShown=false; S.li=0; S.liWrong=null; S.liText=false; S.last[S.unit]=S.review ? "r" : S.lesson;
@@ -350,7 +363,8 @@ var A = {
   aud:function(d){ audToggle(d.k); return false; },
   dashLesson:function(d){
     S.sec = "book"; S.cls = false;
-    if(!S.unit || !UNIT_DATA[S.unit]){ S.unit = 1; try{ localStorage.setItem("aby-unit", "1"); }catch(e){} }
+    S.unit = S.lastUnit;
+    if(!S.unit || !UNIT_DATA[S.unit]){ S.unit = S.lastUnit = 1; try{ localStorage.setItem("aby-unit", "1"); }catch(e){} }
     A.lesson({n:String(S.last[S.unit] || "1")});
     S.tab = d.t;
   },
@@ -439,12 +453,12 @@ var A = {
   dashStart:function(){ S.sec="book"; S.cls=false; return A.unit({n:"1"}); },
   dashPractice:function(d){
     closeModal(); clearInterval(speedTimer); S.sec="practice"; S.cls=false; S.pracTab=d.t;
-    if(UNIT_DATA[S.unit]) S.pUnit = S.unit; else if(!UNIT_DATA[S.pUnit]) S.pUnit = 1;
+    if(UNIT_DATA[S.lastUnit]) S.pUnit = S.lastUnit; else if(!UNIT_DATA[S.pUnit]) S.pUnit = 1;
     initPracticeFor(S.pUnit, 0); window.scrollTo(0,0);
   },
   goRecent:function(d){
     var u = +d.u; if(!UNIT_DATA[u]) return;
-    S.sec="book"; S.cls=false; S.unit=u; try{ localStorage.setItem("aby-unit", String(u)); }catch(e){}
+    S.sec="book"; S.cls=false; S.unit=S.lastUnit=u; try{ localStorage.setItem("aby-unit", String(u)); }catch(e){}
     return A.lesson({n:d.l});
   },
   nextLesson:function(){
@@ -531,7 +545,33 @@ var A = {
 document.addEventListener("click", function(ev){
   var t = ev.target.closest("[data-a]"); if(!t) return;
   var fn = A[t.dataset.a]; if(!fn) return;
-  if(fn(t.dataset, ev) !== false) render();
+  if(fn(t.dataset, ev) !== false){ render(); navSync(); }
+});
+/* browser back/forward: one history entry per screen (section, unit, lesson); tabs inside a lesson are not entries */
+function navKey(){
+  if(!S.mode || S.cls) return null;
+  var b = S.sec === "book";
+  return S.sec+"|"+(b && S.unit || 0)+"|"+(b && S.unit && S.lesson ? (S.review ? "r" : S.lesson) : 0);
+}
+function navSync(){
+  var k = navKey(); if(!k) return;
+  var cur = history.state && history.state.k; if(cur === k) return;
+  try{ if(cur) history.pushState({k:k}, ""); else history.replaceState({k:k}, ""); }catch(e){}
+}
+window.addEventListener("popstate", function(ev){
+  var k = ev.state && ev.state.k; if(!k || !S.mode) return;
+  var p = k.split("|");
+  closeModal(); clearInterval(speedTimer); S.cls = false; S.practice = null; S.sec = p[0];
+  if(p[0] === "book"){
+    S.unit = UNIT_DATA[+p[1]] ? +p[1] : null; S.lesson = null; S.review = false;
+    if(S.unit && p[2] !== "0"){
+      S.review = p[2] === "r"; S.lesson = S.review ? 1 : +p[2];
+      S.dlg=0; S.tab="read"; S.readTab="conv"; S.scope="lesson"; S.open={}; S.sp=0; S.spShown=false; S.li=0; S.liWrong=null; S.liText=false;
+    }
+  }
+  if(p[0] === "practice"){ if(!UNIT_DATA[S.pUnit]) S.pUnit = 1; initPracticeFor(S.pUnit, S.pLesson); }
+  if(p[0] === "ref") S.libReview = false;
+  render(); window.scrollTo(0,0);
 });
 /* drag and drop for arrange-the-letters (mouse and pen; on touch screens tapping does the same) */
 document.addEventListener("dragstart", function(ev){
@@ -559,5 +599,5 @@ document.addEventListener("input", function(ev){
   }
 });
 app.innerHTML = '<div class="empty">'+T("loading")+'</div>';
-loadBook().then(loadAudioIndex).then(function(){ if(S.unit && !UNIT_DATA[S.unit]) S.unit = null; render(); })
+loadBook().then(loadAudioIndex).then(function(){ if(S.unit && !UNIT_DATA[S.unit]) S.unit = null; if(S.lastUnit && !UNIT_DATA[S.lastUnit]) S.lastUnit = null; render(); var k = navKey(); if(k){ try{ history.replaceState({k:k}, ""); }catch(e){} } })
   .catch(function(){ app.innerHTML = '<div class="empty">'+T("loadFail")+'</div>'; });

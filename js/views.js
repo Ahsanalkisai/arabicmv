@@ -17,20 +17,27 @@ function renderChrome(){
     var c = store.classes.filter(function(x){ return x.id === S.classId; })[0];
     h = bar("clsBack", "", c ? esc(c.name) : T("yourClass"), false);
   }
+  else if(S.sec === "home") h = "";
+  else if(S.sec === "books") h = bar("home", "", T("homeBooks"), false);
+  else if(S.sec === "level") h = bar("home", "", T("homeLevel"), false);
+  else if(S.sec === "gram") h = bar("home", "", T("homeGrammar"), false);
+  else if(S.sec === "book" && !S.unit) h = bar("books", "", T("secBook"), false);
   else if(S.sec === "book" && S.unit && !S.lesson) h = bar("units", "", T("lessons"), false);
   else if(inLessonView()) h = '<div class="hdr"><button class="ib" data-a="'+(S.tab==="read" && S.readTab==="turn" ? "turnBack" : "lessons")+'" aria-label="'+T("back")+'">'+ic("back")+'</button>'+
     '<div class="hc"><div class="hl" dir="rtl">'+unitKind(S.unit)+' ('+arNum(S.unit)+')<span class="hmid"> - '+UNITS[S.unit-1][0]+'</span> - '+(S.review ? "مراجعة" : "الدرس ("+arNum(UNIT_DATA[S.unit].lessons[S.lesson-1].num || S.lesson)+")")+'</div></div>'+
     '<button class="ib" data-a="menu" aria-label="'+T("menu")+'">'+ic("more")+'</button></div>';
   else { var sec = SECTIONS().filter(function(x){ return x[0] === S.sec; })[0]; h = bar("", "", sec ? sec[1] : "", false); }
   document.getElementById("hdr").innerHTML = h;
-  var show = !!S.mode;
+  /* the homepage stands alone, like the welcome screen: no rail or bottom bar, its own menu button */
+  var show = !!S.mode && !(S.sec === "home" && !S.cls);
   function navBtns(short){ return SECTIONS().map(function(n){
     return '<button class="'+(S.sec===n[0]?"on":"")+'" data-a="sec" data-s="'+n[0]+'"'+(S.sec===n[0]?' aria-current="page"':'')+' aria-label="'+n[1]+'">'+ic(n[2])+'<span>'+(short ? n[3] : n[1])+'</span></button>'; }).join(""); }
   var navs = navBtns(true), sideNavs = navBtns(false);
   var nav = document.getElementById("nav"), side = document.getElementById("side");
   nav.hidden = !show; side.hidden = !show; document.body.classList.toggle("has-nav", show);
+  document.body.classList.toggle("on-home", !!S.mode && S.sec === "home" && !S.cls);
   nav.innerHTML = navs;
-  side.innerHTML = '<div class="brand"><span class="blogo">'+ic("read")+'</span><span class="bname">ArabicMV</span></div><div class="snav">'+sideNavs+'</div>'+
+  side.innerHTML = '<button class="brand" data-a="home" aria-label="'+T("home")+'"><span class="blogo">'+ic("read")+'</span><span class="bname">ArabicMV</span></button><div class="snav">'+sideNavs+'</div>'+
     '<div class="sfoot"><span class="avatar">'+ic("user")+'</span><span>'+T("guest")+'</span></div>';
 }
 function lessonTabs(){
@@ -58,6 +65,21 @@ function welcomeHTML(){
     opt("dv","Arabic + Dhivehi","ދިވެހި އިންޓަރފޭސް އަދި ތަރުޖަމާ")+
     opt("both","Arabic + English + Dhivehi","ދިވެހި އިންޓަރފޭސް، އިނގިރޭސި އަދި ދިވެހި ތަރުޖަމާ")+
     '<p class="wnote">You can change this later from the menu · ފަހުން މެނޫއިން ބަދަލުކުރެވޭނެ</p></div>';
+}
+/* homepage: brand block and the three entry cards (no descriptions, no book list) */
+function homeHTML(){
+  function card(sec, icon, label){ return '<button class="hcard" data-a="sec" data-s="'+sec+'"><span class="hic">'+ic(icon)+'</span><span class="hlab">'+label+'</span><span class="hgo">'+ic("chev")+'</span></button>'; }
+  return '<div class="lp"><button class="ib lpmenu" data-a="menu" aria-label="'+T("menu")+'">'+ic("more")+'</button>'+
+    '<div class="lpbrand"><h1 class="lpname">ArabicMV</h1><p class="lptag">Learn Arabic with Confidence</p><p class="lpby">Developed by Ahmed Ahsan</p></div>'+
+    '<div class="hcards">'+card("level", "clipboardCheck", T("homeLevel"))+card("books", "bookOpen", T("homeBooks"))+card("gram", "gradCap", T("homeGrammar"))+'</div></div>';
+}
+/* book selection: Book 1 opens the all-units overview; later books are shown but not clickable */
+function booksHTML(){
+  return '<div class="hcards">'+[1,2,3].map(function(n){
+    var ready = n === 1, label = T("bookN")+" "+n+' <span class="hsep">\u2014</span> '+T("levelN")+" "+n;
+    return ready ? '<button class="hcard" data-a="sec" data-s="book"><span class="hic">'+ic("bookOpen")+'</span><span class="hlab">'+label+'</span><span class="hgo">'+ic("chev")+'</span></button>'
+      : '<div class="hcard off" aria-disabled="true"><span class="hic">'+ic("lock")+'</span><span class="hlab">'+label+'</span><span class="hsoon">'+T("soon")+'</span></div>';
+  }).join("")+'</div>';
 }
 /* fully completed lessons in a unit (all four section flags set) */
 function lessonsDoneIn(u){
@@ -301,7 +323,7 @@ function dashStats(){
   return st;
 }
 function dashHTML(){
-  var st = dashStats(), u = S.unit, l = S.last[u], d = u && UNIT_DATA[u];
+  var st = dashStats(), u = S.lastUnit, l = S.last[u], d = u && UNIT_DATA[u];
   var started = st.lessonsDone + st.bonusDone > 0 || !!(d && l);
   /* A. welcome */
   var h = '<div class="dhead"><h1 class="wh2">'+T(started ? "welcomeBack" : "welcome")+'</h1><p class="dsub">'+T("dashSub")+'</p></div>';
@@ -458,6 +480,10 @@ function render(){
   if(!S.mode) app.innerHTML = welcomeHTML();
   else if(S.cls) app.innerHTML = S.classId ? classHTML() : classListHTML();
   else switch(S.sec){
+    case "home": app.innerHTML = homeHTML(); break;
+    case "books": app.innerHTML = booksHTML(); break;
+    case "level": app.innerHTML = '<div class="empty">'+T("levelSoon")+'</div>'; break;
+    case "gram": app.innerHTML = '<div class="empty">'+T("gramSoon")+'</div>'; break;
     case "dash": app.innerHTML = dashHTML(); break;
     case "practice": app.innerHTML = practicePickHTML()+practiceHTML(); break;
     case "talk": app.innerHTML = placeholderHTML("talkItems"); break;
@@ -481,7 +507,7 @@ function pracTabKeep(){
   else if(br.left < sr.left) s.scrollLeft -= sr.left - br.left + 8;
 }
 function menuModal(){
-  openModal('<div class="menu"><button data-a="clsOpen">'+T("yourClass")+'</button>'+
+  openModal('<div class="menu">'+(S.sec !== "home" || S.cls ? '<button data-a="home">'+T("home")+'</button>' : '')+'<button data-a="clsOpen">'+T("yourClass")+'</button>'+
     (S.sec === "book" && (S.unit || S.cls) ? '<button data-a="units">'+T("allUnits")+'</button>' : '')+
     '<button data-a="changeLang">'+T("changeLang")+'</button>'+
     (S.teacher ? '<button data-a="logout">'+T("tLogout")+'</button>' : '<button data-a="loginOpen">'+T("tLogin")+'</button>')+
