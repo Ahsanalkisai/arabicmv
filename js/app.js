@@ -86,7 +86,10 @@ function uid(){ return Date.now().toString(36) + Math.random().toString(36).slic
 var S = {mode:null, ui:"dv", sec:"home", pUnit:1, pLesson:0, dlg:0, review:false, unit:null, lastUnit:null, lesson:null, last:{}, tab:"read", readTab:"conv", pracTab:"fc", scope:"lesson", spTab:"qa", sp:0, spShown:false, open:{},
          li:0, liWrong:null, liA:{}, liText:false,
          cls:false, classId:null, type:"phrase", practice:null, teacher:false,
-         libTab:"book", libQ:"", libU:0, libL:0, libSt:"all", libReview:false};
+         libTab:"book", libQ:"", libU:0, libL:0, libSt:"all", libReview:false, pType:"ex"};
+/* screens that were merged: old names (saved history entries, old links) open their new home */
+var SEC_ALIAS = {dash:"home", books:"book", level:"home", gram:"practice", talk:"practice"};
+function normSec(s){ return SEC_ALIAS[s] || s; }
 try{
   var m = localStorage.getItem("aby-mode"); if(MODES.indexOf(m) >= 0) S.mode = m;
   var lastUnit = +localStorage.getItem("aby-unit"); if(lastUnit >= 1) S.unit = S.lastUnit = lastUnit; /* a unit without data is cleared after loadBook */
@@ -275,18 +278,15 @@ function notReady(){ return '<div class="empty">'+T("unitNotReady")+'</div>'; }
 /* ---------- actions ---------- */
 var A = {
   setMode:function(d){ S.mode = d.m; try{ localStorage.setItem("aby-mode", S.mode); }catch(e){} applyMode(); window.scrollTo(0,0); },
-  /* homepage cards and header back buttons (the chrome's bar() takes an action name without data) */
+  /* header back buttons (the chrome's bar() takes an action name without data) */
   home:function(){ return A.sec({s:"home"}); },
-  books:function(){ return A.sec({s:"books"}); },
-  /* homepage cards and header back buttons (the chrome's bar() takes an action name without data) */
-  home:function(){ return A.sec({s:"home"}); },
-  books:function(){ return A.sec({s:"books"}); },
-  /* homepage cards and header back buttons (the chrome's bar() takes an action name without data) */
-  home:function(){ return A.sec({s:"home"}); },
-  books:function(){ return A.sec({s:"books"}); },
+  books:function(){ return A.sec({s:"book"}); },
+  /* homepage unit shortcut: straight to that unit's lessons */
+  openUnit:function(d){ A.sec({s:"book"}); return A.unit({n:d.n}); },
   sec:function(d){
-    closeModal(); clearInterval(speedTimer); S.sec = d.s; S.cls = false;
-    /* Textbook always opens the all-units overview; the last unit stays in S.lastUnit for Continue */
+    closeModal(); clearInterval(speedTimer); S.sec = normSec(d.s); S.cls = false;
+    d = {s:S.sec};
+    /* Lessons always opens the all-units overview; the last unit stays in S.lastUnit for Continue */
     if(d.s === "book"){ S.unit = null; S.lesson = null; S.review = false; S.practice = null; }
     if(d.s === "practice"){ if(!UNIT_DATA[S.pUnit]) S.pUnit = 1; initPracticeFor(S.pUnit, S.pLesson); }
     if(d.s === "ref") S.libReview = false;
@@ -313,8 +313,8 @@ var A = {
     window.scrollTo(0,0);
   },
   tab:function(d){
+    if(d.t==="help"){ S.pracTab="gram"; d = {t:"practice"}; }
     clearInterval(speedTimer); S.tab=d.t;
-    if(d.t==="read" && S.readTab==="turn") S.readTab="conv";
     if(d.t==="practice") initPractice();
     if(d.t==="speak"){ S.sp=0; S.spShown=false; }
     if(d.t==="listen"){ S.li=0; S.liWrong=null; S.liText=false; }
@@ -322,8 +322,7 @@ var A = {
   },
   clsOpen:function(){ closeModal(); S.cls=true; S.classId=null; S.practice=null; window.scrollTo(0,0); },
   clsBack:function(){ if(S.practice) S.practice=null; else if(S.classId) S.classId=null; else S.cls=false; },
-  readTab:function(d){ S.readTab=d.t; clearInterval(speedTimer); if(d.t==="turn") initPractice(); },
-  turnBack:function(){ clearInterval(speedTimer); S.readTab="conv"; window.scrollTo(0,0); },
+  readTab:function(d){ S.readTab=d.t; clearInterval(speedTimer); },
   dlgNext:function(){ S.dlg++; },
   dlgPrev:function(){ S.dlg--; },
   pracTab:function(d){ S.pracTab=d.t; initPractice(); },
@@ -338,9 +337,9 @@ var A = {
   line:function(d){
     S.open[d.k]=!S.open[d.k];
     /* grammar counts as studied once a note is actually opened, not on tab visit */
-    if(S.open[d.k] && d.k.charAt(0)==="g" && S.tab==="help") markDone("help");
+    if(S.open[d.k] && d.k.charAt(0)==="g" && inLessonView() && S.tab==="practice" && S.pracTab==="gram") markDone("help");
     /* reading counts once enough dialogue lines or words have been revealed */
-    if(S.open[d.k] && S.tab==="read" && (d.k.charAt(0)==="c" || d.k.charAt(0)==="v")) checkReadDone();
+    if(S.open[d.k] && inLessonView() && S.tab==="read" && (d.k.charAt(0)==="c" || d.k.charAt(0)==="v")) checkReadDone();
   },
   /* listening: answered = picked the right answer or revealed it; the lesson's
      listen flag is set only when every question in scope has been answered */
@@ -362,24 +361,25 @@ var A = {
   liText:function(){ S.liText = true; },
   aud:function(d){ audToggle(d.k); return false; },
   dashLesson:function(d){
-    S.sec = "book"; S.cls = false;
-    S.unit = S.lastUnit;
-    if(!S.unit || !UNIT_DATA[S.unit]){ S.unit = S.lastUnit = 1; try{ localStorage.setItem("aby-unit", "1"); }catch(e){} }
-    A.lesson({n:String(S.last[S.unit] || "1")});
-    S.tab = d.t;
+    var r = lastLesson();
+    A.goRecent(r ? {u:r.u, l:String(r.l)} : {u:1, l:"1"});
+    A.tab({t:d.t});
   },
+  /* Practice page: listening / speaking open inside the chosen lesson */
+  openAct:function(d){ A.goRecent({u:d.u, l:d.l}); A.tab({t:d.t}); },
+  pType:function(d){ S.pType = d.t; clearInterval(speedTimer); if(d.t === "ex") initPracticeFor(S.pUnit, S.pLesson); window.scrollTo(0,0); },
   spShow:function(){ S.spShown=true; if(S.sp===spCount()-1) markDone("speak"); },
   spNext:function(){ S.sp=(S.sp+1)%spCount(); S.spShown=false; },
   spPrev:function(){ var n=spCount(); S.sp=(S.sp-1+n)%n; S.spShown=false; },
   fcFlip:function(){ fc.flipped=!fc.flipped; },
-  fcNext:function(){ if((S.tab==="practice" || S.readTab==="turn") && fc.i===fc.items.length-1) markDone("practice"); fc.i=(fc.i+1)%fc.items.length; fc.flipped=false; },
+  fcNext:function(){ if(inLessonView() && S.tab==="practice" && fc.i===fc.items.length-1) markDone("practice"); fc.i=(fc.i+1)%fc.items.length; fc.flipped=false; },
   fcPrev:function(){ fc.i=(fc.i-1+fc.items.length)%fc.items.length; fc.flipped=false; },
   quizPick:function(d){ if(quiz.checked) return; quiz.sel=+d.k; quiz.nudge=false; },
   quizCheck:function(){
     if(quiz.sel===null){ quiz.nudge=true; return; }
     quiz.checked=true; if(quiz.sel===quiz.qs[quiz.i].ans) quiz.score++;
   },
-  quizNext:function(){ quiz.i++; quiz.sel=null; quiz.checked=false; quiz.nudge=false; if((S.tab==="practice" || S.readTab==="turn") && quiz.i >= quiz.qs.length) markDone("practice"); },
+  quizNext:function(){ quiz.i++; quiz.sel=null; quiz.checked=false; quiz.nudge=false; if(inLessonView() && S.tab==="practice" && quiz.i >= quiz.qs.length) markDone("practice"); },
   quizRestart:function(){ startQuiz(S.cls ? classItems(S.classId) : practiceSource().vocab); },
   matchPick:function(d){
     var i = +d.i;
@@ -444,16 +444,16 @@ var A = {
   },
   ltNext:function(){
     lt.i++;
-    if(lt.i >= lt.list.length){ lt.done = true; if(S.tab==="practice" || S.readTab==="turn") markDone("practice"); }
+    if(lt.i >= lt.list.length){ lt.done = true; if(inLessonView() && S.tab==="practice") markDone("practice"); }
     else ltLoad();
     window.scrollTo(0,0);
   },
   ltRetry:function(){ var keep = lt; ltRound(lt.list.filter(function(q){ return !keep.ok[q.ar] || keep.miss[q.ar]; })); },
   ltRestart:function(){ startLt(lt.all); },
-  dashStart:function(){ S.sec="book"; S.cls=false; return A.unit({n:"1"}); },
   dashPractice:function(d){
-    closeModal(); clearInterval(speedTimer); S.sec="practice"; S.cls=false; S.pracTab=d.t;
-    if(UNIT_DATA[S.lastUnit]) S.pUnit = S.lastUnit; else if(!UNIT_DATA[S.pUnit]) S.pUnit = 1;
+    closeModal(); clearInterval(speedTimer); S.sec="practice"; S.cls=false; S.pracTab=d.t; S.pType="ex";
+    var r = lastLesson();
+    if(r) S.pUnit = r.u; else if(UNIT_DATA[S.lastUnit]) S.pUnit = S.lastUnit; else if(!UNIT_DATA[S.pUnit]) S.pUnit = 1;
     initPracticeFor(S.pUnit, 0); window.scrollTo(0,0);
   },
   goRecent:function(d){
@@ -561,7 +561,7 @@ function navSync(){
 window.addEventListener("popstate", function(ev){
   var k = ev.state && ev.state.k; if(!k || !S.mode) return;
   var p = k.split("|");
-  closeModal(); clearInterval(speedTimer); S.cls = false; S.practice = null; S.sec = p[0];
+  closeModal(); clearInterval(speedTimer); S.cls = false; S.practice = null; S.sec = p[0] = normSec(p[0]);
   if(p[0] === "book"){
     S.unit = UNIT_DATA[+p[1]] ? +p[1] : null; S.lesson = null; S.review = false;
     if(S.unit && p[2] !== "0"){

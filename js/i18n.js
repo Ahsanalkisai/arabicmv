@@ -114,6 +114,12 @@ var L = {
   letBox:["Empty box","ހުސް ގޮޅި"], letRemove:["Take back","އަނބުރާ ނަގާ"],
   home:["Home","ހޯމް"], homeLevel:["Check Your Arabic Level","ޢަރަބި ފެންވަރު ބަލާ"], homeBooks:["Choose Your Book","ފޮތް ޚިޔާރުކުރޭ"], homeGrammar:["Grammar Lessons","ޤަވާޢިދު ފިލާވަޅުތައް"],
   bookN:["Book","ފޮތް"], levelN:["Level","ފެންވަރު"], soon:["Coming soon","ވަރަށް އަވަހަށް"],
+  navHome:["Home","މައި ޞަފްޙާ"], practise:["Practise","ފަރިތަކުރޭ"], exercises:["Exercises","ތަމްރީންތައް"], cont:["Continue","ކުރިއަށް"],
+  chooseLesson:["Choose a lesson to start practising.","ފަރިތަކުރަން ފަށާނެ ފިލާވަޅެއް ޚިޔާރުކުރޭ."],
+  recentProgress:["Recent progress","ފަހުގެ ކުރިއެރުން"], practisedH:["Lessons you have practised","ފަރިތަކުރި ފިލާވަޅުތައް"],
+  lessonsPractisedN:["lessons practised","ފަރިތަކުރި ފިލާވަޅު"], activitiesDone:["activities completed","ނިންމި ހަރަކާތް"],
+  listenDoneN:["listening completed","ނިންމި އަޑުއެހުން"], speakDoneN:["speaking completed","ނިންމި ވާހަކަދެއްކުން"],
+  noGrammar:["No grammar notes for this lesson","މި ފިލާވަޅުގައި ޤަވާޢިދެއް ނެތް"],
   levelSoon:["The level check is being prepared. It will open here when it is ready.","ފެންވަރު ބެލުމުގެ ޓެސްޓު ތައްޔާރުކުރަމުންދަނީ. ތައްޔާރުވުމުން މިތަނުން ހުޅުވޭނެ."],
   gramSoon:["Grammar lessons are being prepared. They will open here when they are ready.","ޤަވާޢިދު ފިލާވަޅުތައް ތައްޔާރުކުރަމުންދަނީ. ތައްޔާރުވުމުން މިތަނުން ހުޅުވޭނެ."]
 };

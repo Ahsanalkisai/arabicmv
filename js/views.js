@@ -1,8 +1,12 @@
 /* ArabicMV — screens. Each function returns HTML for one view. */
 /* ---------- views ---------- */
-function SECTIONS(){ return [["dash",T("secDash"),"dash",T("navDash")],["book",T("secBook"),"read",T("navBook")],["practice",T("secPractice"),"practice",T("navPractice")],["talk",T("secTalk"),"speak",T("navTalk")],["ref",T("secRef"),"ref",T("navRef")],["progress",T("secProgress"),"progress",T("navProgress")]]; }
-/* the last tab shows grammar; its storage key stays "help" for saved progress */
-function LESSON_TABS(){ return [["read",T("read")],["practice",T("doo")],["listen",T("listening")],["speak",T("speak")],["help",T("grammar")]]; }
+/* main navigation: Home, Lessons, Practice, My progress (Reference is in the menu) */
+function SECTIONS(){ return [["home",T("navHome"),"dash",T("navDash")],["book",T("lessons"),"read",T("lessons")],["practice",T("secPractice"),"practice",T("navPractice")],["progress",T("secProgress"),"progress",T("navProgress")]]; }
+function secTitle(s){ var m = SECTIONS().filter(function(x){ return x[0] === s; })[0]; return m ? m[1] : s === "ref" ? T("secRef") : ""; }
+/* four lesson activities, open in any order. Grammar is inside Practise; its saved-progress key stays "help" */
+function LESSON_TABS(){ return [["read",T("read")],["practice",T("practise")],["listen",T("listening")],["speak",T("speak")]]; }
+/* Practise counts as done when both of its saved parts are: exercises ("practice") and grammar ("help") */
+function tabDone(t){ return t === "practice" ? isDone("practice") && isDone("help") : isDone(t); }
 function TYPESL(){ return TYPES.map(function(t){ return [t[0], T(t[0])]; }); }
 function bar(back, small, title, isAr){
   return '<div class="hdr">'+(back ? '<button class="ib" data-a="'+back+'" aria-label="'+T("back")+'">'+ic("back")+'</button>' : '<span class="ib"></span>')+'<div class="hc">'+
@@ -18,31 +22,28 @@ function renderChrome(){
     h = bar("clsBack", "", c ? esc(c.name) : T("yourClass"), false);
   }
   else if(S.sec === "home") h = "";
-  else if(S.sec === "books") h = bar("home", "", T("homeBooks"), false);
-  else if(S.sec === "level") h = bar("home", "", T("homeLevel"), false);
-  else if(S.sec === "gram") h = bar("home", "", T("homeGrammar"), false);
-  else if(S.sec === "book" && !S.unit) h = bar("books", "", T("secBook"), false);
+  else if(S.sec === "ref") h = bar("home", "", T("secRef"), false);
+  else if(S.sec === "book" && !S.unit) h = bar("", "", T("lessons"), false);
   else if(S.sec === "book" && S.unit && !S.lesson) h = bar("units", "", T("lessons"), false);
-  else if(inLessonView()) h = '<div class="hdr"><button class="ib" data-a="'+(S.tab==="read" && S.readTab==="turn" ? "turnBack" : "lessons")+'" aria-label="'+T("back")+'">'+ic("back")+'</button>'+
+  else if(inLessonView()) h = '<div class="hdr"><button class="ib" data-a="lessons" aria-label="'+T("back")+'">'+ic("back")+'</button>'+
     '<div class="hc"><div class="hl" dir="rtl">'+unitKind(S.unit)+' ('+arNum(S.unit)+')<span class="hmid"> - '+UNITS[S.unit-1][0]+'</span> - '+(S.review ? "مراجعة" : "الدرس ("+arNum(UNIT_DATA[S.unit].lessons[S.lesson-1].num || S.lesson)+")")+'</div></div>'+
     '<button class="ib" data-a="menu" aria-label="'+T("menu")+'">'+ic("more")+'</button></div>';
-  else { var sec = SECTIONS().filter(function(x){ return x[0] === S.sec; })[0]; h = bar("", "", sec ? sec[1] : "", false); }
+  else h = bar("", "", secTitle(S.sec), false);
   document.getElementById("hdr").innerHTML = h;
-  /* the homepage stands alone, like the welcome screen: no rail or bottom bar, its own menu button */
-  var show = !!S.mode && !(S.sec === "home" && !S.cls);
+  /* every screen after the language choice has the navigation, the homepage included */
+  var show = !!S.mode;
   function navBtns(short){ return SECTIONS().map(function(n){
     return '<button class="'+(S.sec===n[0]?"on":"")+'" data-a="sec" data-s="'+n[0]+'"'+(S.sec===n[0]?' aria-current="page"':'')+' aria-label="'+n[1]+'">'+ic(n[2])+'<span>'+(short ? n[3] : n[1])+'</span></button>'; }).join(""); }
   var navs = navBtns(true), sideNavs = navBtns(false);
   var nav = document.getElementById("nav"), side = document.getElementById("side");
   nav.hidden = !show; side.hidden = !show; document.body.classList.toggle("has-nav", show);
-  document.body.classList.toggle("on-home", !!S.mode && S.sec === "home" && !S.cls);
   nav.innerHTML = navs;
   side.innerHTML = '<button class="brand" data-a="home" aria-label="'+T("home")+'"><span class="blogo">'+ic("read")+'</span><span class="bname">ArabicMV</span></button><div class="snav">'+sideNavs+'</div>'+
     '<div class="sfoot"><span class="avatar">'+ic("user")+'</span><span>'+T("guest")+'</span></div>';
 }
 function lessonTabs(){
   return '<div class="ltabs">'+LESSON_TABS().map(function(t){
-    var dn = !S.review && isDone(t[0]);
+    var dn = !S.review && tabDone(t[0]);
     return '<button class="'+(S.tab===t[0]?"on":"")+'" data-a="tab" data-t="'+t[0]+'">'+t[1]+(dn ? '<span class="td" aria-hidden="true"></span>' : '')+'</button>';
   }).join("")+'</div>';
 }
@@ -50,10 +51,9 @@ function lessonTabs(){
 function flowHTML(){
   var d = UNIT_DATA[S.unit];
   function btn(action, extra, label){ return '<button class="flow" data-a="'+action+'"'+extra+'><span>'+label+'</span>'+ic("chev")+'</button>'; }
-  if(S.tab === "read") return btn("tab", ' data-t="practice"', T("next")+': '+T("doo"));
+  if(S.tab === "read") return btn("tab", ' data-t="practice"', T("next")+': '+T("practise"));
   if(S.tab === "practice") return btn("tab", ' data-t="listen"', T("next")+': '+T("listening"));
   if(S.tab === "listen") return btn("tab", ' data-t="speak"', T("next")+': '+T("speak"));
-  if(S.tab === "speak") return btn("tab", ' data-t="help"', T("next")+': '+T("grammar"));
   if(S.review) return btn("lessons", '', T("allLessons"));
   return btn("nextLesson", '', S.lesson < d.lessons.length ? T("nextLessonL") : T("reviewUnit"));
 }
@@ -66,20 +66,39 @@ function welcomeHTML(){
     opt("both","Arabic + English + Dhivehi","ދިވެހި އިންޓަރފޭސް، އިނގިރޭސި އަދި ދިވެހި ތަރުޖަމާ")+
     '<p class="wnote">You can change this later from the menu · ފަހުން މެނޫއިން ބަދަލުކުރެވޭނެ</p></div>';
 }
-/* homepage: brand block and the three entry cards (no descriptions, no book list) */
-function homeHTML(){
-  function card(sec, icon, label){ return '<button class="hcard" data-a="sec" data-s="'+sec+'"><span class="hic">'+ic(icon)+'</span><span class="hlab">'+label+'</span><span class="hgo">'+ic("chev")+'</span></button>'; }
-  return '<div class="lp"><button class="ib lpmenu" data-a="menu" aria-label="'+T("menu")+'">'+ic("more")+'</button>'+
-    '<div class="lpbrand"><h1 class="lpname">ArabicMV</h1><p class="lptag">Learn Arabic with Confidence</p><p class="lpby">Developed by Ahmed Ahsan</p></div>'+
-    '<div class="hcards">'+card("level", "clipboardCheck", T("homeLevel"))+card("books", "bookOpen", T("homeBooks"))+card("gram", "gradCap", T("homeGrammar"))+'</div></div>';
+/* the lesson to continue: the most recently opened one (aby-recent), else the last lesson of the last unit */
+function lastLesson(){
+  var r = recent.filter(function(x){ return UNIT_DATA[x.u]; })[0];
+  if(r) return r;
+  var u = S.lastUnit, l = u && S.last[u];
+  return u && UNIT_DATA[u] && l ? {u:u, l:l} : null;
 }
-/* book selection: Book 1 opens the all-units overview; later books are shown but not clickable */
-function booksHTML(){
-  return '<div class="hcards">'+[1,2,3].map(function(n){
-    var ready = n === 1, label = T("bookN")+" "+n+' <span class="hsep">\u2014</span> '+T("levelN")+" "+n;
-    return ready ? '<button class="hcard" data-a="sec" data-s="book"><span class="hic">'+ic("bookOpen")+'</span><span class="hlab">'+label+'</span><span class="hgo">'+ic("chev")+'</span></button>'
-      : '<div class="hcard off" aria-disabled="true"><span class="hic">'+ic("lock")+'</span><span class="hlab">'+label+'</span><span class="hsoon">'+T("soon")+'</span></div>';
-  }).join("")+'</div>';
+/* homepage: welcome, continue, explore lessons, quick practice, recent progress */
+function homeHTML(){
+  var last = lastLesson(), st = dashStats();
+  var h = '<div class="hwel"><button class="ib hmenu" data-a="menu" aria-label="'+T("menu")+'">'+ic("more")+'</button>'+
+    '<h1 class="lpname">ArabicMV</h1><p class="lptag">Your Arabic Practice Companion</p><p class="lpsub">Practise Arabic. Every day.</p></div>';
+  /* B. continue learning, or where to begin */
+  h += last
+    ? '<button class="ccard" data-a="goRecent" data-u="'+last.u+'" data-l="'+last.l+'"><span class="cbody"><span class="ck">'+T("continueL")+' · '+T("book1")+'</span><span class="cv ar">'+UNITS[last.u-1][0]+'</span><span class="cs">'+unitName(last.u)+' · '+lessonLabel(last.u, last.l)+'</span></span><span class="cbtn">'+T("cont")+'</span></button>'
+    : '<div class="cempty"><p>'+T("chooseLesson")+'</p><button class="btn" data-a="sec" data-s="book">'+T("lessons")+'</button></div>';
+  /* C. explore lessons: Book 1 and a shortcut to every unit; later books are only announced */
+  h += '<h2>'+T("lessons")+'</h2><div class="books">'+
+    '<button class="hcard" data-a="sec" data-s="book"><span class="hic">'+ic("bookOpen")+'</span><span class="hlab">'+T("book1")+'<span class="hsub">'+st.unitsReady+' '+T("unitsN")+' · '+st.lessonsTotal+' '+T("lessonsN")+'</span></span><span class="hgo">'+ic("chev")+'</span></button>'+
+    [2,3].map(function(n){ return '<div class="hcard off" aria-disabled="true"><span class="hic">'+ic("bookOpen")+'</span><span class="hlab">'+T("bookN")+' '+n+'</span><span class="hsoon">'+T("soon")+'</span></div>'; }).join("")+'</div>'+
+    '<div class="ugrid">'+Object.keys(UNIT_DATA).map(function(k){
+      return '<button class="utile" data-a="openUnit" data-n="'+k+'" aria-label="'+unitName(+k)+' · '+esc(UNITS[k-1][0])+'" title="'+esc(UNITS[k-1][0])+'">'+k+(isBonus(+k) ? '<small>'+T("bonus")+'</small>' : '')+'</button>'; }).join("")+'</div>';
+  /* D. quick practice */
+  h += '<h2>'+T("quickPractice")+'</h2><div class="pgrid">'+
+    '<button class="pbtn" data-a="dashLesson" data-t="listen">'+ic("ear")+'<span>'+T("listening")+'</span></button>'+
+    '<button class="pbtn" data-a="dashLesson" data-t="speak">'+ic("speak")+'<span>'+T("speak")+'</span></button>'+
+    '<button class="pbtn" data-a="dashPractice" data-t="fc">'+ic("practice")+'<span>'+T("exercises")+'</span></button></div>';
+  /* E. recent progress */
+  var rec = recent.filter(function(r){ return UNIT_DATA[r.u]; }).slice(0, 3);
+  if(rec.length)
+    h += '<h2>'+T("recentProgress")+'</h2><div class="rlist">'+rec.map(recentCard).join("")+'</div>'+
+      '<p class="sub">'+activityTotals().acts+' '+T("activitiesDone")+' · <button class="lnk" data-a="sec" data-s="progress">'+T("secProgress")+'</button></p>';
+  return h+'<p class="credit">Developed by Ahmed Ahsan</p>';
 }
 /* fully completed lessons in a unit (all four section flags set) */
 function lessonsDoneIn(u){
@@ -88,16 +107,19 @@ function lessonsDoneIn(u){
   d.lessons.forEach(function(_,i){ var dk = done[u+"-"+(i+1)]; if(dk && dk.read && dk.practice && dk.speak && dk.help) n++; });
   return n;
 }
-/* five section-progress dots (read, practice, listen, speak, help) for one lesson.
-   Lesson completion (the tick and unit progress) stays defined by the original
-   four flags so progress earned before the listening tab existed is not lost;
-   the listen dot tracks the new activity on its own. */
-function sdots(u, l){
+/* the four lesson activities and whether each is done, read from the saved aby-done flags.
+   Lesson completion (the tick and unit progress) stays defined by the original four
+   flags (read, practice, speak, help) so earlier progress keeps its meaning. */
+function actsOf(u, l){
   var dk = done[u+"-"+l] || {};
-  return '<span class="sdots" aria-hidden="true">'+["read","practice","listen","speak","help"].map(function(s){ return '<i class="'+(dk[s]?"on":"")+'"></i>'; }).join("")+'</span>';
+  return [["read",T("read"),!!dk.read],["practice",T("practise"),!!(dk.practice && dk.help)],["listen",T("listening"),!!dk.listen],["speak",T("speak"),!!dk.speak]];
+}
+function actsHTML(u, l){
+  if(l === "r") return "";
+  return '<span class="acts">'+actsOf(u, l).map(function(a){ return '<span class="act'+(a[2]?" on":"")+'">'+(a[2] ? ic("check") : '')+a[1]+'</span>'; }).join("")+'</span>';
 }
 function startHTML(){
-  return '<ul class="ulist">'+UNITS.map(function(u,i){
+  return '<div class="hero"><div class="hk">'+T("book1")+'</div><div class="hn ar">العَرَبِيَّةُ بَيْنَ يَدَيْكَ – الْكِتَابُ الْأَوَّلُ</div></div><ul class="ulist">'+UNITS.map(function(u,i){
     var n = i+1, d = UNIT_DATA[n];
     if(!d) return '<li><button class="ucard off" disabled>'+
       '<span class="thumb ar">'+arNum(n)+'</span><span class="ut"><span class="uk ar">الوحدة '+arNum(n)+'</span><span class="un ar">'+u[0]+'</span><span class="ud">'+esc(unitSub(i))+' · '+T("notReady")+'</span></span></button></li>';
@@ -119,7 +141,7 @@ function lessonsHTML(){
     var k = i+1, words = d.vocab.filter(function(v){ return v.lesson===k; }).length, dl = d.conv.filter(function(c){ return c.lesson===k; }).length;
     var dk = done[S.unit+"-"+k], all = dk && dk.read && dk.practice && dk.speak && dk.help;
     return '<button class="lcard'+(S.last[S.unit]===k?" cur":"")+'" data-a="lesson" data-n="'+k+'"><span class="lk ar'+(all?" ok":"")+'">'+(all ? ic("check") : arNum(l.num || k))+'</span>'+
-      '<span class="ut"><span class="un ar">'+esc(l.ar)+'</span>'+meta(words, dl)+sdots(S.unit, k)+'</span><span class="uend">'+ic("chev")+'</span></button>';
+      '<span class="ut"><span class="un ar">'+esc(l.ar)+'</span>'+meta(words, dl)+actsHTML(S.unit, k)+'</span><span class="uend">'+ic("chev")+'</span></button>';
   }).join("")+review+'</div>';
 }
 function convBlock(c, ci, n, total){
@@ -147,8 +169,7 @@ function noteHTML(g, k){
 }
 function readHTML(){
   var d = UNIT_DATA[S.unit], n = 0;
-  var h = seg([["conv",T("dialogue")],["vocab",T("vocab")],["turn",T("yourTurn")]], S.readTab, "readTab");
-  if(S.readTab === "turn") return practiceHTML();
+  var h = seg([["conv",T("dialogue")],["vocab",T("vocab")]], S.readTab, "readTab");
   if(S.readTab === "conv"){
     var idx = []; d.conv.forEach(function(c,ci){ if(S.review || c.lesson === S.lesson) idx.push(ci); });
     if(!idx.length) return h+'<div class="empty">'+T("noDialogue")+'</div>';
@@ -163,15 +184,17 @@ function readHTML(){
 }
 function practiceHTML(){
   if(S.sec === "practice" && !UNIT_DATA[S.pUnit]) return "";
-  var tl = [["fc",T("cards")],["quiz",T("quiz")],["match",T("match")],["arr",T("arrange")],["speed",T("speed")]];
+  var inLsn = inLessonView();
+  var tl = (inLsn ? [["gram",T("grammar")]] : []).concat([["fc",T("cards")],["quiz",T("quiz")],["match",T("match")],["arr",T("arrange")],["speed",T("speed")]]);
   if(hasLetters(practiceUnit())) tl.push(["letters",T("letters")]);
+  if(S.pracTab === "gram" && !inLsn){ S.pracTab = "fc"; initPractice(); }
   if(S.pracTab === "letters" && !hasLetters(practiceUnit())) initPractice();
   var tabs = seg(tl, S.pracTab, "pracTab");
   var cnt = (S.pracTab==="quiz" && quiz && quiz.qs && quiz.i < quiz.qs.length) ? '<span class="count tcount">'+T("question")+' '+num(quiz.i+1, quiz.qs.length)+'</span>' : '';
   tabs = tabs.replace('</div>', cnt+'</div>');
-  if(!S.review && S.sec !== "practice") tabs = '<div class="segrow">'+tabs+'<button class="fbtn'+(S.scope==="unit"?" on":"")+'" data-a="scopeToggle" aria-pressed="'+(S.scope==="unit")+'" aria-label="'+T("scope")+'" title="'+(S.scope==="unit" ? T("wholeUnit") : T("thisLesson"))+'">'+ic("filter")+'</button></div>';
+  if(!S.review && S.sec !== "practice" && S.pracTab !== "gram") tabs = '<div class="segrow">'+tabs+'<button class="fbtn'+(S.scope==="unit"?" on":"")+'" data-a="scopeToggle" aria-pressed="'+(S.scope==="unit")+'" aria-label="'+T("scope")+'" title="'+(S.scope==="unit" ? T("wholeUnit") : T("thisLesson"))+'">'+ic("filter")+'</button></div>';
   return tabs+
-    (S.pracTab==="fc" ? fcHTML() : S.pracTab==="quiz" ? quizHTML() : S.pracTab==="match" ? matchHTML() : S.pracTab==="speed" ? speedHTML() : S.pracTab==="letters" ? ltHTML() : arrHTML());
+    (S.pracTab==="gram" ? helpHTML() : S.pracTab==="fc" ? fcHTML() : S.pracTab==="quiz" ? quizHTML() : S.pracTab==="match" ? matchHTML() : S.pracTab==="speed" ? speedHTML() : S.pracTab==="letters" ? ltHTML() : arrHTML());
 }
 /* ---------- listening (comprehension over the existing speak[] Q/A pairs) ---------- */
 /* questions of the current lesson (or whole unit in review), with their
@@ -263,7 +286,7 @@ function helpHTML(){
   return '<h2 style="margin-top:0">'+T("grammar")+'</h2>'+d.grammar.map(function(g,i){ return noteHTML(g, "g"+i); }).join("")+
     '<h2>'+T("howTo")+'</h2><div class="card tips">'+
     '<p><strong>'+T("read")+':</strong> '+T("howRead")+'</p>'+
-    '<p><strong>'+T("doo")+':</strong> '+T("howDo")+'</p>'+
+    '<p><strong>'+T("practise")+':</strong> '+T("howDo")+'</p>'+
     '<p><strong>'+T("listening")+':</strong> '+T("howListen")+'</p>'+
     '<p><strong>'+T("speak")+':</strong> '+T("howSpeak")+'</p></div>'+
     '<h2>'+T("tips")+'</h2><div class="card tips"><p>'+T("tip1")+'</p><p>'+T("tip2")+'</p><p>'+T("tip3")+'</p></div>';
@@ -322,47 +345,55 @@ function dashStats(){
   st.pct = st.lessonsTotal ? Math.round(st.lessonsDone / st.lessonsTotal * 100) : 0;
   return st;
 }
-function dashHTML(){
-  var st = dashStats(), u = S.lastUnit, l = S.last[u], d = u && UNIT_DATA[u];
-  var started = st.lessonsDone + st.bonusDone > 0 || !!(d && l);
-  /* A. welcome */
-  var h = '<div class="dhead"><h1 class="wh2">'+T(started ? "welcomeBack" : "welcome")+'</h1><p class="dsub">'+T("dashSub")+'</p></div>';
-  /* B. continue learning (or a starting recommendation) */
-  h += d && l
-    ? '<button class="ccard" data-a="resume"><span class="cbody"><span class="ck">'+T("continueL")+'</span><span class="cv ar">'+UNITS[u-1][0]+'</span><span class="cs">'+lessonLabel(u, l)+'</span></span><span class="cgo">'+ic("chev")+'</span></button>'
-    : '<button class="ccard" data-a="dashStart"><span class="cbody"><span class="ck">'+T("startL")+'</span><span class="cv ar">'+UNITS[0][0]+'</span><span class="cs">'+T("startHint")+' · '+esc(unitSub(0))+'</span></span><span class="cgo">'+ic("chev")+'</span></button>';
-  /* C. learning overview — every number is computed from UNIT_DATA and aby-done */
-  h += '<h2>'+T("overview")+'</h2><div class="stats">'+
-    '<div class="stat"><b class="num">'+st.unitsDone+' / '+st.unitsReady+'</b><span>'+T("unitsDone")+'</span></div>'+
-    '<div class="stat"><b class="num">'+st.lessonsDone+' / '+st.lessonsTotal+'</b><span>'+T("lessonsDone")+'</span></div>'+
-    '<div class="stat"><b>'+st.words+'</b><span>'+T("wordsAvail")+'</span></div>'+
-    '<div class="stat"><b>'+st.pct+'%</b><span>'+T("overallProgress")+'</span></div></div>'+
-    '<div class="pbar dpbar"><i style="width:'+st.pct+'%"></i></div>'+
-    (st.bonusTotal ? '<p class="sub">'+T("bonusTag")+' · '+st.bonusDone+' / '+st.bonusTotal+' '+T("lessonsDone")+'</p>' : '');
-  /* D. daily activity — streak counts only days recorded in aby-days */
-  var sk = streak(), today = days.indexOf(dayKey()) >= 0;
-  h += '<h2>'+T("dailyActivity")+'</h2><div class="daily card">'+
-    '<div class="dstreak"><b>'+sk+'</b><span>'+T("streakN")+'</span></div>'+
-    '<div class="dtoday"><span class="drow"><span class="dot'+(today ? " on" : "")+'"></span><span>'+T(today ? "doneToday" : "notToday")+'</span></span><span class="sub2">'+T("dailyGoalHint")+'</span></div></div>';
-  /* E. today's practice — shortcuts into the existing engines, plus the two
-     lesson activities (listening and speaking) resumed at the last lesson */
-  h += '<h2>'+T("todaysPractice")+'</h2><div class="pgrid">'+[["fc","cards","cardsI"],["quiz","quiz","help"],["match","match","matchI"],["arr","arrange","arrangeI"],["speed","speed","speedI"]].map(function(p){
-    return '<button class="pbtn" data-a="dashPractice" data-t="'+p[0]+'">'+ic(p[2])+'<span>'+T(p[1])+'</span></button>'; }).join("")+
-    [["listen","listening","ear"],["speak","speak","speak"]].map(function(p){
-    return '<button class="pbtn" data-a="dashLesson" data-t="'+p[0]+'">'+ic(p[2])+'<span>'+T(p[1])+'</span></button>'; }).join("")+'</div>';
-  /* F. recent lessons (recorded in aby-recent from first use on) */
-  var rec = recent.filter(function(r){ return UNIT_DATA[r.u]; });
-  if(rec.length)
-    h += '<h2>'+T("recent")+'</h2><div class="rlist">'+rec.map(function(r){
-      return '<button class="rcard" data-a="goRecent" data-u="'+r.u+'" data-l="'+r.l+'"><span class="rk ar">'+arNum(r.u)+'</span><span class="ut"><span class="un ar">'+UNITS[r.u-1][0]+'</span><span class="ud">'+lessonLabel(r.u, r.l)+'</span></span><span class="uend">'+ic("chev")+'</span></button>'; }).join("")+'</div>';
-  return h+'<div class="row" style="margin-top:14px"><button class="btn ghost" data-a="sec" data-s="book">'+T("openBook")+'</button><button class="btn ghost" data-a="sec" data-s="practice">'+T("quickPractice")+'</button></div>'+
-    '<p class="sub" style="margin-top:16px">'+T("savedOnDevice")+'</p>';
+/* totals over the saved aby-done flags (only lessons that exist) */
+function activityTotals(){
+  var t = {practised:0, acts:0, listen:0, speak:0, lessons:[]};
+  Object.keys(UNIT_DATA).forEach(function(u){
+    UNIT_DATA[u].lessons.forEach(function(_, i){
+      var a = actsOf(+u, i+1), n = a.filter(function(x){ return x[2]; }).length, dk = done[u+"-"+(i+1)] || {};
+      if(n || dk.practice || dk.help){ t.practised++; t.lessons.push({u:+u, l:i+1}); }
+      t.acts += n; if(a[2][2]) t.listen++; if(a[3][2]) t.speak++;
+    });
+  });
+  return t;
 }
+function recentCard(r){
+  return '<button class="rcard" data-a="goRecent" data-u="'+r.u+'" data-l="'+r.l+'"><span class="rk ar">'+arNum(r.u)+'</span><span class="ut"><span class="un ar">'+UNITS[r.u-1][0]+'</span><span class="ud">'+unitName(r.u)+' · '+lessonLabel(r.u, r.l)+'</span>'+actsHTML(r.u, r.l)+'</span><span class="uend">'+ic("chev")+'</span></button>';
+}
+/* Practice page: choose book, unit, lesson and the kind of activity; everything reuses the lesson content and engines */
 function practicePickHTML(){
   var d = UNIT_DATA[S.pUnit] || UNIT_DATA[1];
+  var bk = '<select id="pBookSel" aria-label="'+T("bookN")+'"><option value="1" selected>'+T("book1")+'</option>'+[2,3].map(function(n){ return '<option disabled>'+T("bookN")+' '+n+' · '+T("soon")+'</option>'; }).join("")+'</select>';
   var us = Object.keys(UNIT_DATA).map(function(k){ return '<option value="'+k+'"'+(+k===S.pUnit?" selected":"")+'>'+unitName(+k)+' · '+esc(UNITS[k-1][0])+'</option>'; }).join("");
   var ls = '<option value="0"'+(S.pLesson===0?" selected":"")+'>'+T("allLessons")+'</option>'+d.lessons.map(function(l,i){ return '<option value="'+(i+1)+'"'+(S.pLesson===i+1?" selected":"")+'>'+T("lesson")+' '+(l.num||i+1)+' · '+esc(l.ar)+'</option>'; }).join("");
-  return '<div class="pick"><select id="pUnitSel" aria-label="'+T("unit")+'">'+us+'</select><select id="pLessonSel" aria-label="'+T("lesson")+'">'+ls+'</select></div>';
+  return '<div class="pick pick3">'+bk+'<select id="pUnitSel" aria-label="'+T("unit")+'">'+us+'</select><select id="pLessonSel" aria-label="'+T("lesson")+'">'+ls+'</select></div>'+
+    '<div class="ptypes" role="group" aria-label="'+T("chooseContent")+'">'+[["vocab","vocab","cardsI"],["gram","grammar","gradCap"],["ex","exercises","practice"],["listen","listening","ear"],["speak","speak","speak"]].map(function(t){
+      return '<button class="ptype'+(S.pType===t[0]?" on":"")+'" data-a="pType" data-t="'+t[0]+'" aria-pressed="'+(S.pType===t[0])+'">'+ic(t[2])+'<span>'+T(t[1])+'</span></button>'; }).join("")+'</div>';
+}
+function unitHasAudio(u){ return !!(AUDIO_READY && AUD.map && AUD.map[u] && Object.keys(AUD.map[u]).length); }
+function practicePageHTML(){
+  var d = UNIT_DATA[S.pUnit], h = practicePickHTML();
+  if(!d) return h;
+  if(S.pType === "vocab"){
+    var vs = d.vocab.filter(function(v){ return !S.pLesson || v.lesson === S.pLesson; });
+    return h+'<p class="sub">'+vs.length+' '+T("wordsN")+'</p><ul class="vlist">'+vs.map(function(v){ return libCard(S.pUnit, v); }).join("")+'</ul>'+
+      '<div class="row" style="margin-top:12px"><button class="btn ghost" data-a="sec" data-s="ref">'+T("searchPh")+'</button></div>';
+  }
+  if(S.pType === "gram"){
+    var gs = []; d.grammar.forEach(function(g, i){ if(!S.pLesson || g.lesson === S.pLesson) gs.push(noteHTML(g, "pg"+i)); });
+    return h+(gs.length ? gs.join("") : '<div class="empty">'+T("noGrammar")+'</div>');
+  }
+  if(S.pType === "listen" || S.pType === "speak"){
+    /* listening and speaking run inside the lesson (audio, answers, progress): list where to start */
+    var t = S.pType, rows = d.lessons.map(function(l, i){
+      var k = i+1; if(S.pLesson && S.pLesson !== k) return "";
+      var ok = !!(done[S.pUnit+"-"+k] || {})[t];
+      return '<button class="rcard" data-a="openAct" data-u="'+S.pUnit+'" data-l="'+k+'" data-t="'+t+'"><span class="rk ar">'+arNum(l.num || k)+'</span><span class="ut"><span class="un ar">'+esc(l.ar)+'</span><span class="ud">'+lessonLabel(S.pUnit, k)+(ok ? ' · '+T("completed") : '')+'</span></span><span class="uend">'+ic("chev")+'</span></button>';
+    }).join("");
+    if(!S.pLesson) rows += '<button class="rcard" data-a="openAct" data-u="'+S.pUnit+'" data-l="r" data-t="'+t+'"><span class="rk">'+ic("redo")+'</span><span class="ut"><span class="un" style="font-size:1.05rem">'+T("reviewUnit")+'</span></span><span class="uend">'+ic("chev")+'</span></button>';
+    return h+(t === "listen" && !unitHasAudio(S.pUnit) ? '<p class="sub">'+T("audioSoon")+'</p>' : '')+'<div class="rlist">'+rows+'</div>';
+  }
+  return h+practiceHTML();
 }
 /* ---------- vocabulary library (Reference section) ---------- */
 /* example sentences block for a word's reveal, textbook content only */
@@ -462,17 +493,19 @@ function libHTML(){
   }
   return h+'<p class="sub" style="margin-top:14px">'+T("moreComing")+'</p>';
 }
-function placeholderHTML(key){
-  return '<div class="card"><p style="margin:0 0 8px">'+T("comingSoon")+'</p><h2 style="margin:8px 0 4px;font-size:1rem">'+T("planned")+'</h2><p class="sub" style="margin:0">'+T(key)+'</p></div>';
-}
 function progressHTML(){
+  var t = activityTotals(), rec = recent.filter(function(r){ return UNIT_DATA[r.u]; });
+  function stat(n, label){ return '<div class="stat"><b>'+n+'</b><span>'+label+'</span></div>'; }
+  var top = '<div class="stats">'+stat(t.practised, T("lessonsPractisedN"))+stat(t.acts, T("activitiesDone"))+stat(t.listen, T("listenDoneN"))+stat(t.speak, T("speakDoneN"))+'</div>'+
+    (rec.length ? '<h2>'+T("recent")+'</h2><div class="rlist">'+rec.map(recentCard).join("")+'</div>' : '')+
+    (t.lessons.length ? '<h2>'+T("practisedH")+'</h2><div class="rlist">'+t.lessons.map(recentCard).join("")+'</div>' : '<div class="cempty" style="margin-top:14px"><p>'+T("chooseLesson")+'</p><button class="btn" data-a="sec" data-s="book">'+T("lessons")+'</button></div>');
   function rows(bonus){ return Object.keys(UNIT_DATA).filter(function(k){ return isBonus(+k) === bonus; }).map(function(k){
     var dd = UNIT_DATA[k], n = lessonsDoneIn(k);
     var st = n === dd.lessons.length ? T("completed") : n ? T("inProgress") : T("notStarted");
     return '<li><span class="ar">'+UNITS[k-1][0]+'</span><span class="pbar"><i style="width:'+(n/dd.lessons.length*100)+'%"></i></span><span class="count">'+num(n, dd.lessons.length)+' · '+st+'</span></li>';
   }).join(""); }
   var b = rows(true);
-  return '<h2 style="margin-top:0">'+T("textbookProgress")+'</h2><ul class="plist">'+rows(false)+'</ul>'+
+  return top+'<h2>'+T("textbookProgress")+'</h2><ul class="plist">'+rows(false)+'</ul>'+
     (b ? '<h2>'+T("bonusTag")+'</h2><ul class="plist">'+b+'</ul>' : '')+'<p class="sub">'+T("savedOnDevice")+'</p>';
 }
 function render(){
@@ -481,18 +514,13 @@ function render(){
   else if(S.cls) app.innerHTML = S.classId ? classHTML() : classListHTML();
   else switch(S.sec){
     case "home": app.innerHTML = homeHTML(); break;
-    case "books": app.innerHTML = booksHTML(); break;
-    case "level": app.innerHTML = '<div class="empty">'+T("levelSoon")+'</div>'; break;
-    case "gram": app.innerHTML = '<div class="empty">'+T("gramSoon")+'</div>'; break;
-    case "dash": app.innerHTML = dashHTML(); break;
-    case "practice": app.innerHTML = practicePickHTML()+practiceHTML(); break;
-    case "talk": app.innerHTML = placeholderHTML("talkItems"); break;
+    case "practice": app.innerHTML = practicePageHTML(); break;
     case "ref": app.innerHTML = libHTML(); break;
     case "progress": app.innerHTML = progressHTML(); break;
     default:
       if(!S.unit) app.innerHTML = startHTML();
       else if(!S.lesson) app.innerHTML = lessonsHTML();
-      else app.innerHTML = lessonTabs()+(S.tab === "practice" ? practiceHTML() : S.tab === "listen" ? listenHTML() : S.tab === "speak" ? speakHTML() : S.tab === "help" ? helpHTML() : readHTML())+flowHTML();
+      else app.innerHTML = lessonTabs()+(S.tab === "practice" ? practiceHTML() : S.tab === "listen" ? listenHTML() : S.tab === "speak" ? speakHTML() : readHTML())+flowHTML();
   }
   audAfterRender();
   pracTabKeep();
@@ -507,7 +535,7 @@ function pracTabKeep(){
   else if(br.left < sr.left) s.scrollLeft -= sr.left - br.left + 8;
 }
 function menuModal(){
-  openModal('<div class="menu">'+(S.sec !== "home" || S.cls ? '<button data-a="home">'+T("home")+'</button>' : '')+'<button data-a="clsOpen">'+T("yourClass")+'</button>'+
+  openModal('<div class="menu">'+(S.sec !== "home" || S.cls ? '<button data-a="home">'+T("home")+'</button>' : '')+'<button data-a="sec" data-s="ref">'+T("secRef")+'</button><button data-a="clsOpen">'+T("yourClass")+'</button>'+
     (S.sec === "book" && (S.unit || S.cls) ? '<button data-a="units">'+T("allUnits")+'</button>' : '')+
     '<button data-a="changeLang">'+T("changeLang")+'</button>'+
     (S.teacher ? '<button data-a="logout">'+T("tLogout")+'</button>' : '<button data-a="loginOpen">'+T("tLogin")+'</button>')+
