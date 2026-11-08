@@ -2,7 +2,7 @@
 var TYPES = [["phrase","ޢިބާރާތް"],["noun","އިސްމު"],["verb","ފިޢުލު"],["tip","ޤަވާޢިދު"]];
 var DEMO_PASSWORD = "1234"; /* prototype only; Supabase login replaces this */
 var AR_DIGITS = "٠١٢٣٤٥٦٧٨٩";
-var ICON_PLAY = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5v13l11-6.5z"/></svg>';
+var ICON_PLAY = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2 6h2.6L9 2.6v10.8L4.6 10H2z"/><path d="M11 5.2a3.6 3.6 0 010 5.6M12.8 3a6.2 6.2 0 010 10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
 var ICON_PAUSE = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 1.5h3.5v13H3zM9.5 1.5H13v13H9.5z"/></svg>';
 
 
@@ -16,6 +16,9 @@ var ICONS = {
   check:'<path d="M5 12.5l4.5 4.5L19 7"/>',
   redo:'<path d="M4 12a8 8 0 0113.6-5.7L20 8M20 4v4h-4"/><path d="M20 12a8 8 0 01-13.6 5.7L4 16M4 20v-4h4"/>',
   x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  sliders:'<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/>',
+  mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3M9 21h6"/>',
+  volOff:'<path d="M4 9h3l4-3.5v13L7 15H4z"/><path d="M16 9l4 6M20 9l-4 6"/>',
   filter:'<path d="M4 6h16M7 12h10M10 18h4"/>',
   eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
   read:'<path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13c-3-.5-6 0-8 1.5zM12 6v13"/>',
@@ -140,7 +143,7 @@ function liCheckDone(){
    to the text-only exercises. AUDIO_READY is the master switch: while false nothing
    is fetched and Listening/Speaking behave exactly as they did before audio. */
 var AUDIO_READY = true; /* Units 1-7 recordings installed 2026-11-08; later units join as audio/book1/ready.json lists them */
-var AUD = {map:null, el:null, key:null, st:"", bad:{}};
+var AUD = {map:null, el:null, key:null, st:"", bad:{}, done:null};
 function fnv(s){ /* FNV-1a 32-bit over UTF-16 units of the NFC text; generate.js uses the same function */
   s = String(s); if(s.normalize) s = s.normalize("NFC");
   var h = 0x811c9dc5;
@@ -166,7 +169,7 @@ function audPlayer(){
   function st(v){ return function(){ if(AUD.key){ AUD.st = v; audSync(); } }; }
   a.addEventListener("loadstart", st("loading")); a.addEventListener("waiting", st("loading"));
   a.addEventListener("playing", st("playing"));
-  a.addEventListener("pause", st("")); a.addEventListener("ended", function(){ AUD.key = null; AUD.st = ""; audSync(); });
+  a.addEventListener("pause", st("")); a.addEventListener("ended", function(){ AUD.done = AUD.key; AUD.key = null; AUD.st = ""; audSync(); });
   a.addEventListener("error", function(){ audFail(AUD.key); });
   return a;
 }
@@ -176,7 +179,7 @@ function audToggle(k){
   var p = k.split("-"), url = audioUrl(+p[0], +p[1], p[2]); if(!url) return;
   if(AUD.key === k){ audStop(); audSync(); return; }
   audStop();
-  var a = audPlayer(); AUD.key = k; AUD.st = "loading"; audSync();
+  var a = audPlayer(); AUD.key = k; AUD.st = "loading"; AUD.done = null; audSync();
   a.src = url;
   var pr = a.play(); if(pr && pr.catch) pr.catch(function(e){ if(e && e.name !== "AbortError") audFail(k); });
 }
@@ -184,11 +187,13 @@ function audToggle(k){
 function audSync(){
   Array.prototype.forEach.call(document.querySelectorAll(".abtn"), function(b){
     var on = b.getAttribute("data-k") === AUD.key, s = on ? AUD.st : "";
-    b.className = "abtn" + (s ? " " + s : ""); b.setAttribute("aria-pressed", s === "playing" ? "true" : "false");
+    b.className = "abtn" + (s ? " " + s : "") + (!s && AUD.done === b.getAttribute("data-k") ? " done" : ""); b.setAttribute("aria-pressed", s === "playing" ? "true" : "false");
+    var orb = b.parentNode; if(orb && orb.className && orb.className.indexOf("orb") === 0) orb.className = "orb" + (s ? " " + s : "");
     b.setAttribute("aria-busy", s === "loading" ? "true" : "false");
     b.setAttribute("aria-label", s === "loading" ? T("loading") : s === "playing" ? T("pause") : T("audPlay"));
     b.innerHTML = s === "playing" ? ICON_PAUSE : ICON_PLAY;
-    var st = b.parentNode && b.parentNode.querySelector(".ast"); if(st) st.textContent = s === "loading" ? T("loading") : "";
+    var host = orb && orb.className.indexOf("orb") === 0 ? orb.parentNode : b.parentNode;
+    var st = host && host.querySelector(".ast"); if(st) st.textContent = s === "loading" ? T("loading") : "";
   });
 }
 /* after every render: stop audio whose button is no longer on screen */
@@ -361,6 +366,7 @@ var A = {
   liPrev:function(){ var n = liList().length; if(n){ S.li = (S.li - 1 + n) % n; } S.liWrong = null; S.liText = false; },
   liText:function(){ S.liText = true; },
   aud:function(d){ audToggle(d.k); return false; },
+  audReplay:function(d){ audStop(); audToggle(d.k); return false; },
   dashLesson:function(d){
     S.sec = "book"; S.cls = false;
     S.unit = S.lastUnit;

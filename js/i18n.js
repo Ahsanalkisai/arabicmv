@@ -34,6 +34,7 @@ var L = {
   wrongTry:["Not quite — try again or show the answer","ރަނގަޅެއް ނޫން — އަލުން މަސައްކަތްކުރޭ ނުވަތަ ޖަވާބު ބަލާ"],
   audioSoon:["Audio coming soon","އަޑު ވަރަށް އަވަހަށް އިތުރުކުރެވޭނެ"],
   audPlay:["Play audio","އަޑު އަހާ"], audErr:["This audio could not be played","މި އަޑު ޕްލޭއެއް ނުކުރެވުނު"],
+  replay:["Play again","އަލުން އަޑުއަހާ"], progressL:["Progress","ކުރިއެރުން"],
   showQuestion:["Show question text","ސުވާލުގެ ލިޔުން ދައްކާ"],
   listenDone:["Listening complete for this lesson","މި ފިލާވަޅުގެ އަޑުއެހުން ފުރިހަމަވެއްޖެ"],
   howListen:["Read the question (audio is coming), then choose the matching answer.","ސުވާލު ކިޔާފައި (އަޑު ފަހުން އަންނާނެ) އެއާ ގުޅޭ ޖަވާބު ހޮވާ."],
