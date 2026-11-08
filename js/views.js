@@ -23,9 +23,9 @@ function renderChrome(){
   else if(S.sec === "gram") h = bar("home", "", T("homeGrammar"), false);
   else if(S.sec === "book" && !S.unit) h = bar("books", "", T("secBook"), false);
   else if(S.sec === "book" && S.unit && !S.lesson) h = bar("units", "", T("lessons"), false);
-  else if(inLessonView()) h = '<div class="hdr lhdr"><button class="ib" data-a="'+(S.tab==="read" && S.readTab==="turn" ? "turnBack" : "lessons")+'" aria-label="'+T("back")+'">'+ic("x")+'</button>'+
-    '<div class="hc"><div class="ht">'+tabTitle()+'</div></div>'+
-    '<button class="ib" data-a="menu" aria-label="'+T("menu")+'">'+ic("sliders")+'</button></div>';
+  else if(inLessonView()) h = '<div class="hdr"><button class="ib" data-a="'+(S.tab==="read" && S.readTab==="turn" ? "turnBack" : "lessons")+'" aria-label="'+T("back")+'">'+ic("back")+'</button>'+
+    '<div class="hc"><div class="hl" dir="rtl">'+unitKind(S.unit)+' ('+arNum(S.unit)+')<span class="hmid"> - '+UNITS[S.unit-1][0]+'</span> - '+(S.review ? "مراجعة" : "الدرس ("+arNum(UNIT_DATA[S.unit].lessons[S.lesson-1].num || S.lesson)+")")+'</div></div>'+
+    '<button class="ib" data-a="menu" aria-label="'+T("menu")+'">'+ic("more")+'</button></div>';
   else { var sec = SECTIONS().filter(function(x){ return x[0] === S.sec; })[0]; h = bar("", "", sec ? sec[1] : "", false); }
   document.getElementById("hdr").innerHTML = h;
   /* the homepage stands alone, like the welcome screen: no rail or bottom bar, its own menu button */
@@ -36,26 +36,12 @@ function renderChrome(){
   var nav = document.getElementById("nav"), side = document.getElementById("side");
   nav.hidden = !show; side.hidden = !show; document.body.classList.toggle("has-nav", show);
   document.body.classList.toggle("on-home", !!S.mode && S.sec === "home" && !S.cls);
-  document.body.classList.toggle("in-lesson", !!S.mode && inLessonView());
   nav.innerHTML = navs;
   side.innerHTML = '<button class="brand" data-a="home" aria-label="'+T("home")+'"><span class="blogo">'+ic("read")+'</span><span class="bname">ArabicMV</span></button><div class="snav">'+sideNavs+'</div>'+
     '<div class="sfoot"><span class="avatar">'+ic("user")+'</span><span>'+T("guest")+'</span></div>';
 }
-/* title of the open activity, as the reference shows "Reading" / "Conversation" */
-function tabTitle(){
-  if(S.tab === "read") return S.readTab === "turn" ? T("yourTurn") : S.readTab === "vocab" ? T("vocab") : T("read");
-  return S.tab === "practice" ? T("doo") : S.tab === "listen" ? T("listening") : S.tab === "speak" ? T("speak") : T("grammar");
-}
-/* thin progress line with a round knob (Reference A "Difficulty level", Reference B "Progress") */
-function pbarHTML(f){ var pc = Math.round(Math.max(0, Math.min(1, f)) * 100); return '<div class="pbar2" aria-hidden="true"><i style="width:'+pc+'%"></i><b style="left:'+pc+'%"></b></div>'; }
-function lessonLabelAr(){ return unitKind(S.unit)+' ('+arNum(S.unit)+')<span class="hmid"> - '+UNITS[S.unit-1][0]+'</span> - '+(S.review ? "مراجعة" : "الدرس ("+arNum(UNIT_DATA[S.unit].lessons[S.lesson-1].num || S.lesson)+")"); }
 function lessonTabs(){
-  var secs = ["read","practice","listen","speak","help"], dn = S.review ? 0 : secs.filter(isDone).length;
-  /* Listening and Speaking carry their own single progress line (Reference B) */
-  var one = S.tab === "listen" || S.tab === "speak";
-  var lab = lessonLabelAr();
-  return (one ? '' : '<div class="plab"><span class="hl" dir="rtl">'+lab+'</span><span class="count">'+num(dn, secs.length)+'</span></div>'+pbarHTML(dn / secs.length))+
-    '<div class="ltabs">'+LESSON_TABS().map(function(t){
+  return '<div class="ltabs">'+LESSON_TABS().map(function(t){
     var dn = !S.review && isDone(t[0]);
     return '<button class="'+(S.tab===t[0]?"on":"")+'" data-a="tab" data-t="'+t[0]+'">'+t[1]+(dn ? '<span class="td" aria-hidden="true"></span>' : '')+'</button>';
   }).join("")+'</div>';
@@ -137,17 +123,12 @@ function lessonsHTML(){
   }).join("")+review+'</div>';
 }
 function convBlock(c, ci, n, total){
-  /* the dialogue itself is Arabic, so its lines always run right-to-left, whatever the interface language.
-     Chat layout (Reference A): the first speaker's lines sit on the start side with an avatar,
-     the other speaker's lines on the end side in the gradient bubble; tap a bubble for its meaning */
-  var first = c.lines.length ? c.lines[0].who : "";
+  /* the dialogue itself is Arabic, so its lines always run right-to-left, whatever the interface language */
   return '<section class="conv"><div class="chead"><b>'+T("dialogue")+' '+n+'</b>'+
     (total > 1 ? '<span class="count">'+num(n, total)+'</span><button class="ib" data-a="dlgPrev" aria-label="'+T("prevDialogue")+'">'+ic("fwd")+'</button><button class="ib" data-a="dlgNext" aria-label="'+T("nextDialogue")+'">'+ic("chev")+'</button>' : '')+'</div>'+
     '<div class="lines" dir="rtl">'+c.lines.map(function(l,li){
-    var k = "c"+ci+"-"+li, on = !!S.open[k], me = l.who !== first;
-    return '<button class="line'+(me?" b":" a")+(on?" on":"")+'" data-a="line" data-k="'+k+'" aria-expanded="'+on+'">'+
-      (me ? '' : '<span class="av ar" aria-hidden="true">'+esc(l.who.charAt(0))+'</span>')+
-      '<span class="who ar">'+esc(l.who)+'</span><span class="say ar">'+esc(l.ar)+'</span>'+
+    var k = "c"+ci+"-"+li, on = !!S.open[k];
+    return '<button class="line'+(on?" on":"")+'" data-a="line" data-k="'+k+'" aria-expanded="'+on+'"><span class="who ar">'+esc(l.who)+'</span><span class="say ar">'+esc(l.ar)+'</span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true">'+ICONS.chev+'</svg>'+
       (on ? '<span class="tr">'+meaning(l)+'</span>' : '')+'</button>';
   }).join("")+'</div></section>';
 }
@@ -223,48 +204,33 @@ function liOpts(qi){
   for(var r = 0; r < (qi % opts.length); r++) opts.push(opts.shift());
   return opts;
 }
-/* Reference B: the circular listening control with its sound rings. mode: "play" (current
-   recording), "soon" (none yet — Units 8-16 and Bonus 17), "err" (failed to play), "say" (speaking prompt) */
-function orbMode(u, si, part){ return audioUrl(u, si, part) ? "play" : (AUDIO_READY && AUD.bad[audioKey(u, si, part)]) ? "err" : "soon"; }
-function orbHTML(u, si, part, mode){
-  var k = audioKey(u, si, part), inner, cap = "";
-  if(mode === "play") inner = '<button class="abtn" data-a="aud" data-k="'+k+'" aria-pressed="false" aria-label="'+T("audPlay")+'">'+ICON_PLAY+'</button>'+
-    '<button class="obadge" data-a="audReplay" data-k="'+k+'" aria-label="'+T("replay")+'">'+ic("redo")+'</button>';
-  else if(mode === "say"){ inner = '<span class="ostub say" aria-hidden="true">'+ic("mic")+'</span>'; cap = T("sayPrompt"); }
-  else { inner = '<span class="ostub" aria-hidden="true">'+ic(mode === "err" ? "volOff" : "ear")+'</span>'; cap = mode === "err" ? T("audErr") : T("audioSoon"); }
-  return '<div class="orbwrap'+(mode === "play" ? "" : " off")+'"><div class="orb">'+inner+'</div><span class="ring r1" aria-hidden="true"></span><span class="ring r2" aria-hidden="true"></span><span class="ring r3" aria-hidden="true"></span>'+(cap ? '<p class="ocap'+(mode === "err" ? " bad" : "")+'" role="status">'+cap+'</p>' : '<p class="ocap ast" aria-live="polite"></p>')+'</div>';
-}
-/* model-answer card (Reference B word card): speaker + Arabic + tick, tag row, translation row */
-function modelCard(u, si, part, it){
-  var url = audioUrl(u, si, part), k = audioKey(u, si, part), bad = AUDIO_READY && AUD.bad[k], tr = meaning(it);
-  return '<div class="model"><div class="mrow"><span class="msp">'+(url ? '<button class="abtn" data-a="aud" data-k="'+k+'" aria-pressed="false" aria-label="'+T("audPlay")+'">'+ICON_PLAY+'</button>' : ic(bad ? "volOff" : "ear"))+'</span>'+
-    '<span class="ar">'+esc(it.ar)+'</span><span class="mok" aria-hidden="true">'+ic("check")+'</span></div>'+
-    '<div class="mrow tags"><span class="mtag">'+T("modelAnswer")+'</span>'+(bad ? '<span class="mtag bad" role="status">'+T("audErr")+'</span>' : '')+'</div>'+
-    (tr ? '<div class="mrow tr">'+tr+'</div>' : '')+'</div>';
-}
 function listenHTML(){
   var list = liList(), n = list.length;
   if(!n) return '<div class="empty">'+T("noQuestions")+'</div>';
   S.li = ((S.li % n) + n) % n;
   var it = list[S.li], st = S.liA[S.unit + ":" + it.i] || 0, opts = liOpts(it.i);
-  var pool = UNIT_DATA[S.unit].speak, mode = orbMode(S.unit, it.i, "q"), hasQ = mode === "play";
-  /* with a current recording the question is audio-first (text hidden until the student asks
-     for it or has answered); without one — not generated yet, or failed to play — the control
-     shows the honest coming-soon / error notice and the question text is shown */
-  var h = '<div class="plab"><span class="hl" dir="rtl">'+lessonLabelAr()+'</span><span class="count">'+T("progressL")+' '+num(S.li+1, n)+'</span></div>'+pbarHTML((S.li+1) / n)+
-    orbHTML(S.unit, it.i, "q", mode)+
-    '<div class="sent">'+(!hasQ || S.liText || st ? '<span class="ar">'+esc(it.s.q.ar)+'</span>' : '<button class="lnk" data-a="liText">'+ic("eye")+'<span>'+T("showQuestion")+'</span></button>')+'</div>'+
-    (st ? '' : '<p class="sub c">'+T("chooseAnswer")+'</p>')+
-    '<div class="opts" role="group">'+opts.map(function(o){
+  var pool = UNIT_DATA[S.unit].speak, hasQ = !!audioUrl(S.unit, it.i, "q");
+  var h = '<div class="card"><div class="clabel"><span>'+T("listening")+'</span><span class="count">'+num(S.li+1, n)+'</span></div>'+
+    /* with a current recording the question is audio-first (text hidden until the
+       student asks for it or has answered); without one — audio off, not generated
+       yet, or failed to play — this stays the honest coming-soon notice and the
+       question text is shown */
+    (hasQ ? '<div class="audioRow">'+audBtn(S.unit, it.i, "q")+'<span class="ast" aria-live="polite"></span></div>'
+          : audErrHTML(S.unit, it.i, "q") || '<div class="audioStub"><span class="asBtn" aria-hidden="true">'+ic("ear")+'</span><span>'+T("audioSoon")+'</span></div>')+
+    (!hasQ || S.liText || st
+      ? '<div class="prompt" style="margin:6px 0 10px"><span class="ar">'+esc(it.s.q.ar)+'</span></div>'
+      : '<div class="row" style="justify-content:center;margin:6px 0 10px"><button class="btn ghost small" data-a="liText">'+ic("eye")+'<span>'+T("showQuestion")+'</span></button></div>')+
+    (st ? '' : '<p class="sub" style="text-align:center;margin:0 0 10px">'+T("chooseAnswer")+'</p>')+
+    '<div class="opts">'+opts.map(function(o){
       var cls = st && o === it.i ? " right" : (!st && S.liWrong === o ? " wrong" : "");
       return '<button class="opt ar'+cls+'" data-a="liPick" data-i="'+o+'"><span class="radio"></span><span class="otext">'+esc(pool[o].a.ar)+'</span></button>';
     }).join("")+'</div>'+
     (st === 1 ? '<p class="fb ok">'+T("correct")+'</p>' : '')+
     (!st && S.liWrong !== null ? '<p class="fb no">'+T("wrongTry")+'</p>' : '')+
-    (st ? modelCard(S.unit, it.i, "a", it.s.a) : '')+
-    '<div class="navrow"><button class="rb" data-a="liPrev" aria-label="'+T("prev")+'">'+ic("fwd")+'</button>'+
-    (st ? '<button class="gbtn" data-a="liNext"><span>'+T("next")+'</span>'+ic("chev")+'</button>'
-        : '<button class="gbtn ghost" data-a="liReveal">'+ic("eye")+'<span>'+T("showAnswer")+'</span></button><button class="rb" data-a="liNext" aria-label="'+T("next")+'">'+ic("chev")+'</button>')+'</div>';
+    (st ? '' : '<button class="btn wide reveal ghost" data-a="liReveal">'+ic("eye")+'<span>'+T("showAnswer")+'</span></button>')+
+    '</div>'+
+    (st ? '<div class="model"><div class="count">'+T("modelAnswer")+'</div><span class="ar">'+esc(it.s.a.ar)+'</span>'+audBtn(S.unit, it.i, "a")+'<span class="tr">'+meaning(it.s.a)+'</span></div>' : '')+
+    '<div class="ctrl"><button class="rb" data-a="liPrev" aria-label="'+T("prev")+'">'+ic("fwd")+'</button><button class="rb'+(st?" go":"")+'" data-a="liNext" aria-label="'+T("next")+'">'+ic("chev")+'</button></div>';
   if(list.every(function(x){ return S.liA[S.unit + ":" + x.i]; }))
     h += '<p class="fb ok" style="margin-top:12px">'+T("listenDone")+'</p>';
   return h;
@@ -285,13 +251,11 @@ function speakHTML(){
   var task = S.review ? "" : lTask(d.lessons[S.lesson-1]);
   /* audio reference: Q/A item → its question and answer; say-it prompt → the one utterance it shows */
   var si = d.speak.indexOf(say ? ofLesson(d.speak)[Math.floor(S.sp/2)] : it), sayPart = S.sp % 2 ? "a" : "q";
-  return '<div class="plab"><span class="hl" dir="rtl">'+lessonLabelAr()+'</span><span class="count">'+(say ? T("sayPrompt") : T("question"))+' '+num(S.sp+1, list.length)+'</span></div>'+pbarHTML((S.sp+1) / list.length)+h+
-    (say ? orbHTML(S.unit, si, sayPart, "say") : orbHTML(S.unit, si, "q", orbMode(S.unit, si, "q")))+
-    '<div class="sent">'+(say ? meaning(it) : '<span class="ar">'+esc(it.q.ar)+'</span>')+'</div>'+
-    (S.spShown ? modelCard(S.unit, si, say ? sayPart : "a", say ? it : it.a) : '')+
-    '<div class="navrow"><button class="rb" data-a="spPrev" aria-label="'+T("prev")+'">'+ic("fwd")+'</button>'+
-    (S.spShown ? '<button class="gbtn" data-a="spNext"><span>'+T("next")+'</span>'+ic("chev")+'</button>'
-               : '<button class="gbtn" data-a="spShow">'+ic("eye")+'<span>'+T("showAnswer")+'</span></button><button class="rb" data-a="spNext" aria-label="'+T("next")+'">'+ic("chev")+'</button>')+'</div>'+
+  return h+'<div class="card"><div class="clabel"><span>'+(say ? T("sayPrompt") : T("question"))+'</span><span class="count">'+num(S.sp+1, list.length)+'</span></div>'+
+    '<div class="prompt" style="margin:10px 0 14px">'+(say ? meaning(it) : '<span class="ar">'+esc(it.q.ar)+'</span>'+audBtn(S.unit, si, "q"))+'</div>'+
+    (S.spShown ? '' : '<button class="btn wide reveal" data-a="spShow">'+ic("eye")+'<span>'+T("showAnswer")+'</span></button>')+'</div>'+
+    (S.spShown ? '<div class="model"><div class="count">'+T("modelAnswer")+'</div><span class="ar">'+esc(say ? it.ar : it.a.ar)+'</span>'+audBtn(S.unit, si, say ? sayPart : "a")+'</div>' : '')+
+    '<div class="ctrl"><button class="rb" data-a="spPrev" aria-label="'+T("prev")+'">'+ic("fwd")+'</button><button class="rb'+(S.spShown?" go":"")+'" data-a="spNext" aria-label="'+T("next")+'">'+ic("chev")+'</button></div>'+
     (task ? '<h2>'+T("withClassmate")+'</h2><div class="card tips"><p>'+esc(task)+'</p></div>' : '');
 }
 function helpHTML(){
