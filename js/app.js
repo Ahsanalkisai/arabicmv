@@ -139,7 +139,7 @@ function liCheckDone(){
    now, so a recording of older wording is never played. Everything else falls back
    to the text-only exercises. AUDIO_READY is the master switch: while false nothing
    is fetched and Listening/Speaking behave exactly as they did before audio. */
-var AUDIO_READY = false;
+var AUDIO_READY = true; /* Units 1-7 recordings installed 2026-11-08; later units join as audio/book1/ready.json lists them */
 var AUD = {map:null, el:null, key:null, st:"", bad:{}};
 function fnv(s){ /* FNV-1a 32-bit over UTF-16 units of the NFC text; generate.js uses the same function */
   s = String(s); if(s.normalize) s = s.normalize("NFC");

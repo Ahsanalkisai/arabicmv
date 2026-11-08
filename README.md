@@ -41,4 +41,4 @@ Accounts and Supabase sync are planned for Stage 7.
 ## Sections
 
 Home (landing page: Check Your Arabic Level, Choose Your Book, Grammar Lessons), Dashboard, Textbook (Book 1 → all-units overview), Practice, Communication (placeholder), Reference (placeholder), My progress. The level check, Books 2–3 and the grammar lessons are entry pages only for now.
-Audio controls are hidden until recordings exist.
+Listening/Speaking audio (speak[] questions and answers) plays for the units listed in `audio/book1/ready.json` — Units 1–7 so far; other units show the text-only exercises until their recordings are added.
