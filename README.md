@@ -40,5 +40,16 @@ Accounts and Supabase sync are planned for Stage 7.
 
 ## Sections
 
-Home (landing page: Check Your Arabic Level, Choose Your Book, Grammar Lessons), Dashboard, Textbook (Book 1 → all-units overview), Practice, Communication (placeholder), Reference (placeholder), My progress. The level check, Books 2–3 and the grammar lessons are entry pages only for now.
-Listening/Speaking audio (speak[] questions and answers) plays for the units listed in `audio/book1/ready.json` — Units 1–7 so far; other units show the text-only exercises until their recordings are added.
+Main navigation (bottom bar on phones, sidebar on desktop): **Home, Lessons, Practice, My progress**.
+
+- **Home**: the ArabicMV title and tagline, Continue learning (the most recently opened lesson) or a prompt to choose a lesson, and Books 1–3 (Book 1 is available; Books 2–3 are marked coming soon), followed by recent progress.
+- **Lessons**: Book 1 → all units (Units 1–16 and Bonus Lesson 17) → lessons. Every lesson is open; there are no locks or prerequisites.
+- **Lesson**: four activities, open in any order: Read (dialogue, vocabulary), Practise (grammar, cards, quiz, match, arrange, speed, and letters where a unit has them), Listen and Speak.
+- **Practice**: choose book, unit and lesson, then Vocabulary, Grammar, Exercises, Listening or Speaking. Listening and Speaking open inside the chosen lesson.
+- **My progress**: simple counts, recently opened lessons, lessons practised and per-unit progress.
+- **Menu**: Reference (vocabulary library with search and saved words), Your class, language choice and teacher login.
+
+## Audio
+
+Listening/Speaking audio (speak[] questions and answers) plays for the units listed in `audio/book1/ready.json`: **Units 1–16**, in `audio/book1/u01/` to `u16/`. Recordings play only when tapped and are never preloaded; an item plays only if its listed text fingerprint matches the Arabic on screen, otherwise it falls back to the text-only exercise.
+**Bonus Lesson 17 is text-only**: it is not listed in `ready.json` and has no recordings.

@@ -82,18 +82,11 @@ function homeHTML(){
   h += last
     ? '<button class="ccard" data-a="goRecent" data-u="'+last.u+'" data-l="'+last.l+'"><span class="cbody"><span class="ck">'+T("continueL")+' · '+T("book1")+'</span><span class="cv ar">'+UNITS[last.u-1][0]+'</span><span class="cs">'+unitName(last.u)+' · '+lessonLabel(last.u, last.l)+'</span></span><span class="cbtn">'+T("cont")+'</span></button>'
     : '<div class="cempty"><p>'+T("chooseLesson")+'</p><button class="btn" data-a="sec" data-s="book">'+T("lessons")+'</button></div>';
-  /* C. explore lessons: Book 1 and a shortcut to every unit; later books are only announced */
+  /* C. explore lessons: Book 1 opens the Lessons page; later books are only announced */
   h += '<h2>'+T("lessons")+'</h2><div class="books">'+
     '<button class="hcard" data-a="sec" data-s="book"><span class="hic">'+ic("bookOpen")+'</span><span class="hlab">'+T("book1")+'<span class="hsub">'+st.unitsReady+' '+T("unitsN")+' · '+st.lessonsTotal+' '+T("lessonsN")+'</span></span><span class="hgo">'+ic("chev")+'</span></button>'+
-    [2,3].map(function(n){ return '<div class="hcard off" aria-disabled="true"><span class="hic">'+ic("bookOpen")+'</span><span class="hlab">'+T("bookN")+' '+n+'</span><span class="hsoon">'+T("soon")+'</span></div>'; }).join("")+'</div>'+
-    '<div class="ugrid">'+Object.keys(UNIT_DATA).map(function(k){
-      return '<button class="utile" data-a="openUnit" data-n="'+k+'" aria-label="'+unitName(+k)+' · '+esc(UNITS[k-1][0])+'" title="'+esc(UNITS[k-1][0])+'">'+k+(isBonus(+k) ? '<small>'+T("bonus")+'</small>' : '')+'</button>'; }).join("")+'</div>';
-  /* D. quick practice */
-  h += '<h2>'+T("quickPractice")+'</h2><div class="pgrid">'+
-    '<button class="pbtn" data-a="dashLesson" data-t="listen">'+ic("ear")+'<span>'+T("listening")+'</span></button>'+
-    '<button class="pbtn" data-a="dashLesson" data-t="speak">'+ic("speak")+'<span>'+T("speak")+'</span></button>'+
-    '<button class="pbtn" data-a="dashPractice" data-t="fc">'+ic("practice")+'<span>'+T("exercises")+'</span></button></div>';
-  /* E. recent progress */
+    [2,3].map(function(n){ return '<div class="hcard off" aria-disabled="true"><span class="hic">'+ic("bookOpen")+'</span><span class="hlab">'+T("bookN")+' '+n+'</span><span class="hsoon">'+T("soon")+'</span></div>'; }).join("")+'</div>';
+  /* D. recent progress */
   var rec = recent.filter(function(r){ return UNIT_DATA[r.u]; }).slice(0, 3);
   if(rec.length)
     h += '<h2>'+T("recentProgress")+'</h2><div class="rlist">'+rec.map(recentCard).join("")+'</div>'+
