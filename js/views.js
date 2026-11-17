@@ -245,13 +245,14 @@ function listenHTML(){
     (!st && S.liWrong !== null ? '<p class="fb no">'+T("wrongTry")+'</p>' : '')+
     (st ? '' : '<button class="btn wide reveal ghost" data-a="liReveal">'+ic("eye")+'<span>'+T("showAnswer")+'</span></button>')+
     '</div>'+
-    (st ? '<div class="model"><div class="count">'+T("modelAnswer")+'</div><span class="ar">'+esc(it.s.a.ar)+'</span>'+audBtn(S.unit, it.i, "a")+'<span class="tr">'+meaning(it.s.a)+'</span></div>' : '')+
+    (st ? '<div class="model"><div class="count">'+T("modelAnswer")+'</div><span class="ar">'+esc(it.s.a.ar)+'</span><span class="tr">'+meaning(it.s.a)+'</span></div>' : '')+
     '<div class="ctrl"><button class="rb" data-a="liPrev" aria-label="'+T("prev")+'">'+ic("fwd")+'</button><button class="rb'+(st?" go":"")+'" data-a="liNext" aria-label="'+T("next")+'">'+ic("chev")+'</button></div>';
   if(list.every(function(x){ return S.liA[S.unit + ":" + x.i]; }))
     h += '<p class="fb ok" style="margin-top:12px">'+T("listenDone")+'</p>';
   return h;
 }
-/* play button for one speak[] question or answer; empty while it has no current recording */
+/* play button for one speak[] question or answer; empty while it has no current recording.
+   Listening uses it for the question only: the model answer stays written so students choose by ear. */
 function audBtn(u, si, part){
   if(!audioUrl(u, si, part)) return audErrHTML(u, si, part);
   var k = audioKey(u, si, part);
