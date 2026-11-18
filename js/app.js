@@ -16,6 +16,7 @@ var ICONS = {
   check:'<path d="M5 12.5l4.5 4.5L19 7"/>',
   redo:'<path d="M4 12a8 8 0 0113.6-5.7L20 8M20 4v4h-4"/><path d="M20 12a8 8 0 01-13.6 5.7L4 16M4 20v-4h4"/>',
   x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0014 0M12 18v3M9 21h6"/>',
   filter:'<path d="M4 6h16M7 12h10M10 18h4"/>',
   eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
   read:'<path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13c-3-.5-6 0-8 1.5zM12 6v13"/>',
@@ -194,6 +195,67 @@ function audSync(){
     var st = b.parentNode && b.parentNode.querySelector(".ast"); if(st) st.textContent = s === "loading" ? T("loading") : "";
   });
 }
+/* ---------- microphone answers in Speaking (browser Web Speech API) ----------
+   Practice and self-assessment only. The transcript is shown exactly as the browser returns
+   it: never compared with the model answer, never marked, never saved, and it never changes
+   progress. ArabicMV records nothing and uploads nothing; the browser itself sends the speech
+   to its own recognition service (Google in Chrome, Microsoft in Edge, Apple in Safari).
+   One session at a time; it is cancelled when its question leaves the screen. */
+var MIC = {key:null, st:"", err:"", live:"", fin:"", code:"", rec:null, text:{}};
+function micApi(){ return window.SpeechRecognition || window.webkitSpeechRecognition || null; }
+function micKey(u, si){ return u + "-" + si; }
+function micOn(){ return MIC.st === "listening" || MIC.st === "processing"; }
+/* end a running session and drop its result (question changed, page hidden, audio started) */
+function micAbort(){
+  var r = MIC.rec; MIC.rec = null;
+  if(r){ r.onresult = r.onerror = r.onend = r.onspeechend = null; try{ r.abort(); }catch(e){} }
+  if(micOn()){ MIC.st = ""; MIC.live = ""; MIC.fin = ""; }
+}
+/* browser error codes -> the messages students see */
+function micErr(c){
+  return c === "not-allowed" ? "micDenied" : c === "service-not-allowed" ? "micService" : c === "audio-capture" ? "micNoDevice" :
+    c === "network" ? "micNetwork" : c === "language-not-supported" ? "micLang" : (!c || c === "no-speech") ? "micNoSpeech" : "micFail";
+}
+function micStart(k){
+  if(micOn()) return;                                   /* never two sessions at once */
+  var Api = micApi();
+  MIC.key = k; MIC.err = ""; MIC.live = ""; MIC.fin = ""; MIC.code = "";
+  if(!Api){ MIC.st = "error"; MIC.err = "micUnsupported"; return; }
+  if(AUD.key){ audStop(); audSync(); }                  /* the recogniser must not hear our own recordings */
+  delete MIC.text[k];                                   /* a new attempt replaces the previous transcript */
+  var r; try{ r = new Api(); }catch(e){ MIC.st = "error"; MIC.err = "micFail"; return; }
+  r.lang = "ar-SA"; r.interimResults = true; r.continuous = false; r.maxAlternatives = 1;
+  r.onresult = function(ev){
+    if(MIC.rec !== r) return;
+    var fin = "", tmp = "";
+    for(var i = 0; i < ev.results.length; i++){ var t = ev.results[i][0] ? ev.results[i][0].transcript : ""; if(ev.results[i].isFinal) fin += t; else tmp += t; }
+    MIC.fin = fin; MIC.live = fin + tmp; micSync();
+  };
+  r.onspeechend = function(){ if(MIC.rec === r && MIC.st === "listening"){ MIC.st = "processing"; micSync(); } };
+  r.onerror = function(ev){ if(MIC.rec === r) MIC.code = ev && ev.error || "unknown"; };
+  r.onend = function(){
+    if(MIC.rec !== r) return;
+    MIC.rec = null;
+    var t = MIC.fin || MIC.live;                        /* the words exactly as recognised */
+    if(t && t.replace(/\s+/g, "") && (!MIC.code || MIC.code === "no-speech")){ MIC.text[k] = t; MIC.st = ""; MIC.err = ""; }
+    else { MIC.st = "error"; MIC.err = micErr(MIC.code); }
+    MIC.live = ""; MIC.fin = ""; micSync();
+  };
+  MIC.rec = r; MIC.st = "listening";
+  try{ r.start(); }catch(e){ MIC.rec = null; MIC.st = "error"; MIC.err = "micFail"; }
+}
+function micStop(){ var r = MIC.rec; if(r && MIC.st === "listening"){ MIC.st = "processing"; try{ r.stop(); }catch(e){} } }
+/* redraw only the microphone panel, so typing-free state changes never rebuild the page */
+function micSync(){
+  var el = MIC.key && document.querySelector('.mic[data-k="' + MIC.key + '"]');
+  if(el) el.innerHTML = micInner(MIC.key);
+}
+/* after every render: cancel a session whose question is no longer on screen */
+function micAfterRender(){
+  if(MIC.key && !document.querySelector('.mic[data-k="' + MIC.key + '"]')){ micAbort(); MIC.key = null; MIC.st = ""; MIC.err = ""; }
+}
+document.addEventListener("visibilitychange", function(){ if(document.hidden && micOn()){ micAbort(); micSync(); } });
+window.addEventListener("pagehide", function(){ micAbort(); });
 /* after every render: stop audio whose button is no longer on screen */
 function audAfterRender(){
   if(AUD.key && !document.querySelector('.abtn[data-k="' + AUD.key + '"]')) audStop();
@@ -359,7 +421,9 @@ var A = {
   liNext:function(){ var n = liList().length; if(n){ S.li = (S.li + 1) % n; } S.liWrong = null; S.liText = false; },
   liPrev:function(){ var n = liList().length; if(n){ S.li = (S.li - 1 + n) % n; } S.liWrong = null; S.liText = false; },
   liText:function(){ S.liText = true; },
-  aud:function(d){ audToggle(d.k); return false; },
+  aud:function(d){ if(micOn()){ micAbort(); micSync(); } audToggle(d.k); return false; },
+  micStart:function(d){ micStart(d.k); micSync(); return false; },
+  micStop:function(){ micStop(); micSync(); return false; },
   dashLesson:function(d){
     var r = lastLesson();
     A.goRecent(r ? {u:r.u, l:String(r.l)} : {u:1, l:"1"});

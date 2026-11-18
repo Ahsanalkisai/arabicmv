@@ -325,6 +325,23 @@ html[data-ui="en"] .line.on>.ic.d,html[data-ui="en"] .nhead[aria-expanded="true"
 .audioRow{display:flex; align-items:center; justify-content:center; gap:10px; margin:10px 0 4px; min-height:48px}
 .abtn{width:48px; height:48px; border-radius:50%; border:0; background:var(--accent); color:var(--primary); display:inline-grid; place-items:center; padding:0; flex:none; vertical-align:middle; margin:4px auto 0}
 .abtn svg{width:18px; height:18px; fill:currentColor}
+/* Speaking: microphone answer panel */
+.mic{background:var(--card); border:1.5px solid var(--line); border-radius:18px; padding:12px 14px; margin-top:12px}
+.mic-head{display:flex; align-items:center; gap:8px; color:var(--primary); font-weight:700; font-size:.95rem; margin-bottom:8px}
+.mic-head .ic{width:18px; height:18px}
+.mic-row{display:flex; align-items:center; gap:14px; flex-wrap:wrap}
+.mic-side{display:flex; flex-direction:column; align-items:flex-start; gap:6px}
+.mic-btn{position:relative; width:64px; height:64px; flex:none; border-radius:50%; border:0; padding:0; display:grid; place-items:center; background:var(--primary); color:var(--on-primary); box-shadow:var(--shadow); cursor:pointer}
+.mic-btn .ic{width:28px; height:28px}
+.mic-btn.on{background:#c62828; color:#fff}
+.mic-btn.busy{background:var(--accent); color:var(--primary); cursor:progress}
+.mic-sq{width:20px; height:20px; border-radius:4px; background:currentColor}
+.mic-spin{width:26px; height:26px; border-radius:50%; border:3px solid var(--line); border-top-color:var(--primary)}
+.mic-state{font-weight:600; color:var(--ink); line-height:1.5}
+.mic-text{direction:rtl; text-align:right; unicode-bidi:plaintext; font-size:1.7rem; line-height:1.9; color:var(--ink); background:var(--surface); border-radius:12px; padding:6px 12px; margin:0 0 10px; overflow-wrap:anywhere; word-break:break-word}
+.mic-text.live{color:var(--muted); margin-top:10px}
+.mic-msg{margin:0 0 10px; line-height:1.6}
+.mic-msg.err{color:var(--bad, #b3261e); font-weight:600}
 .abtn.playing{background:var(--primary); color:var(--on-primary)}
 .abtn.loading{opacity:.65; cursor:progress}
 .audioRow .abtn{margin:0}
@@ -464,6 +481,10 @@ input.en{text-align:left; font-size:1rem; color:var(--ink)}
   .tr,.model,.nbody{animation:rise .18s ease-out}
   @keyframes rise{from{opacity:0; transform:translateY(-4px)}to{opacity:1; transform:none}}
   .abtn.loading{animation:apulse 1s ease-in-out infinite}
+  .mic-btn.on{animation:mring 1.2s ease-out infinite}
+  .mic-spin{animation:mic-spin .8s linear infinite}
+  @keyframes mring{0%{box-shadow:0 0 0 0 rgba(198,40,40,.45)}100%{box-shadow:0 0 0 16px rgba(198,40,40,0)}}
+  @keyframes mic-spin{to{transform:rotate(360deg)}}
   @keyframes apulse{50%{opacity:.35}}
   .ltslots.no{animation:ltshake .3s ease-in-out}
   @keyframes ltshake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}

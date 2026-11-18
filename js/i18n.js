@@ -120,6 +120,17 @@ var L = {
   lessonsPractisedN:["lessons practised","ފަރިތަކުރި ފިލާވަޅު"], activitiesDone:["activities completed","ނިންމި ހަރަކާތް"],
   listenDoneN:["listening completed","ނިންމި އަޑުއެހުން"], speakDoneN:["speaking completed","ނިންމި ވާހަކަދެއްކުން"],
   noGrammar:["No grammar notes for this lesson","މި ފިލާވަޅުގައި ޤަވާޢިދެއް ނެތް"],
+  micTitle:["Your spoken answer","ތިބާ ބުނި ޖަވާބު"], micTap:["Tap to speak Arabic","ޢަރަބިން ވާހަކަދައްކަން ފިއްތާލާ"], micStartL:["Start speaking","ވާހަކަދައްކަން ފަށާ"],
+  micListening:["Listening… speak your answer in Arabic","އަޑުއަހަނީ… ޖަވާބު ޢަރަބިން ބުނޭ"], micStop:["Stop","ހުއްޓާ"],
+  micProcessing:["Recognising your answer…","ޖަވާބު ދެނެގަނެވެނީ…"], micAgain:["Try again","އަލުން ބުނޭ"],
+  micDenied:["Microphone access was blocked. Allow the microphone for this site in your browser settings, then tap Try again.","މައިކް ބޭނުންކުރުމުގެ ހުއްދަ ނުލިބުނު. ބްރައުޒަރުގެ ސެޓިންގްސްއިން މި ސައިޓަށް މައިކް ހުއްދަ ދީފައި، އަލުން ބުނޭ ފިއްތާލާ."],
+  micService:["Speech recognition is turned off on this device or browser. On iPhone, turn on Dictation in Settings, then try again.","މި ޑިވައިސް ނުވަތަ ބްރައުޒަރުގައި ވާހަކަ ދެނެގަތުން ބަންދުކޮށްފައިވޭ. އައިފޯނުގައި ސެޓިންގްސްއިން Dictation ހުޅުވާފައި އަލުން މަސައްކަތްކުރޭ."],
+  micNoDevice:["No microphone was found. Connect or turn on a microphone, then try again.","މައިކެއް ނުފެނުނު. މައިކެއް ގުޅާ ނުވަތަ ހުޅުވާފައި އަލުން މަސައްކަތްކުރޭ."],
+  micNoSpeech:["No speech was heard. Tap the microphone and say your answer clearly in Arabic.","އެއްވެސް ވާހަކައެއް ނީވުނު. މައިކްގައި ފިއްތާފައި ޖަވާބު ސާފުކޮށް ޢަރަބިން ބުނޭ."],
+  micNetwork:["Speech recognition needs an internet connection. Check your connection and try again.","ވާހަކަ ދެނެގަތުމަށް އިންޓަނެޓް ކަނެކްޝަން ބޭނުންވޭ. ކަނެކްޝަން ބަލައި އަލުން މަސައްކަތްކުރޭ."],
+  micLang:["This browser cannot recognise Arabic speech. Try Chrome or Edge.","މި ބްރައުޒަރަށް ޢަރަބި ވާހަކަ ދެނެނުގަނެވޭ. ކްރޯމް ނުވަތަ އެޖް ބޭނުންކޮށްލާ."],
+  micFail:["Speech recognition did not work this time. Please try again.","މިފަހަރު ވާހަކަ ދެނެގަތުން ކާމިޔާބެއް ނުވި. އަލުން މަސައްކަތްކުރޭ."],
+  micUnsupported:["This browser does not support speech recognition, so answering with the microphone is not available here. It works in Chrome (computer and Android), Edge on a computer and Safari on iPhone. You can still say your answer aloud and use Show answer.","މި ބްރައުޒަރުގައި ވާހަކަ ދެނެގަތުމުގެ ފީޗަރު ނެތުމުން، މިތާނގައި މައިކުން ޖަވާބު ދެވެން ނެތް. ކްރޯމް (ކޮމްޕިއުޓަރު އަދި އެންޑްރޮއިޑް)، ކޮމްޕިއުޓަރުގެ އެޖް އަދި އައިފޯނުގެ ސަފާރީގައި މި ފީޗަރު ބޭނުންކުރެވޭނެ. ޖަވާބު އަޑުހަރުކޮށް ބުނެފައި ޖަވާބު ދައްކާ ފިއްތާލެވޭނެ."],
   levelSoon:["The level check is being prepared. It will open here when it is ready.","ފެންވަރު ބެލުމުގެ ޓެސްޓު ތައްޔާރުކުރަމުންދަނީ. ތައްޔާރުވުމުން މިތަނުން ހުޅުވޭނެ."],
   gramSoon:["Grammar lessons are being prepared. They will open here when they are ready.","ޤަވާޢިދު ފިލާވަޅުތައް ތައްޔާރުކުރަމުންދަނީ. ތައްޔާރުވުމުން މިތަނުން ހުޅުވޭނެ."]
 };
