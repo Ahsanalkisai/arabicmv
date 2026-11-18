@@ -49,13 +49,11 @@ function lessonTabs(){
 }
 /* guided flow: one quiet call-to-action at the end of each lesson tab */
 function flowHTML(){
-  var d = UNIT_DATA[S.unit];
   function btn(action, extra, label){ return '<button class="flow" data-a="'+action+'"'+extra+'><span>'+label+'</span>'+ic("chev")+'</button>'; }
   if(S.tab === "read") return btn("tab", ' data-t="practice"', T("next")+': '+T("practise"));
   if(S.tab === "practice") return btn("tab", ' data-t="listen"', T("next")+': '+T("listening"));
   if(S.tab === "listen") return btn("tab", ' data-t="speak"', T("next")+': '+T("speak"));
-  if(S.review) return btn("lessons", '', T("allLessons"));
-  return btn("nextLesson", '', S.lesson < d.lessons.length ? T("nextLessonL") : T("reviewUnit"));
+  return '';                                /* Speak is the last tab: no closing button */
 }
 function welcomeHTML(){
   function opt(m, lab, sub){ return '<button class="wopt" data-a="setMode" data-m="'+m+'"><span class="wl">'+lab+'</span><span class="ws">'+sub+'</span></button>'; }
@@ -265,7 +263,6 @@ function speakHTML(){
   var d = UNIT_DATA[S.unit], say = S.spTab === "say", list = say ? sayList(d) : ofLesson(d.speak), it = list[S.sp];
   var h = seg([["qa",T("qa")],["say",T("sayIt")]], S.spTab, "spTab");
   if(!it) return h+'<div class="empty">'+T("noQuestions")+'</div>';
-  var task = S.review ? "" : lTask(d.lessons[S.lesson-1]);
   /* audio reference: Q/A item → its question and answer; say-it prompt → the one utterance it shows */
   var si = d.speak.indexOf(say ? ofLesson(d.speak)[Math.floor(S.sp/2)] : it), sayPart = S.sp % 2 ? "a" : "q";
   return h+'<div class="card"><div class="clabel"><span>'+(say ? T("sayPrompt") : T("question"))+'</span><span class="count">'+num(S.sp+1, list.length)+'</span></div>'+
@@ -273,8 +270,7 @@ function speakHTML(){
     (S.spShown ? '' : '<button class="btn wide reveal" data-a="spShow">'+ic("eye")+'<span>'+T("showAnswer")+'</span></button>')+'</div>'+
     (!say && !isBonus(S.unit) ? micHTML(S.unit, si) : '')+
     (S.spShown ? '<div class="model"><div class="count">'+T("modelAnswer")+'</div><span class="ar">'+esc(say ? it.ar : it.a.ar)+'</span>'+audBtn(S.unit, si, say ? sayPart : "a")+'</div>' : '')+
-    '<div class="ctrl"><button class="rb" data-a="spPrev" aria-label="'+T("prev")+'">'+ic("fwd")+'</button><button class="rb'+(S.spShown?" go":"")+'" data-a="spNext" aria-label="'+T("next")+'">'+ic("chev")+'</button></div>'+
-    (task ? '<h2>'+T("withClassmate")+'</h2><div class="card tips"><p>'+esc(task)+'</p></div>' : '');
+    '<div class="ctrl"><button class="rb" data-a="spPrev" aria-label="'+T("prev")+'">'+ic("fwd")+'</button><button class="rb'+(S.spShown?" go":"")+'" data-a="spNext" aria-label="'+T("next")+'">'+ic("chev")+'</button></div>';
 }
 /* microphone answer panel for one Speaking question; its contents are redrawn by micSync() */
 function micHTML(u, si){ var k = micKey(u, si); return '<section class="mic" data-k="'+k+'" aria-label="'+T("micTitle")+'">'+micInner(k)+'</section>'; }
