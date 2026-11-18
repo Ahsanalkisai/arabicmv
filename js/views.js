@@ -265,23 +265,26 @@ function speakHTML(){
   if(!it) return h+'<div class="empty">'+T("noQuestions")+'</div>';
   /* audio reference: Q/A item → its question and answer; say-it prompt → the one utterance it shows */
   var si = d.speak.indexOf(say ? ofLesson(d.speak)[Math.floor(S.sp/2)] : it), sayPart = S.sp % 2 ? "a" : "q";
-  /* Q&A with the microphone: Show answer sits below the microphone panel; elsewhere it stays in the card */
-  var mic = !say && !isBonus(S.unit);
+  /* Units 1-16 have the microphone (Q&A: transcript only; Say it: checked against the Arabic sentence);
+     Show answer then sits below the microphone panel. Bonus Unit 17 stays text-only with it in the card. */
+  var mic = !isBonus(S.unit);
   var reveal = S.spShown ? '' : '<button class="btn wide reveal'+(mic ? ' sp-reveal' : '')+'" data-a="spShow">'+ic("eye")+'<span>'+T("showAnswer")+'</span></button>';
   return h+'<div class="card"><div class="clabel"><span>'+(say ? T("sayPrompt") : T("question"))+'</span><span class="count">'+num(S.sp+1, list.length)+'</span></div>'+
     '<div class="prompt" style="margin:10px 0 14px">'+(say ? meaning(it) : '<span class="ar">'+esc(it.q.ar)+'</span>'+audBtn(S.unit, si, "q"))+'</div>'+
     (mic ? '' : reveal)+'</div>'+
-    (mic ? micHTML(S.unit, si)+reveal : '')+
+    (mic ? (say ? sayMicHTML(S.unit, si, sayPart) : micHTML(S.unit, si))+reveal : '')+
     (S.spShown ? '<div class="model"><div class="count">'+T("modelAnswer")+'</div><span class="ar">'+esc(say ? it.ar : it.a.ar)+'</span>'+audBtn(S.unit, si, say ? sayPart : "a")+'</div>' : '')+
     '<div class="ctrl"><button class="rb" data-a="spPrev" aria-label="'+T("prev")+'">'+ic("fwd")+'</button><button class="rb'+(S.spShown?" go":"")+'" data-a="spNext" aria-label="'+T("next")+'">'+ic("chev")+'</button></div>';
 }
 /* microphone answer panel for one Speaking question; its contents are redrawn by micSync() */
 function micHTML(u, si){ var k = micKey(u, si); return '<section class="mic" data-k="'+k+'" aria-label="'+T("micTitle")+'">'+micInner(k)+'</section>'; }
 /* layout: the microphone centred, its instruction below, then the transcript or message */
+/* Say it in Arabic: the same panel with answer checking (key = unit-item-part) */
+function sayMicHTML(u, si, part){ var k = sayKey(u, si, part); return '<section class="mic say" data-k="'+k+'" aria-label="'+T("micTitle")+'">'+micInner(k)+'</section>'; }
 function micInner(k){
   if(!micApi()) return '<p class="mic-msg" role="note">'+T("micUnsupported")+'</p>';
-  var cur = MIC.key === k, st = cur ? MIC.st : "", text = MIC.text[k];
-  function micBtn(label){ return '<button class="mic-btn" data-a="micStart" data-k="'+k+'" aria-label="'+label+'">'+ic("mic")+'</button>'; }
+  var cur = MIC.key === k, st = cur ? MIC.st : "", text = MIC.text[k], check = !!sayWant(k);
+  function micBtn(label){ return '<button class="mic-btn" data-a="micStart" data-k="'+k+'"'+(check ? ' data-c="1"' : '')+' aria-label="'+label+'">'+ic("mic")+'</button>'; }
   function main(btn, state, live){ return '<div class="mic-main">'+btn+'<span class="mic-state"'+(live ? ' role="status"' : '')+'>'+state+'</span></div>'; }
   function said(t, live){ return t ? '<div class="mic-text ar'+(live ? ' live' : '')+'" dir="rtl" lang="ar">'+esc(t)+'</div>' : ''; }
   if(st === "listening") return main('<button class="mic-btn on" data-a="micStop" aria-label="'+T("micStop")+'"><span class="mic-sq" aria-hidden="true"></span></button>', T("micListening"), true)+
@@ -289,6 +292,15 @@ function micInner(k){
   if(st === "processing") return main('<span class="mic-btn busy" aria-hidden="true"><span class="mic-spin"></span></span>', T("micProcessing"), true)+said(MIC.live, true);
   if(st === "error") return (MIC.err === "micUnsupported" ? '' : main(micBtn(T("micAgain")), T("micAgain")))+
     '<p class="mic-msg err" role="alert">'+T(MIC.err)+'</p>';
+  if(text && check){
+    var hit = sayMatch(k);                              /* the recogniser's reading that matches, if any */
+    if(hit) return main(micBtn(T("micAgain")), T("micAgain"))+
+      '<div class="mic-text ar ok" dir="rtl" lang="ar">'+esc(hit)+'</div>'+
+      '<p class="mic-verdict ok" role="status">'+ic("check")+'<span>'+T("sayCorrect")+'</span></p>'+
+      '<button class="btn mic-next" data-a="spNext"><span>'+T("nextQuestion")+'</span>'+ic("chev")+'</button>';
+    return main(micBtn(T("micAgain")), T("micAgain"))+said(text)+
+      '<p class="mic-verdict no" role="status">'+T("sayNotQuite")+'</p>';
+  }
   if(text) return main(micBtn(T("micAgain")), T("micAgain"))+said(text);
   return main(micBtn(T("micStartL")), T("micTap"));
 }

@@ -131,6 +131,8 @@ var L = {
   micLang:["This browser cannot recognise Arabic speech. Try Chrome or Edge.","މި ބްރައުޒަރަށް ޢަރަބި ވާހަކަ ދެނެނުގަނެވޭ. ކްރޯމް ނުވަތަ އެޖް ބޭނުންކޮށްލާ."],
   micFail:["Speech recognition did not work this time. Please try again.","މިފަހަރު ވާހަކަ ދެނެގަތުން ކާމިޔާބެއް ނުވި. އަލުން މަސައްކަތްކުރޭ."],
   micUnsupported:["This browser does not support speech recognition, so answering with the microphone is not available here. It works in Chrome (computer and Android), Edge on a computer and Safari on iPhone. You can still say your answer aloud and use Show answer.","މި ބްރައުޒަރުގައި ވާހަކަ ދެނެގަތުމުގެ ފީޗަރު ނެތުމުން، މިތާނގައި މައިކުން ޖަވާބު ދެވެން ނެތް. ކްރޯމް (ކޮމްޕިއުޓަރު އަދި އެންޑްރޮއިޑް)، ކޮމްޕިއުޓަރުގެ އެޖް އަދި އައިފޯނުގެ ސަފާރީގައި މި ފީޗަރު ބޭނުންކުރެވޭނެ. ޖަވާބު އަޑުހަރުކޮށް ބުނެފައި ޖަވާބު ދައްކާ ފިއްތާލެވޭނެ."],
+  sayCorrect:["Correct! Well done.","ރަނގަޅު! ޝާބާސް."], sayNotQuite:["Not quite. Try again.","ފުރިހަމައެއް ނުވޭ. އަލުން ބުނެލާ."],
+  nextQuestion:["Next question","ދެން އޮތް ސުވާލު"],
   levelSoon:["The level check is being prepared. It will open here when it is ready.","ފެންވަރު ބެލުމުގެ ޓެސްޓު ތައްޔާރުކުރަމުންދަނީ. ތައްޔާރުވުމުން މިތަނުން ހުޅުވޭނެ."],
   gramSoon:["Grammar lessons are being prepared. They will open here when they are ready.","ޤަވާޢިދު ފިލާވަޅުތައް ތައްޔާރުކުރަމުންދަނީ. ތައްޔާރުވުމުން މިތަނުން ހުޅުވޭނެ."]
 };

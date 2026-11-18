@@ -200,10 +200,43 @@ function audSync(){
    it: never compared with the model answer, never marked, never saved, and it never changes
    progress. ArabicMV records nothing and uploads nothing; the browser itself sends the speech
    to its own recognition service (Google in Chrome, Microsoft in Edge, Apple in Safari).
-   One session at a time; it is cancelled when its question leaves the screen. */
-var MIC = {key:null, st:"", err:"", live:"", fin:"", code:"", rec:null, text:{}};
+   One session at a time; it is cancelled when its question leaves the screen.
+   Say it in Arabic reuses the same engine with checking on (sayKey / sayMatch below): the
+   recognised Arabic is compared with the item's Arabic sentence after normalisation, and the
+   student sees Correct or Try again. Nothing from either mode is saved. */
+var MIC = {key:null, st:"", err:"", live:"", fin:"", code:"", rec:null, text:{}, alts:[], alt:{}};
 function micApi(){ return window.SpeechRecognition || window.webkitSpeechRecognition || null; }
 function micKey(u, si){ return u + "-" + si; }
+/* Say it in Arabic: one key per prompt (question or answer half of a speak item) */
+function sayKey(u, si, part){ return u + "-" + si + "-" + part; }
+function sayWant(k){
+  var p = String(k).split("-"), d = UNIT_DATA[+p[0]], it = p.length === 3 && d && d.speak[+p[1]];
+  return it && it[p[2]] ? it[p[2]].ar : null;
+}
+/* Arabic normalisation for checking (strict): drops tashkeel, Quranic marks and tatweel; Arabic-Indic
+   digits -> 0-9; removes punctuation; attaches a separated "و" to the next word; collapses spaces.
+   Every letter is kept as written, including hamza forms, final ى / ي and ة / ه, because they can
+   distinguish different words (أسكن / اسكن, على / علي, مكتبة / مكتبه). */
+var AR_MARKS = new RegExp("[" + String.fromCharCode(0x610) + "-" + String.fromCharCode(0x61A) + String.fromCharCode(0x64B) + "-" + String.fromCharCode(0x65F) +
+  String.fromCharCode(0x670) + String.fromCharCode(0x6D6) + "-" + String.fromCharCode(0x6ED) + String.fromCharCode(0x640) + "]", "g");
+var AR_PUNCT = /[.,!?;:"'()\[\]{}\u00AB\u00BB\u2026\-\u2013\u2014_\/\u060C\u061B\u061F\u066A-\u066D\u06D4]/g;
+function arNorm(s){
+  s = String(s == null ? "" : s);
+  if(s.normalize) s = s.normalize("NFC");
+  s = s.replace(AR_MARKS, "")
+    .replace(/[\u0660-\u0669]/g, function(c){ return String(c.charCodeAt(0) - 0x660); })
+    .replace(/[\u06F0-\u06F9]/g, function(c){ return String(c.charCodeAt(0) - 0x6F0); })
+    .replace(AR_PUNCT, " ").replace(/\s+/g, " ").trim()
+    .replace(/(^| )\u0648 (?=\S)/g, "$1\u0648");
+  return s;
+}
+/* the recogniser's reading that matches the expected sentence, or null */
+function sayMatch(k){
+  var want = sayWant(k), got = [MIC.text[k]].concat(MIC.alt[k] || []), w = arNorm(want);
+  if(!want || !w) return null;
+  for(var i = 0; i < got.length; i++) if(got[i] && arNorm(got[i]) === w) return got[i];
+  return null;
+}
 function micOn(){ return MIC.st === "listening" || MIC.st === "processing"; }
 /* end a running session and drop its result (question changed, page hidden, audio started) */
 function micAbort(){
@@ -216,20 +249,26 @@ function micErr(c){
   return c === "not-allowed" ? "micDenied" : c === "service-not-allowed" ? "micService" : c === "audio-capture" ? "micNoDevice" :
     c === "network" ? "micNetwork" : c === "language-not-supported" ? "micLang" : (!c || c === "no-speech") ? "micNoSpeech" : "micFail";
 }
-function micStart(k){
+function micStart(k, check){
   if(micOn()) return;                                   /* never two sessions at once */
   var Api = micApi();
-  MIC.key = k; MIC.err = ""; MIC.live = ""; MIC.fin = ""; MIC.code = "";
+  MIC.key = k; MIC.err = ""; MIC.live = ""; MIC.fin = ""; MIC.code = ""; MIC.alts = [];
   if(!Api){ MIC.st = "error"; MIC.err = "micUnsupported"; return; }
   if(AUD.key){ audStop(); audSync(); }                  /* the recogniser must not hear our own recordings */
-  delete MIC.text[k];                                   /* a new attempt replaces the previous transcript */
+  delete MIC.text[k]; delete MIC.alt[k];                /* a new attempt replaces the previous transcript */
   var r; try{ r = new Api(); }catch(e){ MIC.st = "error"; MIC.err = "micFail"; return; }
-  r.lang = "ar-SA"; r.interimResults = true; r.continuous = false; r.maxAlternatives = 1;
+  /* checking (Say it) asks for a few alternative readings, so a correct answer is not missed
+     because the recogniser's first guess spelled it differently */
+  r.lang = "ar-SA"; r.interimResults = true; r.continuous = false; r.maxAlternatives = check ? 5 : 1;
   r.onresult = function(ev){
     if(MIC.rec !== r) return;
     var fin = "", tmp = "";
     for(var i = 0; i < ev.results.length; i++){ var t = ev.results[i][0] ? ev.results[i][0].transcript : ""; if(ev.results[i].isFinal) fin += t; else tmp += t; }
-    MIC.fin = fin; MIC.live = fin + tmp; micSync();
+    MIC.fin = fin; MIC.live = fin + tmp;
+    if(check && ev.results.length === 1 && ev.results[0].isFinal){
+      MIC.alts = []; for(var j = 1; j < ev.results[0].length; j++) if(ev.results[0][j] && ev.results[0][j].transcript) MIC.alts.push(ev.results[0][j].transcript);
+    }
+    micSync();
   };
   r.onspeechend = function(){ if(MIC.rec === r && MIC.st === "listening"){ MIC.st = "processing"; micSync(); } };
   r.onerror = function(ev){ if(MIC.rec === r) MIC.code = ev && ev.error || "unknown"; };
@@ -237,7 +276,7 @@ function micStart(k){
     if(MIC.rec !== r) return;
     MIC.rec = null;
     var t = MIC.fin || MIC.live;                        /* the words exactly as recognised */
-    if(t && t.replace(/\s+/g, "") && (!MIC.code || MIC.code === "no-speech")){ MIC.text[k] = t; MIC.st = ""; MIC.err = ""; }
+    if(t && t.replace(/\s+/g, "") && (!MIC.code || MIC.code === "no-speech")){ MIC.text[k] = t; if(check) MIC.alt[k] = MIC.alts; MIC.st = ""; MIC.err = ""; }
     else { MIC.st = "error"; MIC.err = micErr(MIC.code); }
     MIC.live = ""; MIC.fin = ""; micSync();
   };
@@ -422,7 +461,7 @@ var A = {
   liPrev:function(){ var n = liList().length; if(n){ S.li = (S.li - 1 + n) % n; } S.liWrong = null; S.liText = false; },
   liText:function(){ S.liText = true; },
   aud:function(d){ if(micOn()){ micAbort(); micSync(); } audToggle(d.k); return false; },
-  micStart:function(d){ micStart(d.k); micSync(); return false; },
+  micStart:function(d){ micStart(d.k, d.c === "1"); micSync(); return false; },
   micStop:function(){ micStop(); micSync(); return false; },
   dashLesson:function(d){
     var r = lastLesson();
